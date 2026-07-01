@@ -75,6 +75,11 @@ export interface Database {
         Insert: Omit<Database['public']['Tables']['workout_logs']['Row'], 'id' | 'created_at'>
         Update: Partial<Database['public']['Tables']['workout_logs']['Insert']>
       }
+      cravings: {
+        Row: { id: string; user_id: string; feeling: string | null; rode_out: boolean; note: string | null; created_at: string }
+        Insert: Omit<Database['public']['Tables']['cravings']['Row'], 'id' | 'created_at'>
+        Update: Partial<Database['public']['Tables']['cravings']['Insert']>
+      }
       work_items: {
         Row: { id: string; user_id: string; business: string; kind: string; title: string; amount: number | null; status: string; due_date: string | null; created_at: string }
         Insert: Omit<Database['public']['Tables']['work_items']['Row'], 'id' | 'created_at'>

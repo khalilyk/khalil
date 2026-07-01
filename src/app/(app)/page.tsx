@@ -9,6 +9,7 @@ import CoachCard from '@/components/home/CoachCard'
 import DailyScoreBar from '@/components/home/DailyScoreBar'
 import MorningBriefingCard from '@/components/home/MorningBriefingCard'
 import WeeklyReviewCard from '@/components/home/WeeklyReviewCard'
+import CravingTracker from '@/components/body/CravingTracker'
 import GoalsBlock from '@/components/goals/GoalsBlock'
 import { morningBriefing, weeklySummary } from '@/lib/summary'
 import { dayByWeekday, totalExercises } from '@/lib/workout'
@@ -32,7 +33,7 @@ export default async function HomePage() {
   const [
     { data: checkIns }, { data: profile }, { data: goalsData },
     { data: weightLogs }, { data: monthTx }, { data: lastMonthTx },
-    { data: workoutLogs }, { data: recentCheckins },
+    { data: workoutLogs }, { data: recentCheckins }, { data: cravings },
   ] = await Promise.all([
     supabase.from('check_ins').select('*').eq('check_in_date', today),
     supabase.from('profiles').select('*').eq('id', user.id).maybeSingle(),
@@ -44,6 +45,7 @@ export default async function HomePage() {
     supabase.from('transactions').select('amount').eq('direction', 'expense').gte('occurred_on', lastMonthStart).lte('occurred_on', lastMonthEnd),
     supabase.from('workout_logs').select('logged_on,exercise').gte('logged_on', weekStart),
     supabase.from('check_ins').select('check_in_date').gte('check_in_date', format(subDays(now, 40), 'yyyy-MM-dd')),
+    supabase.from('cravings').select('feeling,rode_out').gte('created_at', `${monthStart}T00:00:00`),
   ])
 
   const goals = (goalsData ?? []) as Goal[]
@@ -105,6 +107,9 @@ export default async function HomePage() {
         </div>
         <div className="lg:col-span-3">
           <DailyScoreBar score={score} items={scoreItems} streak={streak} />
+        </div>
+        <div className="lg:col-span-3">
+          <CravingTracker userId={user.id} cravings={(cravings ?? []) as { feeling: string | null; rode_out: boolean }[]} />
         </div>
         <div className="lg:col-span-2">
           <CheckInForm userId={user.id} today={today} bySlot={bySlot} />

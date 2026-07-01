@@ -3,6 +3,7 @@ import { format, subDays, startOfWeek } from 'date-fns'
 import WeightSection from '@/components/body/WeightSection'
 import WorkoutSection from '@/components/body/WorkoutSection'
 import RemindersSection from '@/components/body/RemindersSection'
+import CravingTracker from '@/components/body/CravingTracker'
 import GoalsBlock from '@/components/goals/GoalsBlock'
 
 export default async function BodyPage() {
@@ -15,10 +16,12 @@ export default async function BodyPage() {
   const weekStart = format(startOfWeek(new Date(), { weekStartsOn: 1 }), 'yyyy-MM-dd')
 
   type Profile = { weight_goal: number | null; weight_unit: string; weight_rate: number | null; remind_water: boolean | null; remind_snack: boolean | null }
-  const [{ data: weightLogs }, { data: profileRaw }, { data: workoutLogs }] = await Promise.all([
+  const monthStart = format(new Date(new Date().getFullYear(), new Date().getMonth(), 1), 'yyyy-MM-dd')
+  const [{ data: weightLogs }, { data: profileRaw }, { data: workoutLogs }, { data: cravings }] = await Promise.all([
     supabase.from('weight_logs').select('*').gte('logged_on', since).order('logged_on'),
     supabase.from('profiles').select('*').eq('id', user.id).maybeSingle(),
     supabase.from('workout_logs').select('logged_on,exercise').gte('logged_on', weekStart),
+    supabase.from('cravings').select('feeling,rode_out').gte('created_at', `${monthStart}T00:00:00`),
   ])
   const profile = profileRaw as Profile | null
 
@@ -39,6 +42,7 @@ export default async function BodyPage() {
           weekLogs={workoutLogs ?? []}
         />
       </div>
+      <CravingTracker userId={user.id} cravings={(cravings ?? []) as { feeling: string | null; rode_out: boolean }[]} />
       <RemindersSection userId={user.id} remindWater={!!profile?.remind_water} remindSnack={!!profile?.remind_snack} />
       <GoalsBlock userId={user.id} categories={['Body']} title="Body goals" />
     </div>
