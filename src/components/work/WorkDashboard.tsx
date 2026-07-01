@@ -71,9 +71,8 @@ export default function WorkDashboard({ userId, items, currency, live }: {
         const liveStat = live?.[biz.key]
         const isLive = !!liveStat
         const revenue = isLive ? liveStat!.revenue : mine.filter(i => i.kind === 'revenue').reduce((s, i) => s + (i.amount ?? 0), 0)
-        const pending = isLive
-          ? liveStat!.pending.map((p, idx) => ({ id: `live-${idx}`, title: p.title, amount: p.amount, kind: '', status: p.status, due_date: null } as WorkItem & { id: string }))
-          : mine.filter(i => (i.kind === 'project' || i.kind === 'order') && i.status !== 'done')
+        const manualPending = mine.filter(i => (i.kind === 'project' || i.kind === 'order') && i.status !== 'done')
+        const pendingCount = isLive ? liveStat!.pending.length : manualPending.length
         const tasks = mine.filter(i => i.kind === 'task' && i.status !== 'done')
 
         return (
@@ -93,27 +92,32 @@ export default function WorkDashboard({ userId, items, currency, live }: {
               {/* Pending projects / orders */}
               <div>
                 <p className="text-xs text-muted-foreground uppercase tracking-wider flex items-center gap-1.5 mb-2">
-                  <Package size={12} /> Pending ({pending.length})
+                  <Package size={12} /> Pending ({pendingCount})
                 </p>
                 <div className="space-y-1.5">
-                  {pending.length === 0 && <p className="text-sm text-muted-foreground/60">Nothing pending.</p>}
-                  {pending.map(p => (
+                  {pendingCount === 0 && <p className="text-sm text-muted-foreground/60">Nothing pending.</p>}
+
+                  {/* Live pending (read-only, from the business DB) */}
+                  {isLive && liveStat!.pending.map((p, idx) => (
+                    <div key={`live-${idx}`} className="flex items-center gap-2 text-sm">
+                      <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
+                      <span className="flex-1 min-w-0 truncate">{p.title}</span>
+                      {p.amount != null && <span className="text-muted-foreground shrink-0">{money(p.amount)}</span>}
+                    </div>
+                  ))}
+
+                  {/* Manual pending (editable) */}
+                  {!isLive && manualPending.map(p => (
                     <div key={p.id} className="flex items-center gap-2 text-sm">
-                      {isLive ? (
-                        <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
-                      ) : (
-                        <button onClick={() => toggle(p)} disabled={busy}
-                          className="w-4 h-4 rounded border border-border hover:border-primary shrink-0" />
-                      )}
+                      <button onClick={() => toggle(p)} disabled={busy}
+                        className="w-4 h-4 rounded border border-border hover:border-primary shrink-0" />
                       <span className="flex-1 min-w-0 truncate">
                         {p.title}
-                        {!isLive && p.kind && <span className="text-muted-foreground"> · {p.kind}</span>}
+                        {p.kind && <span className="text-muted-foreground"> · {p.kind}</span>}
                       </span>
                       {p.amount != null && <span className="text-muted-foreground shrink-0">{money(p.amount)}</span>}
                       {p.due_date && <span className="text-[11px] text-muted-foreground shrink-0">{format(parseISO(p.due_date), 'd MMM')}</span>}
-                      {!isLive && (
-                        <button onClick={() => remove(p.id)} disabled={busy} className="text-muted-foreground hover:text-destructive"><Trash2 size={12} /></button>
-                      )}
+                      <button onClick={() => remove(p.id)} disabled={busy} className="text-muted-foreground hover:text-destructive"><Trash2 size={12} /></button>
                     </div>
                   ))}
                 </div>
