@@ -7,7 +7,10 @@ import TodayCard from '@/components/home/TodayCard'
 import MoneyCard from '@/components/home/MoneyCard'
 import CoachCard from '@/components/home/CoachCard'
 import DailyScoreBar from '@/components/home/DailyScoreBar'
+import MorningBriefingCard from '@/components/home/MorningBriefingCard'
+import WeeklyReviewCard from '@/components/home/WeeklyReviewCard'
 import GoalsBlock from '@/components/goals/GoalsBlock'
+import { morningBriefing, weeklySummary } from '@/lib/summary'
 import { dayByWeekday, totalExercises } from '@/lib/workout'
 import { quoteOfTheDay } from '@/lib/quotes'
 import type { Goal } from '@/types/goal'
@@ -65,6 +68,8 @@ export default async function HomePage() {
   const weekDots = Array.from({ length: 7 }).map((_, i) =>
     wLogs.some(l => l.logged_on === format(addDays(weekStartDate, i), 'yyyy-MM-dd')))
   const latestWeight = weights.length ? weights[weights.length - 1].weight : null
+  const briefing = await morningBriefing(supabase, user.id)
+  const week = await weeklySummary(supabase, user.id)
 
   // ── Daily score (0–100) ──────────────────────────────
   const amDone = !!bySlot.morning?.mood
@@ -96,6 +101,9 @@ export default async function HomePage() {
       <p className="text-xl text-muted-foreground italic mb-5">“{quoteOfTheDay(now)}”</p>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 auto-rows-min [&>*]:min-w-0">
         <div className="lg:col-span-3">
+          <MorningBriefingCard lines={briefing.lines} />
+        </div>
+        <div className="lg:col-span-3">
           <DailyScoreBar score={score} items={scoreItems} streak={streak} />
         </div>
         <div className="lg:col-span-2">
@@ -114,6 +122,9 @@ export default async function HomePage() {
         />
         <MoneyCard currency={currency} monthSpend={monthSpend} trend={spendTrend} />
         {reflection && <CoachCard text={reflection} className="lg:col-span-3" />}
+        <div className="lg:col-span-3">
+          <WeeklyReviewCard summary={week} />
+        </div>
       </div>
       <div className="mt-8">
         <GoalsBlock userId={user.id} categories={['Personal', 'Travel', 'Learning']} title="Life goals" />
