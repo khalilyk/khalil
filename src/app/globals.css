@@ -1,26 +1,161 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  /* Metrics.IQ palette — light neutral canvas, vivid orange accent, dark ink */
+  --background: oklch(0.955 0.003 60);
+  --foreground: oklch(0.18 0.005 60);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.18 0.005 60);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.18 0.005 60);
+  /* Vivid orange primary */
+  --primary: oklch(0.67 0.2 44);
+  --primary-foreground: oklch(0.99 0.01 60);
+  --secondary: oklch(0.96 0.004 60);
+  --secondary-foreground: oklch(0.24 0.006 60);
+  --muted: oklch(0.955 0.004 60);
+  --muted-foreground: oklch(0.55 0.01 60);
+  --accent: oklch(0.95 0.03 55);
+  --accent-foreground: oklch(0.5 0.16 44);
+  --destructive: oklch(0.58 0.21 27);
+  --border: oklch(0.91 0.004 60);
+  --input: oklch(0.91 0.004 60);
+  --ring: oklch(0.67 0.2 44);
+  --chart-1: oklch(0.67 0.2 44);
+  --chart-2: oklch(0.78 0.15 60);
+  --chart-3: oklch(0.55 0.12 30);
+  --chart-4: oklch(0.45 0.04 250);
+  --chart-5: oklch(0.3 0.02 60);
+  /* Generous radii, like the reference cards */
+  --radius: 0.9rem;
+  --sidebar: oklch(0.18 0.006 60);
+  --sidebar-foreground: oklch(0.92 0.004 60);
+  --sidebar-primary: oklch(0.67 0.2 44);
+  --sidebar-primary-foreground: oklch(0.99 0.01 60);
+  --sidebar-accent: oklch(0.26 0.01 60);
+  --sidebar-accent-foreground: oklch(0.95 0.004 60);
+  --sidebar-border: oklch(1 0 0 / 8%);
+  --sidebar-ring: oklch(0.67 0.2 44);
+}
+
+/* Keep dark class available but app uses light by default */
+.dark {
+  --background: oklch(0.16 0.005 60);
+  --foreground: oklch(0.96 0.004 60);
+  --card: oklch(0.2 0.006 60);
+  --card-foreground: oklch(0.96 0.004 60);
+  --popover: oklch(0.2 0.006 60);
+  --popover-foreground: oklch(0.96 0.004 60);
+  --primary: oklch(0.7 0.2 44);
+  --primary-foreground: oklch(0.16 0.01 60);
+  --secondary: oklch(0.26 0.008 60);
+  --secondary-foreground: oklch(0.96 0.004 60);
+  --muted: oklch(0.26 0.008 60);
+  --muted-foreground: oklch(0.68 0.01 60);
+  --accent: oklch(0.3 0.04 50);
+  --accent-foreground: oklch(0.85 0.12 50);
+  --destructive: oklch(0.62 0.19 25);
+  --border: oklch(1 0 0 / 9%);
+  --input: oklch(1 0 0 / 13%);
+  --ring: oklch(0.7 0.2 44);
+  --chart-1: oklch(0.7 0.2 44);
+  --chart-2: oklch(0.78 0.15 60);
+  --chart-3: oklch(0.6 0.12 30);
+  --chart-4: oklch(0.6 0.05 250);
+  --chart-5: oklch(0.5 0.03 60);
+  --sidebar: oklch(0.13 0.005 60);
+  --sidebar-foreground: oklch(0.92 0.004 60);
+  --sidebar-primary: oklch(0.7 0.2 44);
+  --sidebar-primary-foreground: oklch(0.16 0.01 60);
+  --sidebar-accent: oklch(0.26 0.01 60);
+  --sidebar-accent-foreground: oklch(0.95 0.004 60);
+  --sidebar-border: oklch(1 0 0 / 9%);
+  --sidebar-ring: oklch(0.7 0.2 44);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ── KK walking stick man ─────────────────────────────── */
+/* Limb swing + head bob — applied only while the figure is moving. */
+.kk-leg, .kk-arm { transform-box: view-box; }
+.kk-leg { transform-origin: 18px 22px; }
+.kk-arm { transform-origin: 18px 14px; }
+.kk-leg-a { animation: kk-swing-a 1.05s ease-in-out infinite; }
+.kk-leg-b { animation: kk-swing-b 1.05s ease-in-out infinite; }
+.kk-arm-a { animation: kk-swing-b 1.05s ease-in-out infinite; }
+.kk-arm-b { animation: kk-swing-a 1.05s ease-in-out infinite; }
+.kk-bob   { transform-box: view-box; animation: kk-bob 1.05s ease-in-out infinite; }
+
+@keyframes kk-swing-a {
+  0%, 100% { transform: rotate(12deg); }
+  50%      { transform: rotate(-12deg); }
+}
+@keyframes kk-swing-b {
+  0%, 100% { transform: rotate(-12deg); }
+  50%      { transform: rotate(12deg); }
+}
+@keyframes kk-bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-0.3px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .kk-leg-a, .kk-leg-b, .kk-arm-a, .kk-arm-b, .kk-bob { animation: none; }
 }

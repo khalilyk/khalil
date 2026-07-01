@@ -1,0 +1,61 @@
+import { createClient } from '@/lib/supabase/server'
+import { format, startOfMonth, endOfMonth } from 'date-fns'
+import PersonalSection from '@/components/money/PersonalSection'
+import BusinessSection from '@/components/money/BusinessSection'
+import BudgetsSection from '@/components/money/BudgetsSection'
+import GoalsBlock from '@/components/goals/GoalsBlock'
+import ReceiptUploader from '@/components/receipts/ReceiptUploader'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+
+export default async function MoneyPage() {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return null
+
+  const monthStart = format(startOfMonth(new Date()), 'yyyy-MM-dd')
+  const monthEnd = format(endOfMonth(new Date()), 'yyyy-MM-dd')
+
+  const [{ data: accounts }, { data: transactions }, { data: snapshots }, { data: profile }, { data: budgets }] = await Promise.all([
+    supabase.from('accounts').select('*').order('type').order('name'),
+    supabase.from('transactions').select('*').gte('occurred_on', monthStart).lte('occurred_on', monthEnd).order('occurred_on', { ascending: false }),
+    supabase.from('balance_snapshots').select('*').order('as_of', { ascending: false }),
+    supabase.from('profiles').select('currency').eq('id', user.id).maybeSingle(),
+    supabase.from('budgets').select('id,category,monthly_limit'),
+  ])
+
+  const currency = (profile as { currency: string } | null)?.currency ?? 'AUD'
+  const personal = (accounts ?? []).filter(a => a.type === 'personal')
+  const business = (accounts ?? []).filter(a => a.type === 'business')
+
+  return (
+    <div className="w-full px-4 lg:px-8 py-6 space-y-6">
+      <h1 className="text-xl font-semibold">Money</h1>
+      <ReceiptUploader userId={user.id} accounts={accounts ?? []} currency={currency} />
+      <BudgetsSection userId={user.id} budgets={budgets ?? []} transactions={transactions ?? []} currency={currency} />
+      <Tabs defaultValue="personal">
+        <TabsList className="w-full">
+          <TabsTrigger value="personal" className="flex-1">Personal</TabsTrigger>
+          <TabsTrigger value="business" className="flex-1">Business</TabsTrigger>
+        </TabsList>
+        <TabsContent value="personal" className="mt-4">
+          <PersonalSection
+            userId={user.id}
+            accounts={personal}
+            transactions={transactions ?? []}
+            snapshots={snapshots ?? []}
+            currency={currency}
+          />
+        </TabsContent>
+        <TabsContent value="business" className="mt-4">
+          <BusinessSection
+            userId={user.id}
+            accounts={business}
+            transactions={transactions ?? []}
+            currency={currency}
+          />
+        </TabsContent>
+      </Tabs>
+      <GoalsBlock userId={user.id} categories={['Money']} title="Money goals" />
+    </div>
+  )
+}
