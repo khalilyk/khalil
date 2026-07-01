@@ -35,6 +35,15 @@ export async function GET(req: NextRequest) {
       await sendPush(prof.id, { title: '🚫 No snacking', body: 'Stay on plan — no snacking between meals.', tag: 'snack', url: '/body' })
       sent++
     }
+    // Afternoon craving check-in — the classic emotional-eating dip
+    if (hour === 15) {
+      await sendPush(prof.id, {
+        title: '🔥 Craving check-in',
+        body: 'Afternoon dip — this is when urges hit. Feeling one? Tap to ride it out.',
+        tag: 'craving', url: '/',
+      })
+      sent++
+    }
   }
 
   return NextResponse.json({ hour, sent })
