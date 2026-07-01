@@ -43,7 +43,7 @@ export default function RemindersSection({ userId, remindWater, remindSnack }: {
         <p className="text-sm font-semibold">Reminders</p>
         <Row icon={Droplet} label="Drink water" sub="Every hour, 10am–5pm" on={water} toggle={v => set('remind_water', v)} />
         <Row icon={Ban} label="No snacking" sub="Hourly nudge, 10am–5pm" on={snack} toggle={v => set('remind_snack', v)} />
-        <p className="text-[11px] text-muted-foreground">Enable phone notifications in Admin to receive these on your device.</p>
+        <p className="text-[11px] text-muted-foreground">Enable notifications in Admin to receive these on your phone or computer.</p>
       </CardContent>
     </Card>
   )

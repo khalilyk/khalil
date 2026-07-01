@@ -80,7 +80,7 @@ export default function PushToggle() {
       {status === 'on' ? (
         <>
           <div className="flex items-center gap-2 text-sm font-medium text-primary">
-            <Check size={15} /> Phone notifications are on
+            <Check size={15} /> Notifications are on
           </div>
           <div className="flex gap-2">
             <Button variant="outline" size="sm" onClick={test} className="rounded-full">Send test</Button>
@@ -90,7 +90,7 @@ export default function PushToggle() {
       ) : (
         <Button onClick={enable} disabled={status === 'busy'} className="w-full rounded-full gap-2">
           {status === 'busy' ? <Loader2 size={16} className="animate-spin" /> : <Bell size={16} />}
-          Enable phone notifications
+          Enable notifications
         </Button>
       )}
       {msg && <p className="text-xs text-muted-foreground">{msg}</p>}
