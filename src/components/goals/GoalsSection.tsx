@@ -28,8 +28,8 @@ function dueLabel(date: string | null): { text: string; tone: string } {
   return { text: `~${months} mo · ${when}`, tone: 'text-muted-foreground' }
 }
 
-export default function GoalsSection({ userId, goals, milestones, categories }: {
-  userId: string; goals: Goal[]; milestones: Milestone[]; categories?: string[]
+export default function GoalsSection({ userId, goals, milestones, categories, currentSavings }: {
+  userId: string; goals: Goal[]; milestones: Milestone[]; categories?: string[]; currentSavings?: number
 }) {
   const router = useRouter()
   const cats = categories ?? CATEGORIES
@@ -80,6 +80,15 @@ export default function GoalsSection({ userId, goals, milestones, categories }: 
   function openAdd() {
     setCategory(tab !== 'All' ? tab : cats[0])
     setAdding(true)
+  }
+
+  // Savings progress for money goals (vs current net worth)
+  function savingsProgress(g: Goal) {
+    if (g.category !== 'money' || g.target_value == null || currentSavings == null) return null
+    const pct = Math.max(0, Math.min(100, Math.round((currentSavings / g.target_value) * 100)))
+    const toGo = Math.max(0, g.target_value - currentSavings)
+    const u = g.target_unit ? `${g.target_unit} ` : ''
+    return { pct, toGo, saved: currentSavings, u }
   }
 
   async function client() {
@@ -177,6 +186,18 @@ export default function GoalsSection({ userId, goals, milestones, categories }: 
             ) : (
               <p className="text-sm mt-3 opacity-80">No target date set</p>
             )}
+            {(() => {
+              const p = savingsProgress(featured)
+              if (!p) return null
+              return (
+                <div className="mt-4">
+                  <div className="h-2 rounded-full bg-primary-foreground/25 overflow-hidden">
+                    <div className="h-full bg-primary-foreground rounded-full" style={{ width: `${Math.max(3, p.pct)}%` }} />
+                  </div>
+                  <p className="text-sm font-medium mt-1.5">{p.pct}% there · {p.u}{Math.round(p.toGo).toLocaleString()} to go</p>
+                </div>
+              )
+            })()}
           </div>
         )
       })()}
@@ -280,6 +301,22 @@ export default function GoalsSection({ userId, goals, milestones, categories }: 
                   <p className={cn('text-xs mt-1.5 flex items-center gap-1', due.tone)}>
                     <CalIcon size={12} /> {due.text}
                   </p>
+
+                  {/* Savings progress (money goals) */}
+                  {(() => {
+                    const p = savingsProgress(g)
+                    if (!p) return null
+                    return (
+                      <div className="mt-2">
+                        <div className="h-2 rounded-full bg-muted overflow-hidden">
+                          <div className="h-full bg-primary rounded-full transition-all" style={{ width: `${Math.max(3, p.pct)}%` }} />
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          <span className="font-semibold text-foreground">{p.pct}%</span> · {p.u}{Math.round(p.saved).toLocaleString()} saved · {p.u}{Math.round(p.toGo).toLocaleString()} to go
+                        </p>
+                      </div>
+                    )
+                  })()}
 
                   {/* Milestones */}
                   {(() => {
