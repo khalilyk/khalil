@@ -3,6 +3,7 @@ import { format, startOfMonth, endOfMonth } from 'date-fns'
 import PersonalSection from '@/components/money/PersonalSection'
 import BusinessSection from '@/components/money/BusinessSection'
 import BudgetsSection from '@/components/money/BudgetsSection'
+import NetWorthCard from '@/components/money/NetWorthCard'
 import GoalsBlock from '@/components/goals/GoalsBlock'
 import ReceiptUploader from '@/components/receipts/ReceiptUploader'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -31,6 +32,7 @@ export default async function MoneyPage() {
     <div className="w-full px-4 lg:px-8 py-6 space-y-6">
       <h1 className="text-xl font-semibold">Money</h1>
       <ReceiptUploader userId={user.id} accounts={accounts ?? []} currency={currency} />
+      <NetWorthCard accounts={accounts ?? []} snapshots={snapshots ?? []} currency={currency} />
       <BudgetsSection userId={user.id} budgets={budgets ?? []} transactions={transactions ?? []} currency={currency} />
       <Tabs defaultValue="personal">
         <TabsList className="w-full">
