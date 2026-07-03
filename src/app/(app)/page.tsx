@@ -31,6 +31,10 @@ export default async function HomePage() {
   const weekStart = format(weekStartDate, 'yyyy-MM-dd')
   const since = format(subDays(now, 60), 'yyyy-MM-dd')
 
+  // Start the briefing/weekly work in parallel with the page queries
+  const briefingP = morningBriefing(supabase, user.id)
+  const weekP = weeklySummary(supabase, user.id)
+
   const [
     { data: checkIns }, { data: profile }, { data: goalsData },
     { data: weightLogs }, { data: monthTx }, { data: lastMonthTx },
@@ -71,8 +75,7 @@ export default async function HomePage() {
   const weekDots = Array.from({ length: 7 }).map((_, i) =>
     wLogs.some(l => l.logged_on === format(addDays(weekStartDate, i), 'yyyy-MM-dd')))
   const latestWeight = weights.length ? weights[weights.length - 1].weight : null
-  const briefing = await morningBriefing(supabase, user.id)
-  const week = await weeklySummary(supabase, user.id)
+  const [briefing, week] = await Promise.all([briefingP, weekP])
 
   // ── Daily score (0–100) ──────────────────────────────
   const amDone = !!bySlot.morning?.mood

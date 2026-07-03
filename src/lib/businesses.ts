@@ -61,10 +61,17 @@ async function notNormal(): Promise<LiveStat | null> {
   } catch { return null }
 }
 
+// Cache the external lookups briefly — NN's Postgres is in us-east-1, so
+// hitting it on every page load makes /work feel sluggish from Sydney.
+let cache: { at: number; data: Partial<Record<BusinessKey, LiveStat>> } | null = null
+const TTL_MS = 5 * 60_000
+
 export async function getBusinessStats(): Promise<Partial<Record<BusinessKey, LiveStat>>> {
+  if (cache && Date.now() - cache.at < TTL_MS) return cache.data
   const [pp, nn] = await Promise.all([printParadise(), notNormal()])
   const out: Partial<Record<BusinessKey, LiveStat>> = {}
   if (pp) out.print_paradise = pp
   if (nn) out.not_normal = nn
+  if (Object.keys(out).length) cache = { at: Date.now(), data: out }
   return out
 }
