@@ -79,7 +79,7 @@ export default function AdminSection({ userId, email, profile }: {
       if (error) throw error
       setPasskeyMsg('Passkey added.')
     } catch {
-      setPasskeyMsg('Passkey enrollment isn’t available on this project yet.')
+      setPasskeyMsg('Passkeys are waiting on Supabase (not your phone) — they’ll work here the day Supabase enables them. Until then: log in once with your password and the app keeps you signed in on this device.')
     }
   }
 

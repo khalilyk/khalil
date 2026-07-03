@@ -13,7 +13,7 @@ function urlB64ToUint8Array(base64String: string) {
   return arr
 }
 
-type Status = 'loading' | 'unsupported' | 'denied' | 'off' | 'on' | 'busy'
+type Status = 'loading' | 'unsupported' | 'ios-install' | 'denied' | 'off' | 'on' | 'busy'
 
 export default function PushToggle() {
   const [status, setStatus] = useState<Status>('loading')
@@ -21,7 +21,12 @@ export default function PushToggle() {
 
   useEffect(() => {
     if (typeof window === 'undefined' || !('serviceWorker' in navigator) || !('PushManager' in window)) {
-      setStatus('unsupported'); return
+      // iOS only exposes web push inside an installed home-screen app.
+      const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent)
+      const standalone = window.matchMedia?.('(display-mode: standalone)').matches
+        || (navigator as unknown as { standalone?: boolean }).standalone === true
+      setStatus(isIOS && !standalone ? 'ios-install' : 'unsupported')
+      return
     }
     if (Notification.permission === 'denied') { setStatus('denied'); return }
     navigator.serviceWorker.getRegistration().then(async reg => {
@@ -70,6 +75,19 @@ export default function PushToggle() {
     setMsg(r.ok ? 'Sent — check your device.' : 'Failed to send.')
   }
 
+  if (status === 'ios-install')
+    return (
+      <div className="text-sm text-muted-foreground space-y-2">
+        <p className="font-medium text-foreground">One step first: install Khalil to your Home Screen.</p>
+        <p>iPhones only allow notifications for installed web apps:</p>
+        <ol className="list-decimal ml-4 space-y-1">
+          <li>Tap the <span className="font-semibold">Share</span> button in Safari (square with ↑)</li>
+          <li>Tap <span className="font-semibold">Add to Home Screen</span> → Add</li>
+          <li>Open <span className="font-semibold">Khalil</span> from your Home Screen icon</li>
+          <li>Come back here and tap Enable</li>
+        </ol>
+      </div>
+    )
   if (status === 'unsupported')
     return <p className="text-sm text-muted-foreground">This browser doesn’t support push notifications.</p>
   if (status === 'denied')
