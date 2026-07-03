@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import Anthropic from '@anthropic-ai/sdk'
 import { format, subDays } from 'date-fns'
+import { sydneyNow } from '@/lib/dates'
 
 const anthropic = new Anthropic()
 
@@ -42,8 +43,8 @@ const tools: Anthropic.Tool[] = [
     }
   },
   {
-    name: 'get_anchors_status',
-    description: 'Get anchor completion status for a date',
+    name: 'get_workout_status',
+    description: 'Get the workout program for a date and which exercises are completed',
     input_schema: {
       type: 'object' as const,
       properties: { date: { type: 'string', description: 'YYYY-MM-DD, defaults to today' } }
@@ -99,12 +100,21 @@ const tools: Anthropic.Tool[] = [
     }
   },
   {
-    name: 'log_anchor',
-    description: 'Log an anchor as done (confirm with user first)',
+    name: 'log_exercise',
+    description: 'Mark a workout exercise as done for a date (confirm with user first)',
     input_schema: {
       type: 'object' as const,
-      properties: { anchor: { type: 'string', description: 'Anchor name' }, date: { type: 'string' }, value: { type: 'number' } },
-      required: ['anchor']
+      properties: { exercise: { type: 'string', description: 'Exercise name, e.g. "Hack Squat"' }, date: { type: 'string' } },
+      required: ['exercise']
+    }
+  },
+  {
+    name: 'log_craving',
+    description: 'Log a food craving/urge the user experienced (rode_out=true if they resisted it)',
+    input_schema: {
+      type: 'object' as const,
+      properties: { feeling: { type: 'string', description: 'e.g. Stressed, Bored, Tired' }, rode_out: { type: 'boolean' }, note: { type: 'string' } },
+      required: ['rode_out']
     }
   },
   {
@@ -143,7 +153,7 @@ const tools: Anthropic.Tool[] = [
 ]
 
 async function executeTool(toolName: string, input: Record<string, unknown>, supabase: Awaited<ReturnType<typeof createClient>>, userId: string): Promise<unknown> {
-  const today = format(new Date(), 'yyyy-MM-dd')
+  const today = format(sydneyNow(), 'yyyy-MM-dd')
 
   switch (toolName) {
     case 'get_financial_summary': {
@@ -195,15 +205,18 @@ async function executeTool(toolName: string, input: Record<string, unknown>, sup
       return { logs: logs ?? [], latest, goal, distToGoal: latest && goal ? (latest - goal).toFixed(1) : null }
     }
 
-    case 'get_anchors_status': {
+    case 'get_workout_status': {
       const date = (input.date as string) ?? today
-      const [{ data: anchors }, { data: logs }] = await Promise.all([
-        supabase.from('anchors').select('*').eq('active', true),
-        supabase.from('anchor_logs').select('*').eq('logged_on', date),
-      ])
-      return (anchors ?? []).map(a => ({
-        ...a, done: (logs ?? []).some(l => l.anchor_id === a.id)
-      }))
+      const weekday = new Date(`${date}T12:00:00`).getDay()
+      const { dayByWeekday, totalExercises } = await import('@/lib/workout')
+      const program = dayByWeekday(weekday)
+      const { data: logs } = await supabase.from('workout_logs').select('exercise').eq('logged_on', date).eq('user_id', userId)
+      const done = new Set((logs ?? []).map(l => l.exercise))
+      if (!program) return { date, restDay: true, completed: [...done] }
+      return {
+        date, title: program.title, total: totalExercises(program),
+        exercises: program.blocks.flatMap(b => b.exercises.map(e => ({ name: e.name, detail: e.detail, done: done.has(e.name) }))),
+      }
     }
 
     case 'get_calendar': {
@@ -252,15 +265,29 @@ async function executeTool(toolName: string, input: Record<string, unknown>, sup
       return { success: true, log: data }
     }
 
-    case 'log_anchor': {
-      const { data: anchors } = await supabase.from('anchors').select('*').eq('active', true)
-      const anchor = (anchors ?? []).find(a => a.name.toLowerCase().includes((input.anchor as string).toLowerCase()))
-      if (!anchor) return { error: `Anchor "${input.anchor}" not found` }
+    case 'log_exercise': {
       const date = (input.date as string) ?? today
-      const existing = await supabase.from('anchor_logs').select('id').eq('anchor_id', anchor.id).eq('logged_on', date).maybeSingle()
-      if (existing.data) return { success: true, message: 'Already logged' }
-      await supabase.from('anchor_logs').insert({ user_id: userId, anchor_id: anchor.id, logged_on: date, value: (input.value as number) ?? 1 })
-      return { success: true }
+      const weekday = new Date(`${date}T12:00:00`).getDay()
+      const { dayByWeekday } = await import('@/lib/workout')
+      const program = dayByWeekday(weekday)
+      const match = program?.blocks.flatMap(b => b.exercises)
+        .find(e => e.name.toLowerCase().includes((input.exercise as string).toLowerCase()))
+      const exercise = match?.name ?? (input.exercise as string)
+      await supabase.from('workout_logs').upsert(
+        { user_id: userId, logged_on: date, exercise },
+        { onConflict: 'user_id,logged_on,exercise' }
+      )
+      return { success: true, exercise, date }
+    }
+
+    case 'log_craving': {
+      await supabase.from('cravings').insert({
+        user_id: userId,
+        feeling: (input.feeling as string) ?? null,
+        rode_out: input.rode_out as boolean,
+        note: (input.note as string) ?? null,
+      })
+      return { success: true, encouragement: input.rode_out ? 'Urge beaten — streak protected.' : 'Logged. Next one, ride it out.' }
     }
 
     case 'create_reminder': {

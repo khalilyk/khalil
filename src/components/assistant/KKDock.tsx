@@ -15,7 +15,7 @@ type Message = { role: 'user' | 'assistant'; content: string }
 const SUGGESTIONS = [
   'How much did I spend this month?',
   'What’s my weight trend this week?',
-  'Show my anchors for today',
+  'What’s my workout today?',
   'What’s coming up on my calendar?',
 ]
 

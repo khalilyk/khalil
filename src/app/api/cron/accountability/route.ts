@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/server'
 import { format, startOfMonth } from 'date-fns'
 import { dayByWeekday, totalExercises } from '@/lib/workout'
+import { sydneyNow } from '@/lib/dates'
 import { sendPush } from '@/lib/push'
 
 export const runtime = 'nodejs'
@@ -21,7 +22,7 @@ export async function GET(req: NextRequest) {
   }
 
   const supabase = await createServiceClient()
-  const now = new Date()
+  const now = sydneyNow()
   const today = format(now, 'yyyy-MM-dd')
   const monthStart = format(startOfMonth(now), 'yyyy-MM-dd')
 

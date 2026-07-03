@@ -39,7 +39,7 @@ let nnPool: Pool | null = null
 function nnDb() {
   const url = process.env.NN_POSTGRES_URL
   if (!url) return null
-  if (!nnPool) nnPool = new Pool({ connectionString: url, ssl: { rejectUnauthorized: false }, max: 2 })
+  if (!nnPool) nnPool = new Pool({ connectionString: url, ssl: { rejectUnauthorized: true }, max: 2 })
   return nnPool
 }
 async function notNormal(): Promise<LiveStat | null> {

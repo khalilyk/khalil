@@ -29,7 +29,7 @@ export async function sendPush(userId: string, payload: Payload) {
     } catch (e: unknown) {
       const code = (e as { statusCode?: number })?.statusCode
       if (code === 404 || code === 410) {
-        await supabase.from('push_subscriptions').delete().eq('id', s.id) // stale subscription
+        await supabase.from('push_subscriptions').delete().eq('id', s.id).eq('user_id', userId) // stale subscription
       }
     }
   }))

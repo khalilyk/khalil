@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { format, startOfMonth, endOfMonth } from 'date-fns'
+import { sydneyNow } from '@/lib/dates'
 import PersonalSection from '@/components/money/PersonalSection'
 import BusinessSection from '@/components/money/BusinessSection'
 import BudgetsSection from '@/components/money/BudgetsSection'
@@ -13,8 +14,8 @@ export default async function MoneyPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return null
 
-  const monthStart = format(startOfMonth(new Date()), 'yyyy-MM-dd')
-  const monthEnd = format(endOfMonth(new Date()), 'yyyy-MM-dd')
+  const monthStart = format(startOfMonth(sydneyNow()), 'yyyy-MM-dd')
+  const monthEnd = format(endOfMonth(sydneyNow()), 'yyyy-MM-dd')
 
   const [{ data: accounts }, { data: transactions }, { data: snapshots }, { data: profile }, { data: budgets }] = await Promise.all([
     supabase.from('accounts').select('*').order('type').order('name'),

@@ -101,7 +101,7 @@ export default function LoginPage() {
           </div>
 
           <div className="flex gap-3 pt-2">
-            {['Money', 'Body', 'Calendar', 'AI'].map(tag => (
+            {['Money', 'Body', 'Work', 'Calendar', 'AI'].map(tag => (
               <span key={tag} className="text-xs text-foreground/70 border border-foreground/20 rounded-full px-3 py-1">
                 {tag}
               </span>

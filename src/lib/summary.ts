@@ -1,5 +1,6 @@
 import { format, startOfMonth, startOfWeek, subDays, addDays, parseISO, differenceInCalendarDays } from 'date-fns'
 import { dayByWeekday, totalExercises } from './workout'
+import { sydneyNow } from './dates'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type DB = any
@@ -8,7 +9,7 @@ const money = (n: number, ccy = 'AUD') => `${ccy} ${Math.round(n).toLocaleString
 
 // ── Morning briefing: what matters today ──────────────────
 export async function morningBriefing(supabase: DB, userId: string) {
-  const now = new Date()
+  const now = sydneyNow()
   const today = format(now, 'yyyy-MM-dd')
   const monthStart = format(startOfMonth(now), 'yyyy-MM-dd')
 
@@ -87,7 +88,7 @@ export type WeeklySummary = {
 }
 
 export async function weeklySummary(supabase: DB, userId: string): Promise<WeeklySummary> {
-  const now = new Date()
+  const now = sydneyNow()
   const weekStart = startOfWeek(now, { weekStartsOn: 1 })
   const weekStartStr = format(weekStart, 'yyyy-MM-dd')
   const monthStart = format(startOfMonth(now), 'yyyy-MM-dd')

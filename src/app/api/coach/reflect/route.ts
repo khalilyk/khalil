@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import Anthropic from '@anthropic-ai/sdk'
+import { sydneyNow } from '@/lib/dates'
 import { format, subDays } from 'date-fns'
 
 const anthropic = new Anthropic()
@@ -11,7 +12,7 @@ export async function POST(req: NextRequest) {
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const { date, slot } = await req.json()
-  const today = date ?? format(new Date(), 'yyyy-MM-dd')
+  const today = date ?? format(sydneyNow(), 'yyyy-MM-dd')
 
   let checkInQuery = supabase.from('check_ins').select('*').eq('check_in_date', today).eq('user_id', user.id)
   if (slot) checkInQuery = checkInQuery.eq('slot', slot)

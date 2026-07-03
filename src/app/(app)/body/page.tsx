@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { format, subDays, startOfWeek } from 'date-fns'
+import { sydneyNow } from '@/lib/dates'
 import WeightSection from '@/components/body/WeightSection'
 import WorkoutSection from '@/components/body/WorkoutSection'
 import RemindersSection from '@/components/body/RemindersSection'
@@ -11,12 +12,12 @@ export default async function BodyPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return null
 
-  const since = format(subDays(new Date(), 60), 'yyyy-MM-dd')
-  const today = format(new Date(), 'yyyy-MM-dd')
-  const weekStart = format(startOfWeek(new Date(), { weekStartsOn: 1 }), 'yyyy-MM-dd')
+  const since = format(subDays(sydneyNow(), 60), 'yyyy-MM-dd')
+  const today = format(sydneyNow(), 'yyyy-MM-dd')
+  const weekStart = format(startOfWeek(sydneyNow(), { weekStartsOn: 1 }), 'yyyy-MM-dd')
 
   type Profile = { weight_goal: number | null; weight_unit: string; weight_rate: number | null; remind_water: boolean | null; remind_snack: boolean | null }
-  const monthStart = format(new Date(new Date().getFullYear(), new Date().getMonth(), 1), 'yyyy-MM-dd')
+  const monthStart = format(new Date(sydneyNow().getFullYear(), sydneyNow().getMonth(), 1), 'yyyy-MM-dd')
   const [{ data: weightLogs }, { data: profileRaw }, { data: workoutLogs }, { data: cravings }] = await Promise.all([
     supabase.from('weight_logs').select('*').gte('logged_on', since).order('logged_on'),
     supabase.from('profiles').select('*').eq('id', user.id).maybeSingle(),

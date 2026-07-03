@@ -12,6 +12,7 @@ import WeeklyReviewCard from '@/components/home/WeeklyReviewCard'
 import CravingTracker from '@/components/body/CravingTracker'
 import GoalsBlock from '@/components/goals/GoalsBlock'
 import { morningBriefing, weeklySummary } from '@/lib/summary'
+import { sydneyNow } from '@/lib/dates'
 import { dayByWeekday, totalExercises } from '@/lib/workout'
 import { quoteOfTheDay } from '@/lib/quotes'
 import type { Goal } from '@/types/goal'
@@ -21,7 +22,7 @@ export default async function HomePage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return null
 
-  const now = new Date()
+  const now = sydneyNow()
   const today = format(now, 'yyyy-MM-dd')
   const monthStart = format(startOfMonth(now), 'yyyy-MM-dd')
   const lastMonthStart = format(startOfMonth(subMonths(now, 1)), 'yyyy-MM-dd')

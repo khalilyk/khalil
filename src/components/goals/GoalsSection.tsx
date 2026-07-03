@@ -325,7 +325,7 @@ export default function GoalsSection({ userId, goals, milestones, categories, cu
                     const isOpen = expanded === g.id
                     return (
                       <div className="mt-2">
-                        <button onClick={() => setExpanded(isOpen ? null : g.id)}
+                        <button onClick={() => { setExpanded(isOpen ? null : g.id); setMsInput('') }}
                           className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1">
                           <ListChecks size={12} /> {ms.length ? `${doneCount}/${ms.length} milestones` : 'Add milestones'}
                           <ChevronDown size={12} className={cn('transition-transform', isOpen && 'rotate-180')} />
