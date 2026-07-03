@@ -43,6 +43,13 @@ export default function KKDock() {
     setTyping(false)
   }, [pathname])
 
+  // Header chat button toggles the panel
+  useEffect(() => {
+    const toggle = () => setOpen(o => !o)
+    window.addEventListener('kk:toggle', toggle)
+    return () => window.removeEventListener('kk:toggle', toggle)
+  }, [])
+
   // Set up speech recognition (Web Speech API) once
   useEffect(() => {
     const SR = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
@@ -131,7 +138,7 @@ export default function KKDock() {
             </div>
 
             {/* Messages */}
-            <ScrollArea className="flex-1 px-4 py-4">
+            <ScrollArea className="flex-1 px-4 pt-4 pb-24">
               {messages.length === 0 ? (
                 <div className="space-y-3 pt-4">
                   <p className="text-sm text-muted-foreground text-center">What would you like to know?</p>
@@ -169,7 +176,8 @@ export default function KKDock() {
         </div>
       )}
 
-      {/* Docked input bar — above bottom nav on mobile, at the bottom on desktop */}
+      {/* Input — lives inside the chat panel */}
+      {open && (
       <div className="fixed left-0 right-0 lg:left-64 bottom-[calc(4rem+env(safe-area-inset-bottom))] lg:bottom-0 z-50 border-t border-border bg-background/95 backdrop-blur">
         <div className="max-w-lg mx-auto w-full px-3 py-2.5">
           {(listening || loading) && (
@@ -222,6 +230,7 @@ export default function KKDock() {
           </div>
         </div>
       </div>
+      )}
     </>
   )
 }
