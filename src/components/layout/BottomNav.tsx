@@ -33,7 +33,7 @@ export default function BottomNav() {
   const homeActive = pathname === '/'
 
   return (
-    <nav className="lg:hidden fixed bottom-0 left-0 right-0 border-t border-border bg-background/95 backdrop-blur z-50">
+    <nav className="lg:hidden fixed bottom-0 left-0 right-0 border-t border-border bg-background/95 backdrop-blur z-50 pb-[env(safe-area-inset-bottom)]">
       <div className="flex justify-around items-end h-16 max-w-lg mx-auto px-2">
         {left.map(i => <Item key={i.href} {...i} />)}
 

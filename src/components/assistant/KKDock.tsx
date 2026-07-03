@@ -114,7 +114,7 @@ export default function KKDock() {
     <>
       {/* Expanded chat panel */}
       {open && (
-        <div className="fixed left-0 right-0 lg:left-64 bottom-16 lg:bottom-0 top-16 z-40 flex flex-col bg-background border-t border-border">
+        <div className="fixed left-0 right-0 lg:left-64 bottom-[calc(4rem+env(safe-area-inset-bottom))] lg:bottom-0 top-16 z-40 flex flex-col bg-background border-t border-border">
           <div className="max-w-lg mx-auto w-full flex flex-col h-full">
             {/* Panel header */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-border">
@@ -170,7 +170,7 @@ export default function KKDock() {
       )}
 
       {/* Docked input bar — above bottom nav on mobile, at the bottom on desktop */}
-      <div className="fixed left-0 right-0 lg:left-64 bottom-16 lg:bottom-0 z-50 border-t border-border bg-background/95 backdrop-blur">
+      <div className="fixed left-0 right-0 lg:left-64 bottom-[calc(4rem+env(safe-area-inset-bottom))] lg:bottom-0 z-50 border-t border-border bg-background/95 backdrop-blur">
         <div className="max-w-lg mx-auto w-full px-3 py-2.5">
           {(listening || loading) && (
             <div className="flex items-center gap-2 px-2 pb-1.5 text-xs font-medium">
