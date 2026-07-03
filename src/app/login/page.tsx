@@ -5,8 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Fingerprint, ArrowRight, Loader2 } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { ArrowRight, Loader2 } from 'lucide-react'
 
 const OWNER_EMAIL = 'khalilykhouri@gmail.com'
 
@@ -16,7 +15,6 @@ export default function LoginPage() {
   const [error, setError] = useState('')
   const [info, setInfo] = useState('')
   const [loading, setLoading] = useState(false)
-  const [passkeyLoading, setPasskeyLoading] = useState(false)
   const [resetting, setResetting] = useState(false)
 
   async function handleLogin(e: React.FormEvent) {
@@ -33,35 +31,6 @@ export default function LoginPage() {
     } else {
       router.push('/')
       router.refresh()
-    }
-  }
-
-  async function handlePasskey() {
-    setPasskeyLoading(true)
-    setError('')
-    setInfo('')
-    try {
-      if (!window.PublicKeyCredential) {
-        setError('Passkeys not supported in this browser.')
-        setPasskeyLoading(false)
-        return
-      }
-      const { createClient } = await import('@/lib/supabase/client')
-      const supabase = createClient()
-      // @ts-ignore — experimental API
-      const { error } = await supabase.auth.signInWithPasskey()
-      if (error) throw error
-      router.push('/')
-      router.refresh()
-    } catch (err: any) {
-      const msg: string = err?.message ?? 'Passkey sign-in failed.'
-      // Passkeys are still gated server-side in Supabase — guide to password instead
-      if (/disabled|not enabled|experimental/i.test(msg)) {
-        setInfo('Passkey sign-in isn’t enabled yet — use your password below.')
-      } else {
-        setError(msg)
-      }
-      setPasskeyLoading(false)
     }
   }
 
@@ -125,33 +94,6 @@ export default function LoginPage() {
           <div className="space-y-2">
             <h1 className="text-2xl font-bold tracking-tight">Welcome back</h1>
             <p className="text-sm text-muted-foreground">Sign in to keep building forward</p>
-          </div>
-
-          {/* Passkey button */}
-          <button
-            onClick={handlePasskey}
-            disabled={passkeyLoading}
-            className={cn(
-              'w-full flex items-center justify-center gap-3 rounded-full border border-border px-4 py-3.5 text-sm font-medium transition-all',
-              'hover:bg-muted hover:border-primary active:scale-[0.98]',
-              passkeyLoading && 'opacity-50 cursor-not-allowed'
-            )}
-          >
-            {passkeyLoading
-              ? <Loader2 size={18} className="animate-spin" />
-              : <Fingerprint size={18} />
-            }
-            Continue with Passkey
-          </button>
-
-          {/* Divider */}
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t border-border" />
-            </div>
-            <div className="relative flex justify-center text-xs">
-              <span className="bg-background px-3 text-muted-foreground">or sign in with password</span>
-            </div>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-4">

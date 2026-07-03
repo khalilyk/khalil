@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Loader2, Check, User, KeyRound, LogOut, Fingerprint, Bell } from 'lucide-react'
+import { Loader2, Check, User, KeyRound, LogOut, Bell } from 'lucide-react'
 import PushToggle from './PushToggle'
 
 type Profile = {
@@ -35,7 +35,6 @@ export default function AdminSection({ userId, email, profile }: {
   const [password, setPassword] = useState('')
   const [savingPw, setSavingPw] = useState(false)
   const [pwMsg, setPwMsg] = useState('')
-  const [passkeyMsg, setPasskeyMsg] = useState('')
 
   async function saveContact() {
     setSavingContact(true)
@@ -67,20 +66,6 @@ export default function AdminSection({ userId, email, profile }: {
     setSavingPw(false)
     if (error) setPwMsg(error.message)
     else { setPwMsg('Password updated.'); setPassword('') }
-  }
-
-  async function enrollPasskey() {
-    setPasskeyMsg('')
-    try {
-      const { createClient } = await import('@/lib/supabase/client')
-      const supabase = createClient()
-      // @ts-ignore — experimental API
-      const { error } = await supabase.auth.enrollPasskey?.() ?? { error: new Error('unavailable') }
-      if (error) throw error
-      setPasskeyMsg('Passkey added.')
-    } catch {
-      setPasskeyMsg('Passkeys are waiting on Supabase (not your phone) — they’ll work here the day Supabase enables them. Until then: log in once with your password and the app keeps you signed in on this device.')
-    }
   }
 
   async function signOut() {
@@ -133,13 +118,6 @@ export default function AdminSection({ userId, email, profile }: {
             <Button onClick={changePassword} disabled={savingPw || !password} variant="outline" className="w-full rounded-full gap-2 mt-1">
               {savingPw ? <Loader2 size={16} className="animate-spin" /> : 'Update password'}
             </Button>
-          </div>
-
-          <div className="space-y-1.5">
-            <Button onClick={enrollPasskey} variant="outline" className="w-full rounded-full gap-2">
-              <Fingerprint size={16} /> Set up passkey
-            </Button>
-            {passkeyMsg && <p className="text-xs text-muted-foreground">{passkeyMsg}</p>}
           </div>
 
           <Button onClick={signOut} variant="ghost" className="w-full rounded-full gap-2 text-destructive hover:text-destructive">
