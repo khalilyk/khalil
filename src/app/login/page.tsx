@@ -55,12 +55,11 @@ export default function LoginPage() {
         {/* Grid texture */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.04)_1px,transparent_1px)] bg-[size:48px_48px]" />
 
-        {/* KHALIL wordmark — Anton at natural proportions */}
-        <div className="relative z-10">
-          <span className="block text-center text-white leading-[0.9] text-7xl sm:text-8xl lg:text-8xl"
-            style={{ fontFamily: 'var(--font-display)' }}>
-            KHALIL
-          </span>
+        {/* KHALIL wordmark — trimmed PNG, recoloured white, edge to edge */}
+        <div className="relative z-10 -mx-6 px-2 lg:mx-0 lg:px-0">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/khalil-wordmark.png" alt="Khalil" className="block w-full h-auto"
+            style={{ filter: 'brightness(0) invert(1)' }} />
         </div>
 
         {/* Content — centred in the remaining orange space */}
