@@ -44,6 +44,7 @@ export default function CheckInForm({ userId, today, bySlot }: {
   const [energy, setEnergy] = useState<number | null>(null)
   const [note, setNote] = useState('')
   const [loading, setLoading] = useState(false)
+  const [justSaved, setJustSaved] = useState(false)
 
   // Load the selected slot's saved values when switching
   useEffect(() => {
@@ -55,16 +56,26 @@ export default function CheckInForm({ userId, today, bySlot }: {
 
   async function save() {
     setLoading(true)
-    await supabase.from('check_ins').upsert(
+    // 1) Save the check-in itself
+    const { error } = await supabase.from('check_ins').upsert(
       { user_id: userId, check_in_date: today, slot, mood, energy, note: note || null },
       { onConflict: 'user_id,check_in_date,slot' }
     )
-    await syncCalendar()
+    if (error) { setLoading(false); alert(`Could not save: ${error.message}`); return }
+
+    // 2) Mirror to the calendar — never let a calendar hiccup block the save
+    try { await syncCalendar() } catch (e) { console.error('calendar sync failed', e) }
+
+    // 3) Kick off the coach reflection in the background (don't block the UI)
     fetch('/api/coach/reflect', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ date: today, slot }),
-    })
+    }).catch(() => {})
+
+    // 4) Refresh the form to its saved state + flash a confirmation
     setLoading(false)
+    setJustSaved(true)
+    setTimeout(() => setJustSaved(false), 2500)
     router.refresh()
   }
 
@@ -136,8 +147,12 @@ export default function CheckInForm({ userId, today, bySlot }: {
           {QUICK[slot].map(q => <option key={q} value={q} />)}
         </datalist>
 
-        <Button onClick={save} disabled={loading || (!mood && !energy)} className="w-full rounded-full">
-          {loading ? 'Saving…' : saved ? `Update ${slot === 'morning' ? 'morning' : 'evening'} check-in` : `Save ${slot === 'morning' ? 'morning' : 'evening'} check-in`}
+        <Button onClick={save} disabled={loading || justSaved || (!mood && !energy)}
+          className={cn('w-full rounded-full gap-1.5', justSaved && 'bg-green-600 hover:bg-green-600')}>
+          {loading ? 'Saving…'
+            : justSaved ? <><Check size={15} strokeWidth={3} /> Saved to calendar</>
+            : saved ? `Update ${slot === 'morning' ? 'morning' : 'evening'} check-in`
+            : `Save ${slot === 'morning' ? 'morning' : 'evening'} check-in`}
         </Button>
       </CardContent>
     </Card>
