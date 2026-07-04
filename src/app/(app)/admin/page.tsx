@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import AdminSection from '@/components/admin/AdminSection'
+import NotificationsPanel from '@/components/notifications/NotificationsPanel'
 
 type Profile = {
   display_name: string | null
@@ -38,6 +39,7 @@ export default async function AdminPage() {
         <p className="text-sm text-muted-foreground">Contact details and login</p>
       </div>
       <AdminSection userId={user!.id} email={user!.email ?? ''} profile={profile} />
+      <NotificationsPanel userId={user!.id} />
     </div>
   )
 }
