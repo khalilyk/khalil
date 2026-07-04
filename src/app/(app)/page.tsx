@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient, getCachedUser } from '@/lib/supabase/server'
 import { format, startOfMonth, endOfMonth, subMonths, startOfWeek, addDays, subDays } from 'date-fns'
 import CheckInForm from '@/components/home/CheckInForm'
 import WeightTrendCard from '@/components/home/WeightTrendCard'
@@ -17,9 +17,9 @@ import { quoteOfTheDay } from '@/lib/quotes'
 import type { Goal } from '@/types/goal'
 
 export default async function HomePage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const user = await getCachedUser()
   if (!user) return null
+  const supabase = await createClient()
 
   const now = sydneyNow()
   const today = format(now, 'yyyy-MM-dd')

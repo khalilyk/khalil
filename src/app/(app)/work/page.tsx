@@ -1,12 +1,12 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient, getCachedUser } from '@/lib/supabase/server'
 import WorkDashboard from '@/components/work/WorkDashboard'
 import GoalsBlock from '@/components/goals/GoalsBlock'
 import { getBusinessStats } from '@/lib/businesses'
 import type { WorkItem } from '@/lib/work'
 
 export default async function WorkPage() {
+  const user = await getCachedUser()
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
 
   const [{ data: items }, { data: profile }, live] = await Promise.all([
     supabase.from('work_items').select('*').order('created_at', { ascending: false }),

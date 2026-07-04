@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient, getCachedUser } from '@/lib/supabase/server'
 import { format, subDays, startOfWeek } from 'date-fns'
 import { sydneyNow } from '@/lib/dates'
 import WeightSection from '@/components/body/WeightSection'
@@ -8,9 +8,9 @@ import CravingTracker from '@/components/body/CravingTracker'
 import GoalsBlock from '@/components/goals/GoalsBlock'
 
 export default async function BodyPage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const user = await getCachedUser()
   if (!user) return null
+  const supabase = await createClient()
 
   const since = format(subDays(sydneyNow(), 60), 'yyyy-MM-dd')
   const today = format(sydneyNow(), 'yyyy-MM-dd')

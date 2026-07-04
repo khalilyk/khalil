@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient, getCachedUser } from '@/lib/supabase/server'
 import AdminSection from '@/components/admin/AdminSection'
 import NotificationsPanel from '@/components/notifications/NotificationsPanel'
 
@@ -13,8 +13,8 @@ type Profile = {
 }
 
 export default async function AdminPage() {
+  const user = await getCachedUser()
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
   const { data } = await supabase
     .from('profiles')
     .select('*')

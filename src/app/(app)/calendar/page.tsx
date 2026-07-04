@@ -1,11 +1,11 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient, getCachedUser } from '@/lib/supabase/server'
 import { format, startOfMonth, endOfMonth, addMonths } from 'date-fns'
 import CalendarView from '@/components/calendar/CalendarView'
 
 export default async function CalendarPage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const user = await getCachedUser()
   if (!user) return null
+  const supabase = await createClient()
 
   const monthStart = format(startOfMonth(new Date()), 'yyyy-MM-dd')
   const monthEnd = format(endOfMonth(addMonths(new Date(), 1)), 'yyyy-MM-dd')

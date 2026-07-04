@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient, getCachedUser } from '@/lib/supabase/server'
 import { format, startOfMonth, endOfMonth } from 'date-fns'
 import { sydneyNow } from '@/lib/dates'
 import PersonalSection from '@/components/money/PersonalSection'
@@ -10,9 +10,9 @@ import ReceiptUploader from '@/components/receipts/ReceiptUploader'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 export default async function MoneyPage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const user = await getCachedUser()
   if (!user) return null
+  const supabase = await createClient()
 
   const monthStart = format(startOfMonth(sydneyNow()), 'yyyy-MM-dd')
   const monthEnd = format(endOfMonth(sydneyNow()), 'yyyy-MM-dd')
