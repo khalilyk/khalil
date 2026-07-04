@@ -3,7 +3,6 @@ import { redirect } from 'next/navigation'
 import BottomNav from '@/components/layout/BottomNav'
 import Header from '@/components/layout/Header'
 import Sidebar from '@/components/layout/Sidebar'
-import KKDock from '@/components/assistant/KKDock'
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const user = await getCachedUser()
@@ -22,7 +21,6 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         <main className="flex-1 pb-[calc(5rem+env(safe-area-inset-bottom))] lg:pb-8 overflow-y-auto overflow-x-hidden">
           {children}
         </main>
-        <KKDock />
         <BottomNav />
       </div>
     </div>

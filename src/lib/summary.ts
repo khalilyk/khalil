@@ -1,4 +1,4 @@
-import { format, startOfMonth, startOfWeek, subDays, addDays, parseISO, differenceInCalendarDays } from 'date-fns'
+import { format, startOfMonth, startOfWeek, startOfYear, subDays, addDays, parseISO, differenceInCalendarDays } from 'date-fns'
 import { dayByWeekday, totalExercises } from './workout'
 import { sydneyNow } from './dates'
 
@@ -139,5 +139,85 @@ export async function weeklySummary(supabase: DB, userId: string): Promise<Weekl
   return {
     rangeLabel: `${format(weekStart, 'd MMM')} – ${format(addDays(weekStart, 6), 'd MMM')}`,
     checkinsDone, workoutDays, weightChange, unit, spend, currency: ccy, overBudget, goalsDueSoon, lines,
+  }
+}
+
+// ── Period summary: week / month / year ───────────────────
+export type PeriodKey = 'week' | 'month' | 'year'
+
+export type PeriodSummary = {
+  period: PeriodKey
+  rangeLabel: string
+  daysElapsed: number
+  checkinsDone: number
+  workoutDays: number
+  weightChange: number | null
+  weightLatest: number | null
+  unit: string
+  spend: number
+  currency: string
+  topCategories: { category: string; amount: number }[]
+  overBudget: string[]
+  goalsActive: number
+  goalsDueSoon: { title: string; days: number }[]
+}
+
+export async function periodSummary(supabase: DB, userId: string, period: PeriodKey): Promise<PeriodSummary> {
+  const now = sydneyNow()
+  const start =
+    period === 'week' ? startOfWeek(now, { weekStartsOn: 1 })
+    : period === 'month' ? startOfMonth(now)
+    : startOfYear(now)
+  const startStr = format(start, 'yyyy-MM-dd')
+  const daysElapsed = differenceInCalendarDays(now, start) + 1
+  const rangeLabel =
+    period === 'week' ? `${format(start, 'd MMM')} – ${format(now, 'd MMM')}`
+    : period === 'month' ? format(now, 'MMMM yyyy')
+    : format(now, 'yyyy')
+
+  const [{ data: profile }, { data: checkIns }, { data: workouts }, { data: weights }, { data: tx }, { data: budgets }, { data: goals }] =
+    await Promise.all([
+      supabase.from('profiles').select('currency, weight_unit').eq('id', userId).maybeSingle(),
+      supabase.from('check_ins').select('check_in_date').gte('check_in_date', startStr),
+      supabase.from('workout_logs').select('logged_on').gte('logged_on', startStr),
+      supabase.from('weight_logs').select('weight,logged_on').gte('logged_on', startStr).order('logged_on'),
+      supabase.from('transactions').select('amount,category,direction').eq('direction', 'expense').gte('occurred_on', startStr),
+      supabase.from('budgets').select('category,monthly_limit'),
+      supabase.from('goals').select('title,target_date,status').eq('status', 'active'),
+    ])
+
+  const ccy = profile?.currency ?? 'AUD'
+  const unit = profile?.weight_unit ?? 'kg'
+
+  const checkinsDone = new Set((checkIns ?? []).map((c: any) => c.check_in_date)).size
+  const workoutDays = new Set((workouts ?? []).map((w: any) => w.logged_on)).size
+
+  const ws = (weights ?? []) as { weight: number; logged_on: string }[]
+  const weightChange = ws.length >= 2 ? +(ws[ws.length - 1].weight - ws[0].weight).toFixed(1) : null
+  const weightLatest = ws.length ? ws[ws.length - 1].weight : null
+
+  const spend = (tx ?? []).reduce((s: number, t: any) => s + Number(t.amount), 0)
+  const byCat: Record<string, number> = {}
+  for (const t of tx ?? []) byCat[t.category ?? 'other'] = (byCat[t.category ?? 'other'] ?? 0) + Number(t.amount)
+  const topCategories = Object.entries(byCat)
+    .map(([category, amount]) => ({ category, amount: amount as number }))
+    .sort((a, b) => b.amount - a.amount)
+    .slice(0, 4)
+  // Budgets are monthly targets — only compare on the month view
+  const overBudget = period === 'month'
+    ? (budgets ?? []).filter((b: any) => (byCat[b.category] ?? 0) > b.monthly_limit).map((b: any) => b.category)
+    : []
+
+  const dated = (goals ?? []).filter((g: any) => g.target_date)
+  const goalsDueSoon = dated
+    .map((g: any) => ({ title: g.title, days: differenceInCalendarDays(parseISO(g.target_date), now) }))
+    .filter((g: any) => g.days <= 30)
+    .sort((a: any, b: any) => a.days - b.days)
+    .slice(0, 5)
+
+  return {
+    period, rangeLabel, daysElapsed, checkinsDone, workoutDays,
+    weightChange, weightLatest, unit, spend, currency: ccy,
+    topCategories, overBudget, goalsActive: (goals ?? []).length, goalsDueSoon,
   }
 }

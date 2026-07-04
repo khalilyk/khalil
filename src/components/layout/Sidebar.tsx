@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { format } from 'date-fns'
-import { Home, DollarSign, Activity, Briefcase, Calendar, Settings, LogOut } from 'lucide-react'
+import { Home, DollarSign, Activity, Briefcase, Calendar, LineChart, Settings, LogOut } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const nav = [
@@ -12,6 +12,7 @@ const nav = [
   { href: '/body', label: 'Body', icon: Activity },
   { href: '/work', label: 'Work', icon: Briefcase },
   { href: '/calendar', label: 'Calendar', icon: Calendar },
+  { href: '/review', label: 'Review', icon: LineChart },
   { href: '/admin', label: 'Admin', icon: Settings },
 ]
 

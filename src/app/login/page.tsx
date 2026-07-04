@@ -65,12 +65,12 @@ export default function LoginPage() {
               Building<br />the future<br />you want.
             </p>
             <p className="text-foreground/60 text-base leading-relaxed max-w-xs">
-              Money, body, calendar, and a personal assistant — all working toward where you&apos;re headed next.
+              Money, body, work, and calendar — with weekly, monthly, and annual reviews to keep you on track.
             </p>
           </div>
 
           <div className="flex gap-3 pt-2">
-            {['Money', 'Body', 'Work', 'Calendar', 'AI'].map(tag => (
+            {['Money', 'Body', 'Work', 'Calendar', 'Review'].map(tag => (
               <span key={tag} className="text-xs text-foreground/70 border border-foreground/20 rounded-full px-3 py-1">
                 {tag}
               </span>
