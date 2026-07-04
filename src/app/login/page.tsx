@@ -64,8 +64,8 @@ export default function LoginPage() {
 
         {/* Content — centred in the remaining orange space */}
         <div className="relative z-10 flex-1 flex flex-col justify-center items-center text-center space-y-3">
-          <p className="text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-[1.05]">
-            Building<br />the future<br />you want.
+          <p className="text-3xl lg:text-4xl font-extrabold tracking-tight text-white leading-[1.05]">
+            Building the future you want.
           </p>
           <p className="text-white/70 text-sm lg:text-base leading-relaxed max-w-xs">
             Money, body, work, and calendar. Weekly, monthly, and annual reviews to keep you on track.
