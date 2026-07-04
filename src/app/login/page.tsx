@@ -49,14 +49,14 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex">
-      {/* Left panel */}
-      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-primary flex-col justify-between p-12">
+    <div className="min-h-screen flex flex-col lg:flex-row">
+      {/* Brand panel — top band on mobile, left half on desktop */}
+      <div className="flex lg:w-1/2 relative overflow-hidden bg-primary flex-col justify-between p-8 lg:p-12 min-h-[45vh] lg:min-h-screen">
         {/* Grid texture */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.04)_1px,transparent_1px)] bg-[size:48px_48px]" />
 
         <div className="relative z-10">
-          <span className="text-white font-bold tracking-tight text-lg">Khalil</span>
+          <span className="block w-full text-center uppercase text-white font-black tracking-[0.35em] text-2xl">Khalil</span>
         </div>
 
         <div className="relative z-10 space-y-6">
@@ -69,7 +69,7 @@ export default function LoginPage() {
             </p>
           </div>
 
-          <div className="flex gap-3 pt-2">
+          <div className="flex flex-wrap gap-2.5 pt-2">
             {['Money', 'Body', 'Work', 'Calendar', 'Review'].map(tag => (
               <span key={tag} className="text-xs text-white/80 border border-white/30 rounded-full px-3 py-1">
                 {tag}
@@ -86,11 +86,6 @@ export default function LoginPage() {
       {/* Right panel */}
       <div className="flex-1 flex items-center justify-center p-8 bg-background">
         <div className="w-full max-w-sm space-y-8">
-          {/* Mobile logo */}
-          <div className="lg:hidden">
-            <span className="font-bold tracking-tight text-lg">Khalil</span>
-          </div>
-
           <div className="space-y-2">
             <h1 className="text-2xl font-bold tracking-tight">Welcome back</h1>
             <p className="text-sm text-muted-foreground">Sign in to keep building forward</p>
