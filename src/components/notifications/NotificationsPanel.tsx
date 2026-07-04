@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { formatDistanceToNow } from 'date-fns'
 import { cn } from '@/lib/utils'
+import PushToggle from '@/components/admin/PushToggle'
 
 type Notification = {
   id: string
@@ -68,6 +69,13 @@ export default function NotificationsPanel({ userId }: { userId: string }) {
         )}
       </CardHeader>
       <CardContent className="p-0">
+        {/* Push on/off for this device */}
+        <div className="px-5 pb-4 border-b border-border">
+          <PushToggle />
+          <p className="text-xs text-muted-foreground mt-3">
+            Turn this on to get check-in, water/no-snacking, and overdue-goal alerts on this device.
+          </p>
+        </div>
         <div className="max-h-96 overflow-y-auto">
           {notifications.length === 0 ? (
             <p className="text-sm text-muted-foreground text-center py-10">All clear — no notifications.</p>

@@ -6,8 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Loader2, Check, User, KeyRound, LogOut, Bell } from 'lucide-react'
-import PushToggle from './PushToggle'
+import { Loader2, Check, User, KeyRound, LogOut } from 'lucide-react'
 
 type Profile = {
   display_name: string | null
@@ -123,19 +122,6 @@ export default function AdminSection({ userId, email, profile }: {
           <Button onClick={signOut} variant="ghost" className="w-full rounded-full gap-2 text-destructive hover:text-destructive">
             <LogOut size={16} /> Sign out
           </Button>
-        </CardContent>
-      </Card>
-
-      {/* Notifications */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-base"><Bell size={16} /> Notifications</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <PushToggle />
-          <p className="text-xs text-muted-foreground mt-3">
-            Turn this on to get nudges, water/no-snacking reminders, and overdue-goal alerts on this device.
-          </p>
         </CardContent>
       </Card>
     </div>
