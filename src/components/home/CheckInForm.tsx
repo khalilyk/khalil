@@ -59,12 +59,35 @@ export default function CheckInForm({ userId, today, bySlot }: {
       { user_id: userId, check_in_date: today, slot, mood, energy, note: note || null },
       { onConflict: 'user_id,check_in_date,slot' }
     )
+    await syncCalendar()
     fetch('/api/coach/reflect', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ date: today, slot }),
     })
     setLoading(false)
     router.refresh()
+  }
+
+  // Mirror the day's check-ins into the calendar so they're reviewable
+  async function syncCalendar() {
+    const { data: rows } = await supabase
+      .from('check_ins').select('slot, mood').eq('check_in_date', today)
+    const doneSlots = new Set((rows ?? []).filter(r => r.mood).map(r => r.slot))
+    doneSlots.add(slot) // include the one we just saved
+    const parts = [doneSlots.has('morning') && 'AM', doneSlots.has('evening') && 'PM'].filter(Boolean)
+    const mL = MOODS.find(m => m.v === mood)?.label
+    const title = `📝 Check-in ${parts.join(' + ')}${mL ? ` · ${mL.split(' ')[1] ?? mL}` : ''}`
+    const ext = `checkin:${today}`
+
+    const found = await supabase.from('calendar_events').select('id').eq('external_id', ext).maybeSingle()
+    if (found.data) {
+      await supabase.from('calendar_events').update({ title }).eq('id', (found.data as { id: string }).id)
+    } else {
+      await supabase.from('calendar_events').insert({
+        user_id: userId, title, starts_at: `${today}T00:00:00`, ends_at: null,
+        all_day: true, source: 'native', external_id: ext,
+      })
+    }
   }
 
   const saved = !!bySlot[slot]?.mood
