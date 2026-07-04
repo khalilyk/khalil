@@ -2,8 +2,7 @@
 
 import Link from 'next/link'
 import { format } from 'date-fns'
-import { Settings, MessageCircle } from 'lucide-react'
-import NotificationBell from '@/components/notifications/NotificationBell'
+import { Settings, MessageCircle, Camera } from 'lucide-react'
 
 function timeGreeting() {
   const h = new Date().getHours()
@@ -40,7 +39,13 @@ export default function Header({ userId, name }: { userId: string; name: string 
           >
             <MessageCircle size={17} />
           </button>
-          <NotificationBell userId={userId} />
+          <Link
+            href="/money?capture=1"
+            title="Snap a receipt"
+            className="w-9 h-9 flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+          >
+            <Camera size={18} />
+          </Link>
         </div>
       </div>
     </header>

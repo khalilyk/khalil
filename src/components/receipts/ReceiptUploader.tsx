@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
@@ -28,6 +28,16 @@ export default function ReceiptUploader({ userId, accounts, currency }: {
   const [receiptId, setReceiptId] = useState<string | null>(null)
   const [accountId, setAccountId] = useState(accounts[0]?.id ?? '')
   const [overrides, setOverrides] = useState({ merchant: '', amount: '', category: 'other', date: '' })
+
+  // Arriving from the header camera button (/money?capture=1) opens the camera straight away
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    if (params.get('capture') === '1') {
+      cameraRef.current?.click()
+      // strip the param so a refresh/back doesn't re-trigger the camera
+      window.history.replaceState(null, '', '/money')
+    }
+  }, [])
 
   async function handleFile(file: File) {
     setStage('uploading')
