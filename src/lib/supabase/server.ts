@@ -22,13 +22,16 @@ export async function createClient() {
   )
 }
 
-// Validating the auth token is a network round-trip to Supabase. The layout and
-// every page each need the user, so without this they'd hit the auth server twice
-// on every navigation. cache() dedupes it to one call per request render.
+// The proxy middleware (src/proxy.ts → updateSession) already calls getUser() on
+// every request — a real network round-trip that validates the token and redirects
+// if it's invalid. So by the time a page renders, the session cookie is trusted.
+// Reading it with getSession() is a local cookie decode (no network), which avoids
+// a second auth-server round-trip on every navigation. cache() further dedupes the
+// layout + page calls into one. Safe *only* because the middleware validates first.
 export const getCachedUser = cache(async () => {
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  return user
+  const { data: { session } } = await supabase.auth.getSession()
+  return session?.user ?? null
 })
 
 export async function createServiceClient() {
