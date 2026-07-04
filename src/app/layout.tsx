@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Sora, Caveat } from 'next/font/google'
+import { Sora, Caveat, Anton } from 'next/font/google'
 import './globals.css'
 
 const sora = Sora({
@@ -12,6 +12,13 @@ const caveat = Caveat({
   subsets: ['latin'],
   variable: '--font-hand',
   weight: ['400', '500', '600', '700'],
+})
+
+// Ultra-condensed heavy display face for the KHALIL wordmark
+const anton = Anton({
+  subsets: ['latin'],
+  variable: '--font-display',
+  weight: '400',
 })
 
 export const metadata: Metadata = {
@@ -35,7 +42,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${sora.variable} ${caveat.variable}`}>
+    <html lang="en" className={`${sora.variable} ${caveat.variable} ${anton.variable}`}>
       <body className="min-h-screen bg-background text-foreground antialiased">
         {children}
       </body>

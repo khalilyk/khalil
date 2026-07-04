@@ -55,11 +55,11 @@ export default function LoginPage() {
         {/* Grid texture */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.04)_1px,transparent_1px)] bg-[size:48px_48px]" />
 
-        {/* KHALIL — heavy, condensed, packed to fill the width */}
-        <svg viewBox="0 0 1000 260" preserveAspectRatio="none" aria-label="Khalil"
-          className="relative z-10 block w-full h-28 sm:h-36 lg:h-32 text-white">
-          <text x="500" y="212" textAnchor="middle" textLength="1000" lengthAdjust="spacingAndGlyphs"
-            fill="currentColor" style={{ fontSize: '260px', fontWeight: 900, letterSpacing: '-0.04em', fontFamily: 'inherit' }}>
+        {/* KHALIL — ultra-condensed heavy display face (Anton), stretched to fill */}
+        <svg viewBox="0 0 1000 300" preserveAspectRatio="none" aria-label="Khalil"
+          className="relative z-10 block w-full h-32 sm:h-44 lg:h-36 text-white">
+          <text x="500" y="248" textAnchor="middle" textLength="1000" lengthAdjust="spacingAndGlyphs"
+            fill="currentColor" style={{ fontSize: '300px', letterSpacing: '-0.01em', fontFamily: 'var(--font-display)' }}>
             KHALIL
           </text>
         </svg>
