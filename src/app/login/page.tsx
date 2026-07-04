@@ -56,22 +56,22 @@ export default function LoginPage() {
         <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.04)_1px,transparent_1px)] bg-[size:48px_48px]" />
 
         <div className="relative z-10">
-          <span className="text-foreground font-bold tracking-tight text-lg">Khalil</span>
+          <span className="text-white font-bold tracking-tight text-lg">Khalil</span>
         </div>
 
         <div className="relative z-10 space-y-6">
           <div className="space-y-3">
-            <p className="text-5xl font-extrabold tracking-tight text-foreground leading-[1.05]">
+            <p className="text-5xl font-extrabold tracking-tight text-white leading-[1.05]">
               Building<br />the future<br />you want.
             </p>
-            <p className="text-foreground/60 text-base leading-relaxed max-w-xs">
+            <p className="text-white/70 text-base leading-relaxed max-w-xs">
               Money, body, work, and calendar — with weekly, monthly, and annual reviews to keep you on track.
             </p>
           </div>
 
           <div className="flex gap-3 pt-2">
             {['Money', 'Body', 'Work', 'Calendar', 'Review'].map(tag => (
-              <span key={tag} className="text-xs text-foreground/70 border border-foreground/20 rounded-full px-3 py-1">
+              <span key={tag} className="text-xs text-white/80 border border-white/30 rounded-full px-3 py-1">
                 {tag}
               </span>
             ))}
@@ -79,7 +79,7 @@ export default function LoginPage() {
         </div>
 
         <div className="relative z-10">
-          <p className="text-foreground/50 text-xs">Private. Yours only.</p>
+          <p className="text-white/60 text-xs">Private. Yours only.</p>
         </div>
       </div>
 
