@@ -3,16 +3,14 @@ import { format, startOfMonth, endOfMonth, subMonths, startOfWeek, addDays, subD
 import CheckInForm from '@/components/home/CheckInForm'
 import WeightTrendCard from '@/components/home/WeightTrendCard'
 import GoalFocusCard from '@/components/home/GoalFocusCard'
-import TodayCard from '@/components/home/TodayCard'
+import TodayHero, { type HeroRow } from '@/components/home/TodayHero'
 import MoneyCard from '@/components/home/MoneyCard'
 import StepsCard from '@/components/home/StepsCard'
 import CoachCard from '@/components/home/CoachCard'
-import DailyScoreBar from '@/components/home/DailyScoreBar'
-import MorningBriefingCard from '@/components/home/MorningBriefingCard'
 import WeeklyReviewCard from '@/components/home/WeeklyReviewCard'
 import CravingTracker from '@/components/body/CravingTracker'
 import GoalsBlock from '@/components/goals/GoalsBlock'
-import { morningBriefing, weeklySummary } from '@/lib/summary'
+import { weeklySummary } from '@/lib/summary'
 import { sydneyNow } from '@/lib/dates'
 import { dayByWeekday, totalExercises } from '@/lib/workout'
 import { quoteOfTheDay } from '@/lib/quotes'
@@ -32,8 +30,7 @@ export default async function HomePage() {
   const weekStart = format(weekStartDate, 'yyyy-MM-dd')
   const since = format(subDays(now, 60), 'yyyy-MM-dd')
 
-  // Start the briefing/weekly work in parallel with the page queries
-  const briefingP = morningBriefing(supabase, user.id)
+  // Start the weekly work in parallel with the page queries
   const weekP = weeklySummary(supabase, user.id)
 
   const [
@@ -80,7 +77,7 @@ export default async function HomePage() {
   const weekDots = Array.from({ length: 7 }).map((_, i) =>
     wLogs.some(l => l.logged_on === format(addDays(weekStartDate, i), 'yyyy-MM-dd')))
   const latestWeight = weights.length ? weights[weights.length - 1].weight : null
-  const [briefing, week] = await Promise.all([briefingP, weekP])
+  const week = await weekP
 
   // ── Daily score (0–100) ──────────────────────────────
   const amDone = !!bySlot.morning?.mood
@@ -97,6 +94,19 @@ export default async function HomePage() {
   ]
   const score = scoreItems.reduce((s, i) => s + i.got, 0)
 
+  // The four things that make the day count — one place, no repetition
+  const MOOD = ['', 'Rough', 'Low', 'Okay', 'Good', 'Great']
+  const moodText = (c?: { mood: number | null; energy: number | null }) =>
+    c?.mood ? `${MOOD[c.mood]}${c.energy ? ` · ⚡${c.energy}` : ''}` : 'Not yet'
+  const heroRows: HeroRow[] = [
+    { key: 'morning', label: 'Morning check-in', value: moodText(bySlot.morning), done: amDone, href: '/' },
+    { key: 'evening', label: 'Evening check-in', value: moodText(bySlot.evening), done: pmDone, href: '/' },
+    { key: 'workout', label: todayWorkout?.title ?? 'Rest day',
+      value: todayWorkout ? `${todayDone}/${totalExercises(todayWorkout)}` : 'Rest day',
+      done: todayWorkout ? todayDone > 0 : true, href: '/body' },
+    { key: 'weight', label: 'Weight', value: latestWeight ? `${latestWeight} ${unit}` : '—', done: weightToday, href: '/body' },
+  ]
+
   // Streak: consecutive days (up to today) with a check-in
   const ciDates = new Set(((recentCheckins ?? []) as { check_in_date: string }[]).map(r => r.check_in_date))
   let streak = 0
@@ -107,59 +117,37 @@ export default async function HomePage() {
     else break
   }
 
-  const firstName = (prof.display_name ?? 'Khalil').split(' ')[0]
-  const greeting = now.getHours() < 12 ? 'Good morning' : now.getHours() < 17 ? 'Good afternoon' : 'Good evening'
-
   return (
     <div className="px-4 py-6 lg:px-8 space-y-8 [&_section>*]:min-w-0">
-      {/* Greeting + quote */}
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">{greeting}, {firstName}.</h1>
-        <p className="text-base text-muted-foreground italic mt-1">“{quoteOfTheDay(now)}”</p>
-      </div>
+      {/* Quote (the header already greets by name) */}
+      <p className="text-base text-muted-foreground italic">“{quoteOfTheDay(now)}”</p>
 
-      {/* ── TODAY — the daily ritual: what's on, log it, see the score ── */}
-      <section className="space-y-4">
-        <SectionLabel>Today</SectionLabel>
-        <MorningBriefingCard lines={briefing.lines} />
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          <div className="lg:col-span-2">
-            <CheckInForm userId={user.id} today={today} bySlot={bySlot} />
-          </div>
-          <TodayCard
-            bySlot={bySlot}
-            workoutTitle={todayWorkout?.title ?? 'Rest day'}
-            workoutDone={todayDone}
-            workoutTotal={todayWorkout ? totalExercises(todayWorkout) : 0}
-            latestWeight={latestWeight}
-            unit={unit}
-            weekDots={weekDots}
-          />
-        </div>
-        <DailyScoreBar score={score} items={scoreItems} streak={streak} />
-        {reflection && <CoachCard text={reflection} />}
+      {/* ── TODAY — one status card + the check-in action ── */}
+      <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+        <TodayHero score={score} streak={streak} rows={heroRows} weekDots={weekDots} />
+        <CheckInForm userId={user.id} today={today} bySlot={bySlot} />
       </section>
 
-      {/* ── SNAPSHOT — the numbers that matter, at a glance ── */}
-      <section className="space-y-4">
-        <SectionLabel>Snapshot</SectionLabel>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 auto-rows-min">
-          <WeightTrendCard logs={weights} unit={unit} goal={prof.weight_goal ?? null} />
-          <StepsCard steps={todaySteps} />
-          <MoneyCard currency={currency} monthSpend={monthSpend} trend={spendTrend} />
-        </div>
+      {/* ── SNAPSHOT — three glanceable numbers ── */}
+      <section className="grid grid-cols-1 sm:grid-cols-3 gap-4 auto-rows-min">
+        <WeightTrendCard logs={weights} unit={unit} goal={prof.weight_goal ?? null} />
+        <StepsCard steps={todaySteps} />
+        <MoneyCard currency={currency} monthSpend={monthSpend} trend={spendTrend} />
       </section>
 
-      {/* ── STAYING ON TRACK — goals, urges, and the week ── */}
+      {/* ── MORE — coach note + urges, quieter ── */}
+      <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+        {reflection ? <CoachCard text={reflection} /> : null}
+        <CravingTracker userId={user.id} cravings={(cravings ?? []) as { feeling: string | null; rode_out: boolean }[]} />
+      </section>
+
+      {/* ── PLANS — goals & the week, at the bottom ── */}
       <section className="space-y-4">
-        <SectionLabel>Staying on track</SectionLabel>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 auto-rows-min">
-          <div className="lg:col-span-2">
-            <CravingTracker userId={user.id} cravings={(cravings ?? []) as { feeling: string | null; rode_out: boolean }[]} />
-          </div>
+        <SectionLabel>Goals & progress</SectionLabel>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
           <GoalFocusCard goals={goals} />
+          <WeeklyReviewCard summary={week} />
         </div>
-        <WeeklyReviewCard summary={week} />
         <GoalsBlock userId={user.id} categories={['Personal', 'Travel', 'Learning']} title="Life goals" />
       </section>
     </div>
