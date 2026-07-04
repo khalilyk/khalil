@@ -57,30 +57,20 @@ export default function LoginPage() {
 
         {/* KHALIL wordmark — Anton at natural proportions */}
         <div className="relative z-10">
-          <span className="block text-white leading-[0.9] text-7xl sm:text-8xl lg:text-8xl"
+          <span className="block text-center text-white leading-[0.9] text-7xl sm:text-8xl lg:text-8xl"
             style={{ fontFamily: 'var(--font-display)' }}>
             KHALIL
           </span>
         </div>
 
-        {/* Content — vertically centred in the remaining orange space */}
-        <div className="relative z-10 flex-1 flex flex-col justify-center space-y-6">
-          <div className="space-y-3">
-            <p className="text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-[1.05]">
-              Building<br />the future<br />you want.
-            </p>
-            <p className="text-white/70 text-sm lg:text-base leading-relaxed max-w-xs">
-              Money, body, work, and calendar — with weekly, monthly, and annual reviews to keep you on track.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap gap-2.5">
-            {['Money', 'Body', 'Work', 'Calendar', 'Review'].map(tag => (
-              <span key={tag} className="text-xs text-white/80 border border-white/30 rounded-full px-3 py-1">
-                {tag}
-              </span>
-            ))}
-          </div>
+        {/* Content — centred in the remaining orange space */}
+        <div className="relative z-10 flex-1 flex flex-col justify-center items-center text-center space-y-3">
+          <p className="text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-[1.05]">
+            Building<br />the future<br />you want.
+          </p>
+          <p className="text-white/70 text-sm lg:text-base leading-relaxed max-w-xs">
+            Money, body, work, and calendar. Weekly, monthly, and annual reviews to keep you on track.
+          </p>
         </div>
 
         <div className="relative z-10 hidden lg:block">
