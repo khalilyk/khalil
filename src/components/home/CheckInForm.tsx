@@ -105,7 +105,7 @@ export default function CheckInForm({ userId, today, bySlot }: {
 
   return (
     <Card>
-      <CardHeader className="pb-3 flex-row items-center justify-between space-y-0">
+      <CardHeader className="pb-3 flex flex-row items-center justify-between space-y-0">
         <CardTitle className="text-base">Check-in</CardTitle>
         {/* AM/PM toggle next to the title */}
         <div className="flex gap-1 bg-muted rounded-full p-1 shrink-0">
