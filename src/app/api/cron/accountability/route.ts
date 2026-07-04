@@ -57,6 +57,11 @@ export async function GET(req: NextRequest) {
 
     const slots = new Set((checkIns ?? []).map(c => (c as { slot: string }).slot))
     const workout = dayByWeekday(now.getDay())
+    const isWeekday = now.getDay() >= 1 && now.getDay() <= 5
+
+    // Weekday-morning movement reminder: gym + 10k steps
+    if (isWeekday && sydHour >= 6 && sydHour <= 8)
+      nudges.push({ type: 'nudge_move_am', title: '🏋️ Gym + 10k steps', body: 'Weekday morning — hit the gym and get your 10,000 steps in today.' })
 
     // Check-ins
     if (sydHour >= 7 && !slots.has('morning'))
