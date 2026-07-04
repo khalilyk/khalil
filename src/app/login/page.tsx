@@ -49,27 +49,29 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row">
-      {/* Brand panel — top band on mobile, left half on desktop */}
-      <div className="flex lg:w-1/2 relative overflow-hidden bg-primary flex-col justify-between p-8 lg:p-12 min-h-[45vh] lg:min-h-screen">
+    <div className="h-[100dvh] lg:h-auto lg:min-h-screen flex flex-col lg:flex-row overflow-hidden lg:overflow-visible">
+      {/* Brand panel — fills the space above the form on mobile, left half on desktop */}
+      <div className="relative overflow-hidden bg-primary flex-1 lg:flex-none lg:w-1/2 lg:min-h-screen flex flex-col px-6 py-8 lg:p-12">
         {/* Grid texture */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.04)_1px,transparent_1px)] bg-[size:48px_48px]" />
 
-        <div className="relative z-10">
-          <span className="block w-full text-center uppercase text-white font-black tracking-[0.35em] text-2xl">Khalil</span>
+        {/* KHALIL — bold, thick, spread edge to edge */}
+        <div className="relative z-10 flex justify-between w-auto -mx-6 px-2 lg:mx-0 lg:px-0 lg:w-full text-white font-black leading-none text-[16.5vw] lg:text-5xl">
+          {'KHALIL'.split('').map((c, i) => <span key={i}>{c}</span>)}
         </div>
 
-        <div className="relative z-10 space-y-6">
+        {/* Content — vertically centred in the remaining orange space */}
+        <div className="relative z-10 flex-1 flex flex-col justify-center space-y-6">
           <div className="space-y-3">
-            <p className="text-5xl font-extrabold tracking-tight text-white leading-[1.05]">
+            <p className="text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-[1.05]">
               Building<br />the future<br />you want.
             </p>
-            <p className="text-white/70 text-base leading-relaxed max-w-xs">
+            <p className="text-white/70 text-sm lg:text-base leading-relaxed max-w-xs">
               Money, body, work, and calendar — with weekly, monthly, and annual reviews to keep you on track.
             </p>
           </div>
 
-          <div className="flex flex-wrap gap-2.5 pt-2">
+          <div className="flex flex-wrap gap-2.5">
             {['Money', 'Body', 'Work', 'Calendar', 'Review'].map(tag => (
               <span key={tag} className="text-xs text-white/80 border border-white/30 rounded-full px-3 py-1">
                 {tag}
@@ -78,13 +80,13 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <div className="relative z-10">
+        <div className="relative z-10 hidden lg:block">
           <p className="text-white/60 text-xs">Private. Yours only.</p>
         </div>
       </div>
 
       {/* Right panel */}
-      <div className="flex-1 flex items-center justify-center p-8 bg-background">
+      <div className="flex-none lg:flex-1 flex items-center justify-center px-6 py-8 lg:p-8 bg-background">
         <div className="w-full max-w-sm space-y-8">
           <div className="space-y-2">
             <h1 className="text-2xl font-bold tracking-tight">Welcome back</h1>
