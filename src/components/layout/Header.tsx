@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { format } from 'date-fns'
-import { Settings, LineChart, Camera } from 'lucide-react'
+import { Settings, Camera } from 'lucide-react'
 
 function timeGreeting() {
   const h = new Date().getHours()
@@ -31,13 +31,6 @@ export default function Header({ userId, name }: { userId: string; name: string 
         <div className="flex items-center gap-1">
           <Link href="/admin" className="lg:hidden w-9 h-9 flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors">
             <Settings size={18} />
-          </Link>
-          <Link
-            href="/review"
-            title="Your review"
-            className="w-9 h-9 flex items-center justify-center rounded-full bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
-          >
-            <LineChart size={17} />
           </Link>
           <Link
             href="/money?capture=1"
