@@ -5,6 +5,7 @@ import WeightTrendCard from '@/components/home/WeightTrendCard'
 import GoalFocusCard from '@/components/home/GoalFocusCard'
 import TodayCard from '@/components/home/TodayCard'
 import MoneyCard from '@/components/home/MoneyCard'
+import StepsCard from '@/components/home/StepsCard'
 import CoachCard from '@/components/home/CoachCard'
 import DailyScoreBar from '@/components/home/DailyScoreBar'
 import MorningBriefingCard from '@/components/home/MorningBriefingCard'
@@ -39,6 +40,7 @@ export default async function HomePage() {
     { data: checkIns }, { data: profile }, { data: goalsData },
     { data: weightLogs }, { data: monthTx }, { data: lastMonthTx },
     { data: workoutLogs }, { data: recentCheckins }, { data: cravings },
+    { data: stepsRow },
   ] = await Promise.all([
     supabase.from('check_ins').select('*').eq('check_in_date', today),
     supabase.from('profiles').select('*').eq('id', user.id).maybeSingle(),
@@ -51,11 +53,14 @@ export default async function HomePage() {
     supabase.from('workout_logs').select('logged_on,exercise').gte('logged_on', weekStart),
     supabase.from('check_ins').select('check_in_date').gte('check_in_date', format(subDays(now, 40), 'yyyy-MM-dd')),
     supabase.from('cravings').select('feeling,rode_out').gte('created_at', `${monthStart}T00:00:00`),
+    supabase.from('daily_steps').select('steps').eq('day', today).maybeSingle(),
   ])
+
+  const todaySteps = (stepsRow as { steps: number } | null)?.steps ?? 0
 
   const goals = (goalsData ?? []) as Goal[]
   const weights = (weightLogs ?? []) as { weight: number; logged_on: string }[]
-  const prof = (profile ?? {}) as { currency?: string; weight_unit?: string; weight_goal?: number | null }
+  const prof = (profile ?? {}) as { currency?: string; weight_unit?: string; weight_goal?: number | null; display_name?: string | null }
   const currency = prof.currency ?? 'AUD'
   const unit = prof.weight_unit ?? 'kg'
 
@@ -102,42 +107,65 @@ export default async function HomePage() {
     else break
   }
 
+  const firstName = (prof.display_name ?? 'Khalil').split(' ')[0]
+  const greeting = now.getHours() < 12 ? 'Good morning' : now.getHours() < 17 ? 'Good afternoon' : 'Good evening'
+
   return (
-    <div className="px-4 py-6 lg:px-8">
-      <p className="text-xl text-muted-foreground italic mb-5">“{quoteOfTheDay(now)}”</p>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 auto-rows-min [&>*]:min-w-0">
-        <div className="lg:col-span-3">
-          <MorningBriefingCard lines={briefing.lines} />
-        </div>
-        <div className="lg:col-span-3">
-          <DailyScoreBar score={score} items={scoreItems} streak={streak} />
-        </div>
-        <div className="lg:col-span-3">
-          <CravingTracker userId={user.id} cravings={(cravings ?? []) as { feeling: string | null; rode_out: boolean }[]} />
-        </div>
-        <div className="lg:col-span-2">
-          <CheckInForm userId={user.id} today={today} bySlot={bySlot} />
-        </div>
-        <GoalFocusCard goals={goals} />
-        <WeightTrendCard logs={weights} unit={unit} goal={prof.weight_goal ?? null} />
-        <TodayCard
-          bySlot={bySlot}
-          workoutTitle={todayWorkout?.title ?? 'Rest day'}
-          workoutDone={todayDone}
-          workoutTotal={todayWorkout ? totalExercises(todayWorkout) : 0}
-          latestWeight={latestWeight}
-          unit={unit}
-          weekDots={weekDots}
-        />
-        <MoneyCard currency={currency} monthSpend={monthSpend} trend={spendTrend} />
-        {reflection && <CoachCard text={reflection} className="lg:col-span-3" />}
-        <div className="lg:col-span-3">
-          <WeeklyReviewCard summary={week} />
-        </div>
+    <div className="px-4 py-6 lg:px-8 space-y-8 [&_section>*]:min-w-0">
+      {/* Greeting + quote */}
+      <div>
+        <h1 className="text-2xl font-bold tracking-tight">{greeting}, {firstName}.</h1>
+        <p className="text-base text-muted-foreground italic mt-1">“{quoteOfTheDay(now)}”</p>
       </div>
-      <div className="mt-8">
+
+      {/* ── TODAY — the daily ritual: what's on, log it, see the score ── */}
+      <section className="space-y-4">
+        <SectionLabel>Today</SectionLabel>
+        <MorningBriefingCard lines={briefing.lines} />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div className="lg:col-span-2">
+            <CheckInForm userId={user.id} today={today} bySlot={bySlot} />
+          </div>
+          <TodayCard
+            bySlot={bySlot}
+            workoutTitle={todayWorkout?.title ?? 'Rest day'}
+            workoutDone={todayDone}
+            workoutTotal={todayWorkout ? totalExercises(todayWorkout) : 0}
+            latestWeight={latestWeight}
+            unit={unit}
+            weekDots={weekDots}
+          />
+        </div>
+        <DailyScoreBar score={score} items={scoreItems} streak={streak} />
+        {reflection && <CoachCard text={reflection} />}
+      </section>
+
+      {/* ── SNAPSHOT — the numbers that matter, at a glance ── */}
+      <section className="space-y-4">
+        <SectionLabel>Snapshot</SectionLabel>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 auto-rows-min">
+          <WeightTrendCard logs={weights} unit={unit} goal={prof.weight_goal ?? null} />
+          <StepsCard steps={todaySteps} />
+          <MoneyCard currency={currency} monthSpend={monthSpend} trend={spendTrend} />
+        </div>
+      </section>
+
+      {/* ── STAYING ON TRACK — goals, urges, and the week ── */}
+      <section className="space-y-4">
+        <SectionLabel>Staying on track</SectionLabel>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 auto-rows-min">
+          <div className="lg:col-span-2">
+            <CravingTracker userId={user.id} cravings={(cravings ?? []) as { feeling: string | null; rode_out: boolean }[]} />
+          </div>
+          <GoalFocusCard goals={goals} />
+        </div>
+        <WeeklyReviewCard summary={week} />
         <GoalsBlock userId={user.id} categories={['Personal', 'Travel', 'Learning']} title="Life goals" />
-      </div>
+      </section>
     </div>
   )
+}
+
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{children}</h2>
 }
