@@ -45,9 +45,9 @@ export default function WeightTrendCard({ logs, unit, goal, className }: {
         <span className="text-white/50 mb-1">{unit}</span>
       </div>
 
-      <div className="mt-2 flex-1 min-h-[150px]">
+      <div className="mt-2 flex-1 min-h-[110px]">
         {logs.length > 1 ? (
-          <ResponsiveContainer width="100%" height={170}>
+          <ResponsiveContainer width="100%" height={120}>
             <AreaChart data={logs} margin={{ top: 8, right: 4, left: -18, bottom: 0 }}>
               <defs>
                 <linearGradient id="wt" x1="0" y1="0" x2="0" y2="1">

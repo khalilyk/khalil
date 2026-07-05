@@ -8,7 +8,7 @@ export default function StepsCard({ steps, className }: { steps: number; classNa
   const pct = Math.min(100, Math.round((steps / GOAL) * 100))
   const hit = steps >= GOAL
   // Ring geometry
-  const r = 26
+  const r = 40
   const c = 2 * Math.PI * r
   const dash = (pct / 100) * c
 
@@ -22,23 +22,22 @@ export default function StepsCard({ steps, className }: { steps: number; classNa
         <ChevronRight size={16} className="text-muted-foreground group-hover:translate-x-0.5 transition-transform" />
       </div>
 
-      <div className="flex items-center gap-4 mt-4">
-        <div className="relative shrink-0">
-          <svg width="64" height="64" viewBox="0 0 64 64" className="-rotate-90">
-            <circle cx="32" cy="32" r={r} fill="none" stroke="currentColor" strokeWidth="6" className="text-muted" />
-            <circle cx="32" cy="32" r={r} fill="none" stroke="currentColor" strokeWidth="6" strokeLinecap="round"
+      {/* Ring centred, count + goal beneath — fills the card height */}
+      <div className="flex-1 flex flex-col items-center justify-center gap-3 py-3">
+        <div className="relative w-24 h-24">
+          <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
+            <circle cx="50" cy="50" r={r} fill="none" stroke="currentColor" strokeWidth="8" className="text-muted" />
+            <circle cx="50" cy="50" r={r} fill="none" stroke="currentColor" strokeWidth="8" strokeLinecap="round"
               strokeDasharray={`${dash} ${c}`} className={hit ? 'text-green-500' : 'text-primary'} />
           </svg>
-          <span className="absolute inset-0 flex items-center justify-center text-xs font-bold tabular-nums">{pct}%</span>
-        </div>
-        <div className="min-w-0">
-          <div className="flex items-end gap-1">
-            <span className="text-3xl font-bold tracking-tight tabular-nums">{steps.toLocaleString()}</span>
+          <div className="absolute inset-0 flex flex-col items-center justify-center leading-none">
+            <span className="text-2xl font-bold tracking-tight tabular-nums">{steps.toLocaleString()}</span>
+            <span className="text-[11px] text-muted-foreground mt-0.5">{pct}%</span>
           </div>
-          <p className="text-xs text-muted-foreground mt-0.5">
-            {hit ? '🎉 10k goal hit' : `${(GOAL - steps).toLocaleString()} to 10k`}
-          </p>
         </div>
+        <p className="text-xs text-muted-foreground text-center">
+          {hit ? '🎉 10k goal hit' : `${(GOAL - steps).toLocaleString()} steps to 10k`}
+        </p>
       </div>
     </Link>
   )
