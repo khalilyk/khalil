@@ -129,10 +129,10 @@ export default async function HomePage() {
       </section>
 
       {/* ── SNAPSHOT — three glanceable numbers ── */}
-      <section className="grid grid-cols-1 sm:grid-cols-3 gap-4 auto-rows-min">
+      <section className="grid grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-min">
         <WeightTrendCard logs={weights} unit={unit} goal={prof.weight_goal ?? null} />
         <StepsCard steps={todaySteps} />
-        <MoneyCard currency={currency} monthSpend={monthSpend} trend={spendTrend} />
+        <MoneyCard currency={currency} monthSpend={monthSpend} trend={spendTrend} className="col-span-2 lg:col-span-1" />
       </section>
 
       {/* ── MORE — coach note + urges, quieter ── */}
