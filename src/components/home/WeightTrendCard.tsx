@@ -25,9 +25,9 @@ export default function WeightTrendCard({ logs, unit, goal, className }: {
 
   return (
     <div className={cn('rounded-3xl bg-neutral-900 text-white p-5 flex flex-col', className)}>
-      <div className="flex items-center gap-2">
-        <span className="flex items-center justify-center w-6 h-6 rounded-md bg-primary text-primary-foreground"><Activity size={14} /></span>
-        <span className="font-semibold">Weight</span>
+      <div className="flex items-center gap-2 text-sm font-semibold">
+        <span className="flex items-center justify-center w-6 h-6 rounded-md bg-primary text-primary-foreground"><Activity size={13} /></span>
+        Weight
       </div>
 
       <div className="mt-3 flex items-end gap-2">
