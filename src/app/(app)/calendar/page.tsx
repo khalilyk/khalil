@@ -22,7 +22,7 @@ export default async function CalendarPage() {
   return (
     <div className="w-full px-4 lg:px-8 py-6 space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold">Calendar</h1>
+        <h1 className="text-2xl font-bold tracking-tight">Calendar</h1>
         <Link href="/review"
           className="inline-flex items-center gap-1.5 rounded-full bg-primary text-primary-foreground text-sm font-medium px-4 py-2 hover:opacity-90 transition-opacity">
           <LineChart size={15} /> Review

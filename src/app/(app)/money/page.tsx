@@ -31,7 +31,7 @@ export default async function MoneyPage() {
 
   return (
     <div className="w-full px-4 lg:px-8 py-6 space-y-6">
-      <h1 className="text-xl font-semibold">Money</h1>
+      <h1 className="text-2xl font-bold tracking-tight">Money</h1>
       <ReceiptUploader userId={user.id} accounts={accounts ?? []} currency={currency} />
       <NetWorthCard accounts={accounts ?? []} snapshots={snapshots ?? []} currency={currency} />
       <BudgetsSection userId={user.id} budgets={budgets ?? []} transactions={transactions ?? []} currency={currency} />

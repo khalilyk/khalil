@@ -28,7 +28,7 @@ export default async function BodyPage() {
 
   return (
     <div className="w-full px-4 lg:px-8 py-6 space-y-6">
-      <h1 className="text-xl font-semibold">Body</h1>
+      <h1 className="text-2xl font-bold tracking-tight">Body</h1>
       <div className="grid gap-6 lg:grid-cols-2 lg:items-start [&>*]:min-w-0">
         <WeightSection
           userId={user.id}
