@@ -24,14 +24,14 @@ export default function StepsCard({ steps, className }: { steps: number; classNa
 
       {/* Ring centred, count + goal beneath — fills the card height */}
       <div className="flex-1 flex flex-col items-center justify-center gap-3 py-3">
-        <div className="relative w-24 h-24">
+        <div className="relative w-32 h-32">
           <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
-            <circle cx="50" cy="50" r={r} fill="none" stroke="currentColor" strokeWidth="8" className="text-muted" />
-            <circle cx="50" cy="50" r={r} fill="none" stroke="currentColor" strokeWidth="8" strokeLinecap="round"
+            <circle cx="50" cy="50" r={r} fill="none" stroke="currentColor" strokeWidth="7" className="text-muted" />
+            <circle cx="50" cy="50" r={r} fill="none" stroke="currentColor" strokeWidth="7" strokeLinecap="round"
               strokeDasharray={`${dash} ${c}`} className={hit ? 'text-green-500' : 'text-primary'} />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center leading-none">
-            <span className="text-2xl font-bold tracking-tight tabular-nums">{steps.toLocaleString()}</span>
+            <span className="text-xl font-bold tracking-tight tabular-nums">{steps.toLocaleString()}</span>
             <span className="text-[11px] text-muted-foreground mt-0.5">{pct}%</span>
           </div>
         </div>
