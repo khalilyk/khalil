@@ -19,19 +19,19 @@ export default function Header({ userId, name }: { userId: string; name: string 
   void userId; void name
   return (
     <header className="sticky top-0 z-40 bg-primary text-primary-foreground">
-      <div className="relative flex items-center justify-center h-16 px-4 lg:px-8 max-w-lg lg:max-w-none mx-auto">
-        {/* Centered brand */}
-        <div className="text-center leading-tight">
-          <p className="text-[11px] text-white/75 uppercase tracking-widest mb-1">
-            {format(new Date(), 'EEEE, d MMMM')}
-          </p>
-          <Link href="/" aria-label="Khalil — home" className="block">
-            <span className="block h-7 w-[74px] mx-auto bg-white" style={WORDMARK} />
-          </Link>
-        </div>
+      <div className="relative flex items-center justify-between h-16 px-4 lg:px-8 max-w-lg lg:max-w-none mx-auto">
+        {/* Date pinned left */}
+        <p className="text-[11px] text-white/75 uppercase tracking-widest">
+          {format(new Date(), 'EEE, d MMM')}
+        </p>
+
+        {/* KHALIL wordmark centered */}
+        <Link href="/" aria-label="Khalil — home" className="absolute left-1/2 -translate-x-1/2">
+          <span className="block h-9 w-[96px] bg-white" style={WORDMARK} />
+        </Link>
 
         {/* Icons pinned right */}
-        <div className="absolute right-4 lg:right-8 flex items-center gap-1">
+        <div className="flex items-center gap-1">
           <Link href="/admin" className="lg:hidden w-9 h-9 flex items-center justify-center rounded-full text-white/80 hover:text-white hover:bg-white/15 transition-colors">
             <Settings size={18} />
           </Link>
