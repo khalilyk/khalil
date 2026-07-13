@@ -120,7 +120,7 @@ export default async function HomePage() {
   return (
     <div className="px-4 py-6 lg:px-8 space-y-8 [&_section>*]:min-w-0">
       {/* Quote (the header already greets by name) */}
-      <p className="text-base text-muted-foreground italic">“{quoteOfTheDay(now)}”</p>
+      <p className="text-sm text-muted-foreground italic">“{quoteOfTheDay(now)}”</p>
 
       {/* ── TODAY — one status card + the check-in action ── */}
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
