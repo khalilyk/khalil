@@ -28,7 +28,7 @@ export default function WeightTrendCard({ logs, unit, goal, className }: {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="flex items-center justify-center w-6 h-6 rounded-md bg-primary text-primary-foreground"><Activity size={14} /></span>
-          <span className="font-semibold">Body trend</span>
+          <span className="font-semibold">Weight</span>
         </div>
         {weekPct !== null && dir !== 'flat' && (
           <span className="inline-flex items-center gap-0.5 text-[11px] font-semibold rounded-full px-2 py-0.5"
