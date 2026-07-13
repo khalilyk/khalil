@@ -18,7 +18,7 @@ const WORDMARK = {
 export default function Header({ userId, name }: { userId: string; name: string | null }) {
   void userId; void name
   return (
-    <header className="sticky top-0 z-40 bg-primary text-primary-foreground">
+    <header className="bg-primary text-primary-foreground">
       <div className="relative flex items-center justify-between h-16 px-4 lg:px-8 max-w-lg lg:max-w-none mx-auto">
         {/* Date pinned left */}
         <p className="text-[11px] text-white/75 uppercase tracking-widest">
