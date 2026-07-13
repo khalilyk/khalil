@@ -25,17 +25,9 @@ export default function WeightTrendCard({ logs, unit, goal, className }: {
 
   return (
     <div className={cn('rounded-3xl bg-neutral-900 text-white p-5 flex flex-col', className)}>
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <span className="flex items-center justify-center w-6 h-6 rounded-md bg-primary text-primary-foreground"><Activity size={14} /></span>
-          <span className="font-semibold">Weight</span>
-        </div>
-        {weekPct !== null && dir !== 'flat' && (
-          <span className="inline-flex items-center gap-0.5 text-[11px] font-semibold rounded-full px-2 py-0.5"
-            style={{ color, backgroundColor: `${color}26` }}>
-            {dir === 'up' ? <ArrowUpRight size={11} /> : <ArrowDownRight size={11} />}{Math.abs(weekPct)}%
-          </span>
-        )}
+      <div className="flex items-center gap-2">
+        <span className="flex items-center justify-center w-6 h-6 rounded-md bg-primary text-primary-foreground"><Activity size={14} /></span>
+        <span className="font-semibold">Weight</span>
       </div>
 
       <div className="mt-3 flex items-end gap-2">
@@ -71,6 +63,15 @@ export default function WeightTrendCard({ logs, unit, goal, className }: {
           </div>
         )}
       </div>
+
+      {weekPct !== null && dir !== 'flat' && (
+        <div className="mt-2 flex justify-center">
+          <span className="inline-flex items-center gap-0.5 text-[11px] font-semibold rounded-full px-2 py-0.5"
+            style={{ color, backgroundColor: `${color}26` }}>
+            {dir === 'up' ? <ArrowUpRight size={11} /> : <ArrowDownRight size={11} />}{Math.abs(weekPct)}% vs last week
+          </span>
+        </div>
+      )}
     </div>
   )
 }
