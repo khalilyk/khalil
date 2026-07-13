@@ -173,9 +173,9 @@ export default function WeightSection({ userId, logs, weightGoal, weightRate, un
                 <XAxis dataKey="logged_on" tickFormatter={d => format(parseISO(d), 'd MMM')} tick={{ fontSize: 10 }} tickLine={false} axisLine={false} />
                 <YAxis domain={['auto', 'auto']} tick={{ fontSize: 10 }} tickLine={false} axisLine={false} width={36} />
                 <Tooltip formatter={(v) => [`${v} ${unit}`, '']} labelFormatter={d => format(parseISO(d as string), 'd MMM yyyy')} />
-                <Line type="monotone" dataKey="weight" stroke="hsl(var(--muted-foreground))" strokeWidth={1} dot={false} />
-                <Line type="monotone" dataKey="avg" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
-                {weightGoal && <ReferenceLine y={weightGoal} stroke="hsl(var(--primary))" strokeDasharray="4 4" />}
+                <Line type="monotone" dataKey="weight" stroke="oklch(0.55 0.01 60)" strokeWidth={1.5} dot={false} />
+                <Line type="monotone" dataKey="avg" stroke="oklch(0.67 0.2 44)" strokeWidth={2.5} dot={false} />
+                {weightGoal && <ReferenceLine y={weightGoal} stroke="oklch(0.67 0.2 44)" strokeDasharray="4 4" />}
               </LineChart>
             </ResponsiveContainer>
           </CardContent>
