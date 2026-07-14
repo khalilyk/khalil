@@ -73,9 +73,9 @@ export async function GET(req: NextRequest) {
     if (workout && (workoutToday ?? []).length === 0 && sydHour >= 12)
       nudges.push({ type: 'nudge_workout', title: `Today’s workout: ${workout.title}`, body: `${totalExercises(workout)} exercises waiting — get it done.` })
 
-    // Weight
-    if ((weightToday ?? []).length === 0 && sydHour >= 8)
-      nudges.push({ type: 'nudge_weight', title: 'Weigh in', body: 'Log your weight to keep your trend and plan accurate.' })
+    // Weight — Monday morning only (weekly weigh-in)
+    if (now.getDay() === 1 && sydHour >= 7 && sydHour <= 10 && (weightToday ?? []).length === 0)
+      nudges.push({ type: 'nudge_weight', title: 'Weekly weigh-in', body: 'It’s Monday — log your weight to track your weekly trend.' })
 
     // Budgets over limit
     const spentByCat: Record<string, number> = {}
