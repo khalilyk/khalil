@@ -26,10 +26,12 @@ export async function GET(req: NextRequest) {
   const today = format(now, 'yyyy-MM-dd')
   const monthStart = format(startOfMonth(now), 'yyyy-MM-dd')
 
-  // Hour in the owner's timezone (Sydney) to decide morning vs evening nudges
+  // Hour in the owner's timezone (Sydney). Derive it from the *real* clock
+  // (new Date()), NOT sydneyNow() — that one already bakes in the Sydney offset,
+  // and formatting it with a Sydney timeZone would double-count +10h.
   const sydHour = Number(new Intl.DateTimeFormat('en-AU', {
     hour: 'numeric', hour12: false, timeZone: 'Australia/Sydney',
-  }).format(now))
+  }).format(new Date()))
 
   const { data: profiles } = await supabase.from('profiles').select('id, currency')
   let created = 0
