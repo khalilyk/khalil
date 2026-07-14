@@ -40,5 +40,20 @@ export async function POST(req: NextRequest) {
   )
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
+  // Mirror the day's steps into the calendar as a daily record
+  try {
+    const ext = `steps:${day}`
+    const title = `👟 ${steps.toLocaleString()} steps`
+    const { data: existing } = await supabase.from('calendar_events').select('id').eq('external_id', ext).maybeSingle()
+    if (existing) {
+      await supabase.from('calendar_events').update({ title }).eq('id', existing.id)
+    } else {
+      await supabase.from('calendar_events').insert({
+        user_id: profile.id, title, starts_at: `${day}T00:00:00`, ends_at: null,
+        all_day: true, source: 'native', external_id: ext,
+      })
+    }
+  } catch { /* never let a calendar hiccup fail the step ingest */ }
+
   return NextResponse.json({ ok: true, day, steps })
 }
