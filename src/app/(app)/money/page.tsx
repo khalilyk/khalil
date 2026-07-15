@@ -7,6 +7,7 @@ import BudgetsSection from '@/components/money/BudgetsSection'
 import NetWorthCard from '@/components/money/NetWorthCard'
 import GoalsBlock from '@/components/goals/GoalsBlock'
 import ReceiptUploader from '@/components/receipts/ReceiptUploader'
+import BankImport from '@/components/money/BankImport'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 export default async function MoneyPage() {
@@ -33,6 +34,7 @@ export default async function MoneyPage() {
     <div className="w-full px-4 lg:px-8 py-6 space-y-6">
       <h1 className="text-2xl font-bold tracking-tight">Money</h1>
       <ReceiptUploader userId={user.id} accounts={accounts ?? []} currency={currency} />
+      <BankImport userId={user.id} accounts={(accounts ?? []) as { id: string; type: 'personal' | 'business'; name: string }[]} currency={currency} />
       <NetWorthCard accounts={accounts ?? []} snapshots={snapshots ?? []} currency={currency} />
       <BudgetsSection userId={user.id} budgets={budgets ?? []} transactions={transactions ?? []} currency={currency} />
       <Tabs defaultValue="personal">
