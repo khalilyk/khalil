@@ -51,14 +51,15 @@ export default function LoginPage() {
   return (
     <div className="h-[100dvh] lg:h-auto lg:min-h-screen flex flex-col lg:flex-row overflow-hidden lg:overflow-visible">
       {/* Brand panel — fills the space above the form on mobile, left half on desktop */}
-      <div className="relative overflow-hidden bg-primary flex-1 lg:flex-none lg:w-1/2 lg:min-h-screen flex flex-col px-6 py-8 lg:p-12">
+      <div className="relative overflow-hidden bg-primary flex-1 lg:flex-none lg:w-1/2 lg:min-h-screen flex flex-col px-6 pb-8 lg:p-12"
+        style={{ paddingTop: 'max(2rem, calc(env(safe-area-inset-top) + 1rem))' }}>
         {/* Grid texture */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.04)_1px,transparent_1px)] bg-[size:48px_48px]" />
 
         {/* KHALIL wordmark — trimmed PNG, recoloured white, edge to edge */}
         <div className="relative z-10 -mx-6 px-2 lg:mx-0 lg:px-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/khalil-wordmark.png" alt="Khalil" className="block w-full h-auto"
+          <img src="/khalil-wordmark.png" alt="Khalil" className="block w-full h-auto max-h-[22vh] object-contain object-left"
             style={{ filter: 'brightness(0) invert(1)' }} />
         </div>
 
@@ -78,7 +79,8 @@ export default function LoginPage() {
       </div>
 
       {/* Right panel */}
-      <div className="flex-none lg:flex-1 flex items-center justify-center px-6 py-8 lg:p-8 bg-background">
+      <div className="flex-none lg:flex-1 flex items-center justify-center px-6 pt-8 lg:p-8 bg-background"
+        style={{ paddingBottom: 'max(2rem, calc(env(safe-area-inset-bottom) + 1rem))' }}>
         <div className="w-full max-w-sm space-y-8">
           <div className="space-y-2">
             <h1 className="text-2xl font-bold tracking-tight">Welcome back</h1>
