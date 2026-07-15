@@ -59,7 +59,7 @@ export default function LoginPage() {
         {/* KHALIL wordmark — trimmed PNG, recoloured white, edge to edge */}
         <div className="relative z-10 -mx-6 px-2 lg:mx-0 lg:px-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/khalil-wordmark.png" alt="Khalil" className="block w-full h-auto max-h-[22vh] object-contain object-left"
+          <img src="/khalil-wordmark.png" alt="Khalil" className="block w-full h-auto max-h-[22vh] object-contain object-center"
             style={{ filter: 'brightness(0) invert(1)' }} />
         </div>
 
