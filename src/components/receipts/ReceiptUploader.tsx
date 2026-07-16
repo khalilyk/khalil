@@ -11,7 +11,7 @@ import { Camera, Upload, Loader2, CheckCircle, AlertTriangle, Target } from 'luc
 import { format } from 'date-fns'
 import { cn } from '@/lib/utils'
 
-type Account = { id: string; name: string; type: string }
+type Account = { id: string; name: string; type: string; goalTitle?: string | null }
 type Budget = { category: string; monthly_limit: number }
 
 const CATEGORIES = ['groceries','dining','supplies','subscriptions','travel','fuel','utilities','equipment','client_revenue','other']
@@ -145,7 +145,9 @@ export default function ReceiptUploader({ userId, accounts, currency, budgets = 
             </div>
 
             <ImpactBanner amount={overrides.amount} category={overrides.category}
-              budgets={budgets} monthByCategory={monthByCategory} currency={currency} topGoal={topGoal} />
+              budgets={budgets} monthByCategory={monthByCategory} currency={currency} topGoal={topGoal}
+              accountName={accounts.find(a => a.id === accountId)?.name ?? null}
+              accountGoal={accounts.find(a => a.id === accountId)?.goalTitle ?? null} />
 
             <div className="flex gap-2">
               <Button onClick={confirm} className="flex-1">Confirm</Button>
@@ -159,14 +161,27 @@ export default function ReceiptUploader({ userId, accounts, currency, budgets = 
 }
 
 // Live budget/goal feedback shown while confirming a spend
-function ImpactBanner({ amount, category, budgets, monthByCategory, currency, topGoal }: {
-  amount: string; category: string; budgets: Budget[]; monthByCategory: Record<string, number>; currency: string; topGoal: string | null
+function ImpactBanner({ amount, category, budgets, monthByCategory, currency, topGoal, accountName, accountGoal }: {
+  amount: string; category: string; budgets: Budget[]; monthByCategory: Record<string, number>
+  currency: string; topGoal: string | null; accountName: string | null; accountGoal: string | null
 }) {
   const amt = parseFloat(amount) || 0
   if (amt <= 0) return null
   const money = (n: number) => `${currency} ${Math.abs(Math.round(n)).toLocaleString()}`
   const spent = monthByCategory[category] ?? 0
   const budget = budgets.find(b => b.category === category)
+
+  // Strongest signal: spending straight out of an account earmarked for a goal
+  if (accountGoal) {
+    return (
+      <div className="rounded-xl px-3 py-2.5 text-sm flex items-start gap-2 bg-destructive/10 text-destructive">
+        <AlertTriangle size={15} className="mt-0.5 shrink-0" />
+        <span>
+          You&apos;re spending <strong>{money(amt)}</strong> from {accountName ?? 'savings'}, which funds <strong>{accountGoal}</strong> — this sets that goal back.
+        </span>
+      </div>
+    )
+  }
 
   if (budget) {
     const remaining = budget.monthly_limit - (spent + amt)

@@ -42,10 +42,17 @@ export default async function MoneyPage() {
   }
   const topGoal = (goals ?? [])[0]?.title ?? null
 
+  // Attach each account's linked-goal title so a spend can warn if it raids a savings goal
+  const goalById = new Map((goals ?? []).map(g => [g.id, g.title]))
+  const accountsWithGoal = (accounts ?? []).map(a => ({
+    id: a.id, name: a.name, type: a.type,
+    goalTitle: a.goal_id ? goalById.get(a.goal_id) ?? null : null,
+  }))
+
   return (
     <div className="w-full px-4 lg:px-8 py-6 space-y-6">
       <h1 className="text-2xl font-bold tracking-tight">Money</h1>
-      <ReceiptUploader userId={user.id} accounts={accounts ?? []} currency={currency}
+      <ReceiptUploader userId={user.id} accounts={accountsWithGoal} currency={currency}
         budgets={(budgets ?? []) as { category: string; monthly_limit: number }[]}
         monthByCategory={monthByCategory} topGoal={topGoal} />
       <BankImport userId={user.id} accounts={(accounts ?? []) as { id: string; type: 'personal' | 'business'; name: string }[]} currency={currency} />
