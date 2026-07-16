@@ -4,8 +4,10 @@ import Anthropic from '@anthropic-ai/sdk'
 
 const anthropic = new Anthropic()
 
-const SYSTEM = `Return JSON only, no prose, no fences:
+const SYSTEM = `You read a photo of a paper receipt OR a screenshot of a purchase/transaction (bank app, order confirmation, etc.). Return JSON only, no prose, no fences:
 {"merchant":string,"total":number,"currency":string,"date":"YYYY-MM-DD","category":string,"tax":number|null,"lineItems":[{"name":string,"amount":number}]}
+- total: the amount spent as a plain number (the transaction/purchase amount).
+- merchant: who it was paid to.
 Unreadable fields = null. Category from: groceries,dining,supplies,subscriptions,travel,fuel,utilities,equipment,client_revenue,other.`
 
 export async function POST(req: NextRequest) {

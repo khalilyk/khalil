@@ -7,15 +7,18 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Camera, Upload, Loader2, CheckCircle } from 'lucide-react'
+import { Camera, Upload, Loader2, CheckCircle, AlertTriangle, Target } from 'lucide-react'
 import { format } from 'date-fns'
+import { cn } from '@/lib/utils'
 
 type Account = { id: string; name: string; type: string }
+type Budget = { category: string; monthly_limit: number }
 
 const CATEGORIES = ['groceries','dining','supplies','subscriptions','travel','fuel','utilities','equipment','client_revenue','other']
 
-export default function ReceiptUploader({ userId, accounts, currency }: {
+export default function ReceiptUploader({ userId, accounts, currency, budgets = [], monthByCategory = {}, topGoal = null }: {
   userId: string; accounts: Account[]; currency: string
+  budgets?: Budget[]; monthByCategory?: Record<string, number>; topGoal?: string | null
 }) {
   const router = useRouter()
   const supabase = createClient()
@@ -102,14 +105,17 @@ export default function ReceiptUploader({ userId, accounts, currency }: {
         onChange={e => e.target.files?.[0] && handleFile(e.target.files[0])} />
 
       {stage === 'idle' && (
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={() => cameraRef.current?.click()} className="flex-1 rounded-full">
-            <Camera size={16} className="mr-2" /> Take photo
-          </Button>
-          <Button variant="outline" onClick={() => uploadRef.current?.click()} className="flex-1 rounded-full">
-            <Upload size={16} className="mr-2" /> Upload
-          </Button>
-        </div>
+        <>
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={() => cameraRef.current?.click()} className="flex-1 rounded-full">
+              <Camera size={16} className="mr-2" /> Take photo
+            </Button>
+            <Button variant="outline" onClick={() => uploadRef.current?.click()} className="flex-1 rounded-full">
+              <Upload size={16} className="mr-2" /> Upload
+            </Button>
+          </div>
+          <p className="text-[11px] text-muted-foreground text-center">Snap a receipt or a screenshot of a purchase — I&apos;ll read the amount and check it against your budget.</p>
+        </>
       )}
 
       {(stage === 'uploading' || stage === 'parsing') && (
@@ -122,7 +128,7 @@ export default function ReceiptUploader({ userId, accounts, currency }: {
       {stage === 'confirm' && (
         <Card>
           <CardContent className="pt-4 space-y-3">
-            <p className="text-sm font-medium">Confirm receipt</p>
+            <p className="text-sm font-medium">Confirm spending</p>
             <Input placeholder="Merchant" value={overrides.merchant} onChange={e => setOverrides(o => ({ ...o, merchant: e.target.value }))} />
             <Input placeholder="Amount" type="number" value={overrides.amount} onChange={e => setOverrides(o => ({ ...o, amount: e.target.value }))} />
             <Select value={overrides.category} onValueChange={v => setOverrides(o => ({ ...o, category: v || 'other' }))}>
@@ -130,10 +136,17 @@ export default function ReceiptUploader({ userId, accounts, currency }: {
               <SelectContent>{CATEGORIES.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
             </Select>
             <Input type="date" value={overrides.date} onChange={e => setOverrides(o => ({ ...o, date: e.target.value }))} />
-            <Select value={accountId} onValueChange={v => v && setAccountId(v)}>
-              <SelectTrigger><SelectValue placeholder="Account" /></SelectTrigger>
-              <SelectContent>{accounts.map(a => <SelectItem key={a.id} value={a.id}>{a.name}</SelectItem>)}</SelectContent>
-            </Select>
+            <div className="space-y-1">
+              <span className="text-[11px] text-muted-foreground">Which account did it come from?</span>
+              <Select value={accountId} onValueChange={v => v && setAccountId(v)}>
+                <SelectTrigger><SelectValue placeholder="Choose account" /></SelectTrigger>
+                <SelectContent>{accounts.map(a => <SelectItem key={a.id} value={a.id}>{a.name}</SelectItem>)}</SelectContent>
+              </Select>
+            </div>
+
+            <ImpactBanner amount={overrides.amount} category={overrides.category}
+              budgets={budgets} monthByCategory={monthByCategory} currency={currency} topGoal={topGoal} />
+
             <div className="flex gap-2">
               <Button onClick={confirm} className="flex-1">Confirm</Button>
               <Button variant="outline" onClick={() => setStage('idle')} className="flex-1">Cancel</Button>
@@ -141,6 +154,40 @@ export default function ReceiptUploader({ userId, accounts, currency }: {
           </CardContent>
         </Card>
       )}
+    </div>
+  )
+}
+
+// Live budget/goal feedback shown while confirming a spend
+function ImpactBanner({ amount, category, budgets, monthByCategory, currency, topGoal }: {
+  amount: string; category: string; budgets: Budget[]; monthByCategory: Record<string, number>; currency: string; topGoal: string | null
+}) {
+  const amt = parseFloat(amount) || 0
+  if (amt <= 0) return null
+  const money = (n: number) => `${currency} ${Math.abs(Math.round(n)).toLocaleString()}`
+  const spent = monthByCategory[category] ?? 0
+  const budget = budgets.find(b => b.category === category)
+
+  if (budget) {
+    const remaining = budget.monthly_limit - (spent + amt)
+    const over = remaining < 0
+    return (
+      <div className={cn('rounded-xl px-3 py-2.5 text-sm flex items-start gap-2',
+        over ? 'bg-destructive/10 text-destructive' : 'bg-primary/10 text-primary')}>
+        {over ? <AlertTriangle size={15} className="mt-0.5 shrink-0" /> : <Target size={15} className="mt-0.5 shrink-0" />}
+        <span>
+          {over
+            ? <>This puts you <strong>{money(remaining)} over</strong> your {category} budget this month.{topGoal && <> That&apos;s money not going toward <strong>{topGoal}</strong>.</>}</>
+            : <><strong>{money(remaining)} left</strong> in your {category} budget this month — you&apos;re on track.</>}
+        </span>
+      </div>
+    )
+  }
+
+  return (
+    <div className="rounded-xl px-3 py-2.5 text-sm bg-muted text-muted-foreground flex items-start gap-2">
+      <Target size={15} className="mt-0.5 shrink-0" />
+      <span>No budget set for {category}. {topGoal ? <>Every dollar saved gets you closer to <strong>{topGoal}</strong>.</> : 'Set a budget to track this category.'}</span>
     </div>
   )
 }

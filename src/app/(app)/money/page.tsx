@@ -33,10 +33,21 @@ export default async function MoneyPage() {
   const personal = (accounts ?? []).filter(a => a.type === 'personal')
   const business = (accounts ?? []).filter(a => a.type === 'business')
 
+  // This month's spend per category, for live budget feedback while logging a spend
+  const monthByCategory: Record<string, number> = {}
+  for (const t of transactions ?? []) {
+    if (t.direction !== 'expense') continue
+    const c = t.category ?? 'other'
+    monthByCategory[c] = (monthByCategory[c] ?? 0) + Number(t.amount)
+  }
+  const topGoal = (goals ?? [])[0]?.title ?? null
+
   return (
     <div className="w-full px-4 lg:px-8 py-6 space-y-6">
       <h1 className="text-2xl font-bold tracking-tight">Money</h1>
-      <ReceiptUploader userId={user.id} accounts={accounts ?? []} currency={currency} />
+      <ReceiptUploader userId={user.id} accounts={accounts ?? []} currency={currency}
+        budgets={(budgets ?? []) as { category: string; monthly_limit: number }[]}
+        monthByCategory={monthByCategory} topGoal={topGoal} />
       <BankImport userId={user.id} accounts={(accounts ?? []) as { id: string; type: 'personal' | 'business'; name: string }[]} currency={currency} />
       <NetWorthCard accounts={accounts ?? []} snapshots={snapshots ?? []} currency={currency} />
       <AccountsList
