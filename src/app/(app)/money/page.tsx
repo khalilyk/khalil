@@ -8,6 +8,8 @@ import NetWorthCard from '@/components/money/NetWorthCard'
 import GoalsBlock from '@/components/goals/GoalsBlock'
 import ReceiptUploader from '@/components/receipts/ReceiptUploader'
 import BankImport from '@/components/money/BankImport'
+import AccountsList from '@/components/money/AccountsList'
+import { BUSINESSES } from '@/lib/work'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 export default async function MoneyPage() {
@@ -18,12 +20,13 @@ export default async function MoneyPage() {
   const monthStart = format(startOfMonth(sydneyNow()), 'yyyy-MM-dd')
   const monthEnd = format(endOfMonth(sydneyNow()), 'yyyy-MM-dd')
 
-  const [{ data: accounts }, { data: transactions }, { data: snapshots }, { data: profile }, { data: budgets }] = await Promise.all([
+  const [{ data: accounts }, { data: transactions }, { data: snapshots }, { data: profile }, { data: budgets }, { data: goals }] = await Promise.all([
     supabase.from('accounts').select('*').order('type').order('name'),
     supabase.from('transactions').select('*').gte('occurred_on', monthStart).lte('occurred_on', monthEnd).order('occurred_on', { ascending: false }),
     supabase.from('balance_snapshots').select('*').order('as_of', { ascending: false }),
     supabase.from('profiles').select('currency').eq('id', user.id).maybeSingle(),
     supabase.from('budgets').select('id,category,monthly_limit'),
+    supabase.from('goals').select('id,title').eq('status', 'active').order('created_at'),
   ])
 
   const currency = (profile as { currency: string } | null)?.currency ?? 'AUD'
@@ -36,6 +39,14 @@ export default async function MoneyPage() {
       <ReceiptUploader userId={user.id} accounts={accounts ?? []} currency={currency} />
       <BankImport userId={user.id} accounts={(accounts ?? []) as { id: string; type: 'personal' | 'business'; name: string }[]} currency={currency} />
       <NetWorthCard accounts={accounts ?? []} snapshots={snapshots ?? []} currency={currency} />
+      <AccountsList
+        userId={user.id}
+        accounts={(accounts ?? []) as { id: string; name: string; type: 'personal' | 'business'; purpose: string | null; goal_id: string | null; business_key: string | null }[]}
+        snapshots={(snapshots ?? []) as { account_id: string; balance: number; as_of: string }[]}
+        goals={(goals ?? []) as { id: string; title: string }[]}
+        businesses={BUSINESSES.map(b => ({ key: b.key, name: b.name }))}
+        currency={currency}
+      />
       <BudgetsSection userId={user.id} budgets={budgets ?? []} transactions={transactions ?? []} currency={currency} />
       <Tabs defaultValue="personal">
         <TabsList className="w-full">

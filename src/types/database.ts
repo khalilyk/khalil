@@ -22,7 +22,7 @@ export interface Database {
         Update: Partial<Database['public']['Tables']['profiles']['Row']>
       }
       accounts: {
-        Row: { id: string; user_id: string; type: 'personal' | 'business'; name: string; created_at: string }
+        Row: { id: string; user_id: string; type: 'personal' | 'business'; name: string; purpose: string | null; goal_id: string | null; business_key: string | null; created_at: string }
         Insert: Omit<Database['public']['Tables']['accounts']['Row'], 'id' | 'created_at'>
         Update: Partial<Database['public']['Tables']['accounts']['Insert']>
       }
