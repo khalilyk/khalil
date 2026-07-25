@@ -29,10 +29,27 @@ export default function PushToggle() {
       return
     }
     if (Notification.permission === 'denied') { setStatus('denied'); return }
-    navigator.serviceWorker.getRegistration().then(async reg => {
-      const sub = reg ? await reg.pushManager.getSubscription() : null
-      setStatus(sub ? 'on' : 'off')
-    }).catch(() => setStatus('off'))
+    ;(async () => {
+      try {
+        const reg = await navigator.serviceWorker.register('/sw.js')
+        await navigator.serviceWorker.ready
+        let sub = await reg.pushManager.getSubscription()
+        // Permission already granted but the subscription was dropped (iOS rotates them)
+        // → re-subscribe silently so notifications don't "randomly turn off".
+        if (!sub && Notification.permission === 'granted') {
+          sub = await reg.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: urlB64ToUint8Array(process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!),
+          })
+          await fetch('/api/push/subscribe', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(sub),
+          })
+        }
+        setStatus(sub ? 'on' : 'off')
+      } catch {
+        setStatus('off')
+      }
+    })()
   }, [])
 
   async function enable() {

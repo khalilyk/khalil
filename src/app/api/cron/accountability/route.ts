@@ -26,6 +26,12 @@ export async function GET(req: NextRequest) {
   const today = format(now, 'yyyy-MM-dd')
   const monthStart = format(startOfMonth(now), 'yyyy-MM-dd')
 
+  // Real-UTC instant of the start of *today* in Sydney. `today T00:00:00` would be
+  // read as UTC (= 10am Sydney), so pre-10am notifications escaped the per-day dedup
+  // and re-fired hourly. Offset = how far sydneyNow() leads the real clock.
+  const offsetMs = sydneyNow().getTime() - new Date().getTime()
+  const sydDayStart = new Date(new Date(`${today}T00:00:00`).getTime() - offsetMs).toISOString()
+
   // Hour in the owner's timezone (Sydney). Derive it from the *real* clock
   // (new Date()), NOT sydneyNow() — that one already bakes in the Sydney offset,
   // and formatting it with a Sydney timeZone would double-count +10h.
@@ -50,7 +56,7 @@ export async function GET(req: NextRequest) {
       supabase.from('budgets').select('category, monthly_limit').eq('user_id', uid),
       supabase.from('transactions').select('amount, category, direction').eq('user_id', uid).gte('occurred_on', monthStart),
       supabase.from('goals').select('id, title, target_date').eq('user_id', uid).eq('status', 'active').lt('target_date', today),
-      supabase.from('notifications').select('type, related_id').eq('user_id', uid).gte('created_at', `${today}T00:00:00`),
+      supabase.from('notifications').select('type, related_id').eq('user_id', uid).gte('created_at', sydDayStart),
     ])
 
     const sentTypes = new Set((todayNotifs ?? []).map(n => n.type))
