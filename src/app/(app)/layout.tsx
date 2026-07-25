@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import BottomNav from '@/components/layout/BottomNav'
 import Header from '@/components/layout/Header'
 import Sidebar from '@/components/layout/Sidebar'
+import PushKeepAlive from '@/components/PushKeepAlive'
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const user = await getCachedUser()
@@ -23,6 +24,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         </main>
         <BottomNav />
       </div>
+      <PushKeepAlive />
     </div>
   )
 }
