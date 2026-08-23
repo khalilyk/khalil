@@ -24,8 +24,6 @@ const anton = Anton({
 export const metadata: Metadata = {
   title: 'Khalil',
   description: 'Your full life platform',
-  // Private app — keep it out of every search index
-  robots: { index: false, follow: false, nocache: true, googleBot: { index: false, follow: false } },
   manifest: '/manifest.webmanifest',
   appleWebApp: { capable: true, statusBarStyle: 'default', title: 'Khalil' },
   icons: {

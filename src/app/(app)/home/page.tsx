@@ -99,8 +99,8 @@ export default async function HomePage() {
   const moodText = (c?: { mood: number | null; energy: number | null }) =>
     c?.mood ? `${MOOD[c.mood]}${c.energy ? ` · ⚡${c.energy}` : ''}` : 'Not yet'
   const heroRows: HeroRow[] = [
-    { key: 'morning', label: 'Morning check-in', value: moodText(bySlot.morning), done: amDone, href: '/' },
-    { key: 'evening', label: 'Evening check-in', value: moodText(bySlot.evening), done: pmDone, href: '/' },
+    { key: 'morning', label: 'Morning check-in', value: moodText(bySlot.morning), done: amDone, href: '/home' },
+    { key: 'evening', label: 'Evening check-in', value: moodText(bySlot.evening), done: pmDone, href: '/home' },
     { key: 'workout', label: todayWorkout?.title ?? 'Rest day',
       value: todayWorkout ? `${todayDone}/${totalExercises(todayWorkout)}` : 'Rest day',
       done: todayWorkout ? todayDone > 0 : true, href: '/body' },

@@ -4,6 +4,12 @@ import BottomNav from '@/components/layout/BottomNav'
 import Header from '@/components/layout/Header'
 import Sidebar from '@/components/layout/Sidebar'
 import PushKeepAlive from '@/components/PushKeepAlive'
+import type { Metadata } from 'next'
+
+// The private app stays out of search indexes (only the public landing at / is indexable)
+export const metadata: Metadata = {
+  robots: { index: false, follow: false, nocache: true, googleBot: { index: false, follow: false } },
+}
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const user = await getCachedUser()
