@@ -208,10 +208,10 @@ function PortfolioView() {
           const big = i === 0 || i === 5 // two feature tiles
           return (
             <Link key={p.slug} href={`/work/${p.slug}`}
-              className={`group/tile relative overflow-hidden bg-black/5 origin-center transition-all duration-300 ease-out will-change-transform group-hover/grid:opacity-40 hover:!opacity-100 hover:scale-[1.45] hover:z-20 hover:shadow-2xl ${big ? 'col-span-2 row-span-2' : ''}`}>
+              className={`group/tile relative overflow-hidden bg-black/5 origin-center transition-all duration-300 ease-out will-change-transform group-hover/grid:opacity-70 hover:!opacity-100 hover:scale-[1.06] hover:z-20 hover:shadow-lg ${big ? 'col-span-2 row-span-2' : ''}`}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={p.img} alt={p.name} draggable={false} loading="lazy"
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover/tile:scale-110 [-webkit-user-drag:none]" />
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover/tile:scale-105 [-webkit-user-drag:none]" />
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-2 opacity-0 group-hover/tile:opacity-100 transition-opacity duration-300"
                 style={{ background: 'rgba(0,0,0,0.55)' }}>
                 <span className="text-white font-bold leading-tight text-sm">{p.name}</span>
