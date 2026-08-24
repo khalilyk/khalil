@@ -244,16 +244,28 @@ function PortfolioView() {
 function ContactView() {
   const [form, setForm] = useState({ topic: '', name: '', email: '', message: '' })
   const [sent, setSent] = useState(false)
+  const [tried, setTried] = useState(false)
   const TOPICS = ['New project', 'Brand & identity', 'Restaurant / café concept', 'Collaboration', 'Something else']
 
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())
+  const errors = {
+    topic: !form.topic,
+    name: !form.name.trim(),
+    email: !emailOk,
+    message: !form.message.trim(),
+  }
+  const valid = !errors.topic && !errors.name && !errors.email && !errors.message
+
   function send() {
-    const subject = encodeURIComponent(`${form.topic || 'Portfolio enquiry'}${form.name ? ` · ${form.name}` : ''}`)
-    const body = encodeURIComponent(`${form.topic ? `Topic: ${form.topic}\n\n` : ''}${form.message}\n\n${form.name}${form.email ? `\n${form.email}` : ''}`)
+    if (!valid) { setTried(true); return }
+    const subject = encodeURIComponent(`${form.topic} · ${form.name}`)
+    const body = encodeURIComponent(`Topic: ${form.topic}\n\n${form.message}\n\n${form.name}\n${form.email}`)
     window.location.href = `mailto:${EMAIL}?subject=${subject}&body=${body}`
     setSent(true)
   }
 
   const field = 'select-text w-full h-11 rounded-xl border bg-white/60 px-3.5 text-sm outline-none focus:border-black/40'
+  const bd = (bad: boolean) => (tried && bad ? RED : 'rgba(0,0,0,0.12)')
   return (
     <div className="kk-view-in max-w-xl">
       <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: GREY }}>03 · contact</p>
@@ -263,7 +275,7 @@ function ContactView() {
       <select value={form.topic} onChange={e => setForm(f => ({ ...f, topic: e.target.value }))}
         className={`${field} mt-5 appearance-none pr-10 ${form.topic ? '' : 'text-muted-foreground'}`}
         style={{
-          borderColor: 'rgba(0,0,0,0.12)',
+          borderColor: bd(errors.topic),
           backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a3a09b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")`,
           backgroundRepeat: 'no-repeat', backgroundPosition: 'right 14px center', backgroundSize: '14px',
         }}>
@@ -271,11 +283,19 @@ function ContactView() {
         {TOPICS.map(t => <option key={t} value={t} style={{ color: INK, backgroundColor: '#fff' }}>{t}</option>)}
       </select>
       <div className="mt-3 grid gap-3 sm:grid-cols-2">
-        <input placeholder="Your name" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} className={field} style={{ borderColor: 'rgba(0,0,0,0.12)' }} />
-        <input type="email" placeholder="Your email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} className={field} style={{ borderColor: 'rgba(0,0,0,0.12)' }} />
+        <input placeholder="Your name" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} className={field} style={{ borderColor: bd(errors.name) }} />
+        <input type="email" placeholder="Your email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} className={field} style={{ borderColor: bd(errors.email) }} />
       </div>
       <textarea placeholder="What do you have in mind?" rows={4} value={form.message} onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
-        className="select-text mt-3 w-full rounded-xl border bg-white/60 px-3.5 py-2.5 text-sm outline-none focus:border-black/40 resize-none" style={{ borderColor: 'rgba(0,0,0,0.12)' }} />
+        className="select-text mt-3 w-full rounded-xl border bg-white/60 px-3.5 py-2.5 text-sm outline-none focus:border-black/40 resize-none" style={{ borderColor: bd(errors.message) }} />
+
+      {tried && !valid && (
+        <p className="mt-2 text-xs font-semibold" style={{ color: RED }}>
+          {errors.email && !errors.name && !errors.topic && !errors.message
+            ? 'Please enter a valid email address.'
+            : 'Please fill in every field before sending.'}
+        </p>
+      )}
 
       <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
         <Cta onClick={send}>{sent ? 'opening your email' : 'send message'}</Cta>
