@@ -159,8 +159,8 @@ function HomeView({ go }: { go: (v: View) => void }) {
         <span className="block" style={{ color: RED }}>khalil khouri<span style={{ color: INK }}>.</span></span>
       </h1>
       <div className="mt-8 space-y-1">
-        <p className="text-lg lg:text-xl font-semibold">designer, maker, and curious mind.</p>
-        <p className="text-lg lg:text-xl" style={{ color: GREY }}>i turn ideas into thoughtful visuals and digital experiences.</p>
+        <p className="text-lg lg:text-xl font-semibold">brand builder, creative thinker and curious mind.</p>
+        <p className="text-lg lg:text-xl" style={{ color: GREY }}>i turn ideas across hospitality, property and print into brands people remember.</p>
       </div>
       <div className="mt-10 lg:mt-14 border-t pt-5" style={{ borderColor: 'rgba(0,0,0,0.12)' }}>
         <p className="font-semibold">selected work</p>
