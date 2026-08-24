@@ -4,8 +4,8 @@ import PortfolioLanding from '@/components/portfolio/PortfolioLanding'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Khalil Khouri — Designer & Maker',
-  description: 'Designer, maker, and curious mind. I turn ideas into thoughtful visuals and digital experiences.',
+  title: 'Khalil Khouri · Brand Builder',
+  description: 'Brand builder, creative thinker and curious mind. I turn ideas across hospitality, property and print into brands people remember.',
   robots: { index: true, follow: true },
 }
 

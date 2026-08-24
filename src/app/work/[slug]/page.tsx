@@ -15,8 +15,8 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params
   const p = getProject(slug)
-  if (!p) return { title: 'Work — Khalil Khouri' }
-  return { title: `${p.name} — Khalil Khouri`, description: p.desc, robots: { index: true, follow: true } }
+  if (!p) return { title: 'Work · Khalil Khouri' }
+  return { title: `${p.name} · Khalil Khouri`, description: p.desc, robots: { index: true, follow: true } }
 }
 
 function NavLink({ n, label, href }: { n: string; label: string; href: string }) {

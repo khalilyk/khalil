@@ -153,14 +153,14 @@ function HomeView({ go }: { go: (v: View) => void }) {
   }, [])
   return (
     <div className="kk-view-in">
-      <h1 className="font-extrabold tracking-tight leading-[0.95] text-5xl sm:text-6xl lg:text-7xl whitespace-nowrap">
+      <h1 className="font-extrabold tracking-tight leading-[0.95] text-[11.5vw] sm:text-6xl lg:text-7xl whitespace-nowrap">
         <span key={gi} dir="auto" className="block kk-fade">{GREETINGS[gi]}</span>
         <span className="block" style={{ color: GREY }}>my name is</span>
         <span className="block" style={{ color: RED }}>khalil khouri<span style={{ color: INK }}>.</span></span>
       </h1>
-      <div className="mt-8 space-y-1">
-        <p className="text-lg lg:text-xl font-semibold">brand builder, creative thinker and curious mind.</p>
-        <p className="text-lg lg:text-xl" style={{ color: GREY }}>i turn ideas across hospitality, property and print into brands people remember.</p>
+      <div className="mt-6 sm:mt-8 space-y-1.5 max-w-xl">
+        <p className="text-base leading-relaxed font-semibold">brand builder, creative thinker and curious mind.</p>
+        <p className="text-base leading-relaxed" style={{ color: GREY }}>i turn ideas across hospitality, property and print into brands people remember.</p>
       </div>
       <div className="mt-10 lg:mt-14 border-t pt-5" style={{ borderColor: 'rgba(0,0,0,0.12)' }}>
         <p className="font-semibold">selected work</p>
@@ -175,9 +175,9 @@ function HomeView({ go }: { go: (v: View) => void }) {
 
 function AboutView({ go }: { go: (v: View) => void }) {
   return (
-    <div className="kk-view-in max-w-2xl space-y-2.5 text-sm leading-relaxed">
-      <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: GREY }}>01 — about</p>
-      <p className="font-semibold text-base">The conviction is simple: the world doesn&apos;t need more of the same.</p>
+    <div className="kk-view-in max-w-2xl space-y-3 text-base leading-relaxed lg:max-h-full lg:overflow-y-auto lg:pr-2">
+      <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: GREY }}>01 · about</p>
+      <p className="font-semibold">The conviction is simple: the world doesn&apos;t need more of the same.</p>
       <p>
         For two decades, I&apos;ve helped shape hospitality brands recognised by <span className="font-semibold">Michelin</span>, celebrated by <span className="font-semibold">The World&apos;s 50 Best</span>, and awarded across Dubai&apos;s most competitive dining scene, including <span className="font-semibold" style={{ color: RED }}>3Fils, BRIX and Bordo Mavi</span>.
       </p>
@@ -216,7 +216,7 @@ function PortfolioView() {
 
   return (
     <div className="kk-view-in max-w-2xl">
-      <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: GREY }}>02 — select works</p>
+      <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: GREY }}>02 · select works</p>
       <div className="group/grid mt-4 grid grid-cols-3 grid-flow-dense auto-rows-[80px] sm:auto-rows-[104px] gap-1.5">
         {order.map((pi, i) => {
           const p = PROJECTS[pi]
@@ -247,8 +247,8 @@ function ContactView() {
   const TOPICS = ['New project', 'Brand & identity', 'Restaurant / café concept', 'Collaboration', 'Something else']
 
   function send() {
-    const subject = encodeURIComponent(`${form.topic || 'Portfolio enquiry'}${form.name ? ` — ${form.name}` : ''}`)
-    const body = encodeURIComponent(`${form.topic ? `Topic: ${form.topic}\n\n` : ''}${form.message}\n\n— ${form.name}${form.email ? `\n${form.email}` : ''}`)
+    const subject = encodeURIComponent(`${form.topic || 'Portfolio enquiry'}${form.name ? ` · ${form.name}` : ''}`)
+    const body = encodeURIComponent(`${form.topic ? `Topic: ${form.topic}\n\n` : ''}${form.message}\n\n${form.name}${form.email ? `\n${form.email}` : ''}`)
     window.location.href = `mailto:${EMAIL}?subject=${subject}&body=${body}`
     setSent(true)
   }
@@ -256,9 +256,9 @@ function ContactView() {
   const field = 'select-text w-full h-11 rounded-xl border bg-white/60 px-3.5 text-sm outline-none focus:border-black/40'
   return (
     <div className="kk-view-in max-w-xl">
-      <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: GREY }}>03 — contact</p>
+      <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: GREY }}>03 · contact</p>
       <h2 className="mt-2 text-4xl sm:text-5xl font-extrabold tracking-tight">let&apos;s talk<span style={{ color: RED }}>.</span></h2>
-      <p className="mt-2 text-sm" style={{ color: GREY }}>Working globally, with roots in Dubai, Sydney and Beirut. Tell me about your project and I&apos;ll usually reply within 24 hours.</p>
+      <p className="mt-3 text-base leading-relaxed" style={{ color: GREY }}>Working globally, with roots in Dubai, Sydney and Beirut. Tell me about your project and I&apos;ll usually reply within 24 hours.</p>
 
       <select value={form.topic} onChange={e => setForm(f => ({ ...f, topic: e.target.value }))}
         className={`${field} mt-5 appearance-none pr-10 ${form.topic ? '' : 'text-muted-foreground'}`}
