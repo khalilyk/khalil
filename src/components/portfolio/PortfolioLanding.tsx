@@ -8,7 +8,7 @@ import { PROJECTS } from '@/lib/projects'
 // Eye (sclera) centres as a % of the portrait image
 const EYES = [{ left: 45.4, top: 11.5 }, { left: 54.6, top: 9.2 }]
 // "hello," cycling through languages every 5s
-const GREETINGS = ['hello,', 'bonjour,', 'مرحبا،', 'γεια σου,', 'ciao,', '你好，', 'こんにちは、']
+const GREETINGS = ['Hello,', 'Bonjour,', 'مرحبا،', 'Γεια σου,', 'Ciao,', '你好，', 'こんにちは、']
 
 const RED = '#e5342b'
 const GREY = '#a3a09b'
@@ -91,15 +91,15 @@ export default function PortfolioLanding() {
             <span role="tooltip"
               className="pointer-events-none absolute left-0 top-full mt-2 z-30 rounded-lg px-3.5 py-2 text-xl font-extrabold tracking-tight text-white whitespace-nowrap shadow-lg opacity-0 -translate-y-1 transition-all duration-150 group-hover/home:opacity-100 group-hover/home:translate-y-0"
               style={{ backgroundColor: INK }}>
-              go home
+              Go home
               <span className="absolute left-5 bottom-full -translate-x-1/2 -mb-1 h-2 w-2 rotate-45" style={{ backgroundColor: INK }} />
             </span>
           )}
         </div>
         <nav className="flex gap-5 sm:gap-8 lg:gap-12 text-sm sm:text-base font-semibold">
-          {navItem('01', 'about', 'about')}
-          {navItem('02', 'select works', 'portfolio')}
-          {navItem('03', 'contact', 'contact')}
+          {navItem('01', 'About', 'about')}
+          {navItem('02', 'Select works', 'portfolio')}
+          {navItem('03', 'Contact', 'contact')}
         </nav>
       </header>
 
@@ -156,18 +156,18 @@ function HomeView({ go }: { go: (v: View) => void }) {
     <div className="kk-view-in">
       <h1 className="font-extrabold tracking-tight leading-[0.95] text-[11.5vw] sm:text-6xl lg:text-7xl whitespace-nowrap">
         <span key={gi} dir="auto" className="block kk-fade">{GREETINGS[gi]}</span>
-        <span className="block" style={{ color: GREY }}>my name is</span>
-        <span className="block" style={{ color: RED }}>khalil khouri<span style={{ color: INK }}>.</span></span>
+        <span className="block" style={{ color: GREY }}>My name is</span>
+        <span className="block" style={{ color: RED }}>Khalil Khouri<span style={{ color: INK }}>.</span></span>
       </h1>
       <div className="mt-6 sm:mt-8 space-y-1.5 max-w-xl">
-        <p className="text-base leading-relaxed font-semibold">brand builder, creative thinker and curious mind.</p>
-        <p className="text-base leading-relaxed" style={{ color: GREY }}>i turn ideas across hospitality, property and print into brands people remember.</p>
+        <p className="text-base leading-relaxed font-semibold">Brand builder, creative thinker and curious mind.</p>
+        <p className="text-base leading-relaxed" style={{ color: GREY }}>I turn ideas across hospitality, property and print into brands people remember.</p>
       </div>
       <div className="mt-10 lg:mt-14 border-t pt-5" style={{ borderColor: 'rgba(0,0,0,0.12)' }}>
-        <p className="font-semibold">selected work</p>
+        <p className="font-semibold">Selected work</p>
         <div className="mt-1 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-          <p className="text-sm" style={{ color: GREY }}>brand systems · digital experiences · illustration</p>
-          <Cta onClick={() => go('contact')} className="text-sm">have something in mind? let&apos;s talk</Cta>
+          <p className="text-sm" style={{ color: GREY }}>Brand systems · digital experiences · illustration</p>
+          <Cta onClick={() => go('contact')} className="text-sm">Have something in mind? Let&apos;s talk</Cta>
         </div>
       </div>
     </div>
@@ -195,7 +195,7 @@ function AboutView({ go }: { go: (v: View) => void }) {
         <BrandLink href="https://printparadise.com.au" label="Print Paradise" tip="A fully fledged online print store. printparadise.com.au" />, a fully fledged online print store making high-quality, beautifully produced print simple and accessible.
       </p>
       <p className="font-semibold">Different sectors. The same ambition: to create brands people notice, understand and remember.</p>
-      <Cta onClick={() => go('contact')} className="!mt-5">let&apos;s build something</Cta>
+      <Cta onClick={() => go('contact')} className="!mt-5">Let&apos;s build something</Cta>
     </div>
   )
 }
@@ -290,11 +290,11 @@ function ContactView() {
     return (
       <div className="kk-view-in max-w-xl">
         <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: GREY }}>03 · contact</p>
-        <h2 className="mt-2 text-4xl sm:text-5xl font-extrabold tracking-tight">message sent<span style={{ color: RED }}>.</span></h2>
+        <h2 className="mt-2 text-4xl sm:text-5xl font-extrabold tracking-tight">Message sent<span style={{ color: RED }}>.</span></h2>
         <p className="mt-3 text-base leading-relaxed" style={{ color: GREY }}>
           Thanks {form.name.split(' ')[0]} — your message has landed in my inbox. I&apos;ll usually reply within 24 hours.
         </p>
-        <Cta onClick={() => { setForm({ topic: '', name: '', email: '', message: '' }); setTried(false); setStatus('idle') }} className="!mt-6">send another</Cta>
+        <Cta onClick={() => { setForm({ topic: '', name: '', email: '', message: '' }); setTried(false); setStatus('idle') }} className="!mt-6">Send another</Cta>
       </div>
     )
   }
@@ -304,7 +304,7 @@ function ContactView() {
   return (
     <div className="kk-view-in max-w-xl">
       <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: GREY }}>03 · contact</p>
-      <h2 className="mt-2 text-4xl sm:text-5xl font-extrabold tracking-tight">let&apos;s talk<span style={{ color: RED }}>.</span></h2>
+      <h2 className="mt-2 text-4xl sm:text-5xl font-extrabold tracking-tight">Let&apos;s talk<span style={{ color: RED }}>.</span></h2>
       <p className="mt-3 text-base leading-relaxed" style={{ color: GREY }}>Working globally, with roots in Dubai, Sydney and Beirut. Tell me about your project and I&apos;ll usually reply within 24 hours.</p>
 
       <select value={form.topic} onChange={e => setForm(f => ({ ...f, topic: e.target.value }))}
@@ -335,7 +335,7 @@ function ContactView() {
       )}
 
       <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-        <Cta onClick={send}>{status === 'sending' ? 'sending…' : 'send message'}</Cta>
+        <Cta onClick={send}>{status === 'sending' ? 'Sending…' : 'Send message'}</Cta>
         <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider">
           <span className="relative flex h-2.5 w-2.5">
             <span className="absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75 animate-ping" />

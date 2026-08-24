@@ -41,9 +41,9 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       <header className="flex items-baseline justify-between gap-4 px-6 lg:px-16 py-6 lg:py-7 max-w-[1500px] w-full mx-auto shrink-0">
         <Link href="/" className="text-2xl font-extrabold tracking-tight">kk<span style={{ color: RED }}>.</span></Link>
         <nav className="flex gap-5 sm:gap-8 lg:gap-12 text-sm sm:text-base font-semibold">
-          <NavLink n="01" label="about" href="/?view=about" />
-          <NavLink n="02" label="select works" href="/?view=portfolio" />
-          <NavLink n="03" label="contact" href="/?view=contact" />
+          <NavLink n="01" label="About" href="/?view=about" />
+          <NavLink n="02" label="Select works" href="/?view=portfolio" />
+          <NavLink n="03" label="Contact" href="/?view=contact" />
         </nav>
       </header>
 
@@ -51,7 +51,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       <main className="flex-1 max-w-[1500px] w-full mx-auto px-6 lg:px-16 py-4 lg:py-8">
         {/* Breadcrumbs */}
         <nav className="flex items-center gap-2 text-sm font-semibold" style={{ color: GREY }}>
-          <Link href="/?view=portfolio" className="hover:opacity-70 transition-opacity">select works</Link>
+          <Link href="/?view=portfolio" className="hover:opacity-70 transition-opacity">Select works</Link>
           <span>/</span>
           <span style={{ color: INK }}>{p.name}</span>
         </nav>
@@ -73,11 +73,11 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
             <div className="mt-8 flex items-center gap-6 text-sm font-semibold">
               <Link href="/?view=contact" className="group inline-flex items-center gap-1.5" style={{ color: RED }}>
-                start a project
+                Start a project
                 <span className="inline-block transition-transform duration-200 group-hover:translate-x-1">→</span>
               </Link>
               <Link href={`/work/${next.slug}`} className="hover:opacity-70 transition-opacity" style={{ color: GREY }}>
-                next: {next.name}
+                Next: {next.name}
               </Link>
             </div>
           </div>
