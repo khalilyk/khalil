@@ -159,3 +159,16 @@
 @media (prefers-reduced-motion: reduce) {
   .kk-leg-a, .kk-leg-b, .kk-arm-a, .kk-arm-b, .kk-bob { animation: none; }
 }
+
+/* Portfolio view-switch animation */
+@keyframes kk-view-in {
+  from { opacity: 0; transform: translateY(18px); filter: blur(4px); }
+  to   { opacity: 1; transform: none; filter: blur(0); }
+}
+.kk-view-in > * { animation: kk-view-in .55s cubic-bezier(.2,.7,.2,1) both; }
+.kk-view-in > *:nth-child(2) { animation-delay: .06s; }
+.kk-view-in > *:nth-child(3) { animation-delay: .12s; }
+.kk-view-in > *:nth-child(4) { animation-delay: .18s; }
+@media (prefers-reduced-motion: reduce) {
+  .kk-view-in > * { animation: none; }
+}
