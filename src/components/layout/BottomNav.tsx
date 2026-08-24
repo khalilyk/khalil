@@ -30,7 +30,7 @@ export default function BottomNav() {
     )
   }
 
-  const homeActive = pathname === '/home'
+  const homeActive = pathname === '/personal'
 
   return (
     <nav className="lg:hidden fixed bottom-0 left-0 right-0 border-t border-border bg-background/95 backdrop-blur z-50 pb-[env(safe-area-inset-bottom)]">
@@ -38,7 +38,7 @@ export default function BottomNav() {
         {left.map(i => <Item key={i.href} {...i} />)}
 
         {/* Centered Home circle */}
-        <Link href="/home" className="flex flex-col items-center -mt-6 shrink-0">
+        <Link href="/personal" className="flex flex-col items-center -mt-6 shrink-0">
           <span className={cn(
             'flex items-center justify-center w-14 h-14 rounded-full shadow-lg border-4 border-background transition-colors',
             homeActive ? 'bg-primary text-primary-foreground' : 'bg-foreground text-background'

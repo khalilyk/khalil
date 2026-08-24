@@ -12,6 +12,6 @@ export const metadata: Metadata = {
 export default async function Landing() {
   // Logged in? Go straight to the private app.
   const user = await getCachedUser()
-  if (user) redirect('/home')
+  if (user) redirect('/personal')
   return <PortfolioLanding />
 }

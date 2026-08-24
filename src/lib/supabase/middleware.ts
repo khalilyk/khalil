@@ -27,14 +27,14 @@ export async function updateSession(request: NextRequest) {
   const isPublic =
     pathname === '/' ||                    // public portfolio landing
     pathname.startsWith('/work') ||        // public project pages
-    pathname.startsWith('/login') ||
+    pathname.startsWith('/personal') ||    // private entry (shows login when signed out)
     pathname.startsWith('/api/') ||
     pathname === '/robots.txt' ||
     pathname === '/manifest.webmanifest'
 
   if (!user && !isPublic) {
     const url = request.nextUrl.clone()
-    url.pathname = '/login'
+    url.pathname = '/personal'
     return NextResponse.redirect(url)
   }
 

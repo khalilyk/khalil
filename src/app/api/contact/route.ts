@@ -24,7 +24,8 @@ export async function POST(req: NextRequest) {
   }
 
   if (!process.env.RESEND_API_KEY) {
-    return NextResponse.json({ error: 'Email is not configured yet.' }, { status: 500 })
+    // Not wired up yet — tell the client to fall back to a mailto handoff.
+    return NextResponse.json({ error: 'not_configured' }, { status: 503 })
   }
 
   const resend = new Resend(process.env.RESEND_API_KEY)

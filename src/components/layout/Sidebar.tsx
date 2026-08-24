@@ -7,7 +7,7 @@ import { Home, DollarSign, Activity, Briefcase, Calendar, LineChart, Settings, L
 import { cn } from '@/lib/utils'
 
 const nav = [
-  { href: '/home', label: 'Home', icon: Home },
+  { href: '/personal', label: 'Home', icon: Home },
   { href: '/money', label: 'Money', icon: DollarSign },
   { href: '/body', label: 'Body', icon: Activity },
   { href: '/work', label: 'Work', icon: Briefcase },
@@ -23,7 +23,7 @@ export default function Sidebar() {
   async function signOut() {
     const { createClient } = await import('@/lib/supabase/client')
     await createClient().auth.signOut()
-    router.push('/login')
+    router.push('/personal')
     router.refresh()
   }
 
@@ -40,7 +40,7 @@ export default function Sidebar() {
 
           <nav className="flex-1 space-y-1 mt-2">
             {nav.map(({ href, label, icon: Icon }) => {
-              const active = href === '/home' ? pathname === '/home' : pathname.startsWith(href)
+              const active = href === '/personal' ? pathname === '/personal' : pathname.startsWith(href)
               return (
                 <Link key={href} href={href} className={cn(
                   'flex items-center gap-3 px-3 py-2.5 rounded-2xl text-sm font-medium transition-colors',

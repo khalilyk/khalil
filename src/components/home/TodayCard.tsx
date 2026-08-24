@@ -14,8 +14,8 @@ export default function TodayCard({ bySlot, workoutTitle, workoutDone, workoutTo
   const ciText = (c?: CI) => c?.mood ? `${MOOD[c.mood]}${c.energy ? ` · ⚡${c.energy}` : ''}` : 'Not yet'
 
   const rows = [
-    { icon: Sun, label: 'Morning check-in', value: ciText(am), done: !!am?.mood, href: '/home' },
-    { icon: Moon, label: 'Evening check-in', value: ciText(pm), done: !!pm?.mood, href: '/home' },
+    { icon: Sun, label: 'Morning check-in', value: ciText(am), done: !!am?.mood, href: '/personal' },
+    { icon: Moon, label: 'Evening check-in', value: ciText(pm), done: !!pm?.mood, href: '/personal' },
     { icon: Dumbbell, label: workoutTitle, value: workoutTotal ? `${workoutDone}/${workoutTotal}` : 'Rest day', done: workoutDone > 0, href: '/body' },
     { icon: Scale, label: 'Weight', value: latestWeight ? `${latestWeight} ${unit}` : '—', done: latestWeight != null, href: '/body' },
   ]

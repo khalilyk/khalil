@@ -14,6 +14,7 @@ const RED = '#e5342b'
 const GREY = '#a3a09b'
 const INK = '#141414'
 const CREAM = '#f4f2ed'
+const EMAIL = 'khalilykhouri@gmail.com'
 
 type View = 'home' | 'about' | 'portfolio' | 'contact'
 
@@ -104,7 +105,8 @@ export default function PortfolioLanding() {
 
       {/* Stage */}
       <main className="flex-1 min-h-0 max-w-[1500px] w-full mx-auto grid gap-8 items-center px-6 lg:px-16 pb-8 lg:grid-cols-[1.15fr_1fr]">
-        <div className="min-h-0">
+        {/* Content — on desktop the page never scrolls, so an over-tall view scrolls within its own frame */}
+        <div className="min-h-0 lg:max-h-full lg:overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           {view === 'home' && <HomeView key="home" go={setView} />}
           {view === 'about' && <AboutView key="about" go={setView} />}
           {view === 'portfolio' && <PortfolioView key="portfolio" />}
@@ -174,7 +176,7 @@ function HomeView({ go }: { go: (v: View) => void }) {
 
 function AboutView({ go }: { go: (v: View) => void }) {
   return (
-    <div className="kk-view-in max-w-2xl space-y-3 text-base leading-relaxed lg:max-h-full lg:overflow-y-auto lg:pr-2">
+    <div className="kk-view-in max-w-2xl space-y-3 text-base leading-relaxed">
       <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: GREY }}>01 · about</p>
       <p className="font-semibold">The conviction is simple: the world doesn&apos;t need more of the same.</p>
       <p>
@@ -267,6 +269,14 @@ function ContactView() {
       })
       if (!res.ok) {
         const { error } = await res.json().catch(() => ({ error: '' }))
+        // Email backend not wired up yet → fall back to the visitor's mail app.
+        if (res.status === 503 || error === 'not_configured') {
+          const subject = encodeURIComponent(`${form.topic} · ${form.name}`)
+          const body = encodeURIComponent(`Topic: ${form.topic}\n\n${form.message}\n\n${form.name}\n${form.email}`)
+          window.location.href = `mailto:${EMAIL}?subject=${subject}&body=${body}`
+          setStatus('sent')
+          return
+        }
         throw new Error(error || 'Something went wrong.')
       }
       setStatus('sent')

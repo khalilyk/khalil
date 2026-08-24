@@ -71,7 +71,7 @@ export default function AdminSection({ userId, email, profile }: {
     const { createClient } = await import('@/lib/supabase/client')
     const supabase = createClient()
     await supabase.auth.signOut()
-    router.push('/login')
+    router.push('/personal')
     router.refresh()
   }
 

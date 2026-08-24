@@ -9,7 +9,7 @@ import { ArrowRight, Loader2 } from 'lucide-react'
 
 const OWNER_EMAIL = 'khalilykhouri@gmail.com'
 
-export default function LoginPage() {
+export default function LoginForm() {
   const router = useRouter()
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -29,7 +29,7 @@ export default function LoginPage() {
       setError(error.message)
       setLoading(false)
     } else {
-      router.push('/home')
+      router.push('/personal')
       router.refresh()
     }
   }
@@ -41,7 +41,7 @@ export default function LoginPage() {
     const { createClient } = await import('@/lib/supabase/client')
     const supabase = createClient()
     const { error } = await supabase.auth.resetPasswordForEmail(OWNER_EMAIL, {
-      redirectTo: `${window.location.origin}/login`,
+      redirectTo: `${window.location.origin}/personal`,
     })
     if (error) setError(error.message)
     else setInfo(`Reset link sent to ${OWNER_EMAIL}.`)

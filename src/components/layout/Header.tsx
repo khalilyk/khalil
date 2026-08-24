@@ -26,7 +26,7 @@ export default function Header({ userId, name }: { userId: string; name: string 
         </p>
 
         {/* KHALIL wordmark centered */}
-        <Link href="/home" aria-label="Khalil — home" className="absolute left-1/2 -translate-x-1/2">
+        <Link href="/personal" aria-label="Khalil — home" className="absolute left-1/2 -translate-x-1/2">
           <span className="block h-9 w-[96px] bg-white" style={WORDMARK} />
         </Link>
 
