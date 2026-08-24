@@ -10,8 +10,8 @@ export type Project = {
   desc: string
 }
 
-const NN = 'https://thisisnn.com'
-const u = (path: string) => (path.startsWith('http') ? path : NN + path)
+// Images are self-hosted under /public/projects/<slug>/ (never hotlinked).
+const u = (path: string) => path
 
 type Raw = Omit<Project, 'img' | 'images'> & { img: string; images: string[] }
 
@@ -24,8 +24,8 @@ const RAW: Raw[] = [
   },
   {
     slug: 'kinoya', name: 'Kinoya', cat: 'Content', sub: 'An izakaya with a soul.', city: 'Dubai', year: '2025',
-    img: '/projects/kinoya/nn-kinoyaheader.jpg',
-    images: ['/projects/kinoya/nn-kinoyaheader.jpg', '/projects/kinoya/nn-kinoya2.jpg', '/projects/kinoya/nn-kinoya4.jpg', '/projects/kinoya/nn-kinoya1.jpg', '/projects/kinoya/nn-kinoya5.jpg', '/projects/kinoya/nn-kinoya3.jpg'],
+    img: '/projects/kinoya/nn-kinoya1.jpg',
+    images: ['/projects/kinoya/nn-kinoya1.jpg', '/projects/kinoya/nn-kinoya2.jpg', '/projects/kinoya/nn-kinoya3.jpg', '/projects/kinoya/nn-kinoya4.jpg', '/projects/kinoya/nn-kinoya5.jpg'],
     desc: "Nestled in the heart of Dubai, Kinoya is more than a ramen bar - it's a cultural ritual. As a Michelin Bib Gourmand-awarded restaurant and one of the UAE's most beloved homegrown concepts, Kinoya embodies the warmth of an izakaya with the soul of Tokyo's backstreets. Our task was to capture this spirit through a lifestyle shoot that reflects not just the food, but the feeling: comforting, communal, and deeply personal.\n\nThe shoot spotlighted Kinoya's signature ramen, sushi, gyoza, and drinks in their natural habitat - steaming bowls mid-slurp, hands reaching for shared plates, and golden hour light pouring over wood textures and soft shadows. We leaned into the honest, lived-in beauty of the space, highlighting the quiet moments between bites and the energy that pulses through every seat at the counter.\n\nOur visual approach celebrated the Kinoya ethos: craftsmanship without pretension. Whether it was the swirl of noodles in broth or the glint of sake glasses clinking together, every frame aimed to tell a story of passion, precision, and place.",
   },
   {
@@ -37,13 +37,13 @@ const RAW: Raw[] = [
   {
     slug: 'voyage-concierge', name: 'Voyage Concierge', cat: 'Branding', sub: 'Exclusive journeys, extraordinary experiences.', city: 'Dubai', year: '2025',
     img: '/projects/voyage/nn-voyage.jpg',
-    images: ['/projects/voyage/nn-voyage.jpg', '/projects/voyage/nn-voyagestamps1.jpg', '/projects/voyage/nn-voyagetote1.jpg', '/projects/voyage/nn-voyageshirt.jpg', '/projects/voyage/nn-voyagenote.jpg'],
+    images: ['/projects/voyage/nn-voyage.jpg', '/projects/voyage/nn-voyagestamps1.jpg', '/projects/voyage/nn-voyagetote1.jpg', '/projects/voyage/nn-voyageshirt.jpg', '/projects/voyage/nn-voyagenote.jpg', '/projects/voyage/nn-voyagesuitcase.jpg', '/projects/voyage/nn-voyageguide.jpg', '/projects/voyage/nn-voyageplane.jpg', '/projects/voyage/nn-voyagegbookmark.jpg'],
     desc: "Voyage Concierge came to us with a clear mission: to redefine how the world experiences travel, seamless, intimate, and utterly bespoke. Our role was to translate that vision into a refined brand identity that felt as effortless and considered as the journeys they design.\n\nFrom the elegant logo to a warm, editorial tone of voice, every element was crafted to reflect the brand's promise of understated luxury and world-class personalization. We drew inspiration from vintage luggage tags, global coordinates, and handwritten notes, symbols of a time when travel was an art, not a transaction.\n\nBeyond the visual identity, we helped Voyage shape its brand story, one that speaks not to tourists, but to travelers. People who value the unseen, the tailored, the quietly spectacular.",
   },
   {
     slug: 'genesis-coffee-co', name: 'Genesis Coffee Co.', cat: 'Branding', sub: "Start strong or don't start at all.", city: 'Dubai', year: '2025',
     img: '/projects/genesis/genesis-coffeecup.jpg',
-    images: ['/projects/genesis/genesis-coffeecup.jpg', '/projects/genesis/genesiscoffee-handsof-scaled.png', '/projects/genesis/genesis-stickerroll1.jpg', '/projects/genesis/genesis-coffeebox.jpg', '/projects/genesis/gensesis-beans.jpg', '/projects/genesis/genesis-buckethat.jpg', '/projects/genesis/genesis-coffeebag.jpg'],
+    images: ['/projects/genesis/genesis-coffeecup.jpg', '/projects/genesis/genesis-coffeebag.jpg', '/projects/genesis/genesis-coffeebox.jpg', '/projects/genesis/genesis-beans.jpg', '/projects/genesis/genesis-stickerroll.jpg', '/projects/genesis/genesis-buckethat.jpg'],
     desc: "Genesis Coffee Co was built from the ground up as an in-house project by Not Normal - a brand that believes in standing out, or not showing up at all. The concept began with a single idea: coffee marks the start of the day, just as Genesis marks the start of life.\n\nFrom that came a brand identity that feels raw, loud and intentional. We paired neon green with deep black to create contrast and clarity, using the all-caps IMPACT font to make every word feel urgent and alive. It's not soft. It's not polite. It's coffee for people who start things.\n\nFrom the visual language to the tone of voice, we stripped away the fluff and leaned into a confident, stripped-back look that celebrates the process - from hand-picked beans to small-batch UAE roasts. Genesis isn't just a coffee brand - it's a statement. One that says: start strong or don't start at all.",
   },
   {

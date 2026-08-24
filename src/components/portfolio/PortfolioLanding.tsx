@@ -203,6 +203,26 @@ function AboutView({ go }: { go: (v: View) => void }) {
 // fixed set of shape slots — 'wide' = 2x2 feature, 'square' = 1 col x 2 rows (≈square), '' = small landscape
 const SPAN_SLOTS = ['wide', 'square', '', 'square', '', 'wide', 'square', ''] as const
 
+function GridTile({ p, cls }: { p: (typeof PROJECTS)[number]; cls: string }) {
+  const [broken, setBroken] = useState(false)
+  return (
+    <Link href={`/work/${p.slug}`}
+      className={`group/tile relative overflow-hidden bg-black/5 origin-center transition-all duration-300 ease-out will-change-transform group-hover/grid:opacity-70 hover:!opacity-100 hover:scale-[1.06] hover:z-20 hover:shadow-lg ${cls}`}>
+      {!broken && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={p.img} alt={p.name} draggable={false} loading="lazy" onError={() => setBroken(true)}
+          className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover/tile:scale-105 [-webkit-user-drag:none]" />
+      )}
+      {/* Label: always shown when the image is missing, otherwise on hover */}
+      <div className={`absolute inset-0 flex flex-col items-center justify-center text-center p-2 transition-opacity duration-300 ${broken ? 'opacity-100' : 'opacity-0 group-hover/tile:opacity-100'}`}
+        style={{ background: broken ? 'rgba(20,20,20,0.04)' : 'rgba(0,0,0,0.55)' }}>
+        <span className={`font-bold leading-tight text-sm ${broken ? '' : 'text-white'}`} style={broken ? { color: INK } : undefined}>{p.name}</span>
+        <span className={`text-[10px] uppercase tracking-wider mt-0.5 ${broken ? '' : 'text-white/70'}`} style={broken ? { color: GREY } : undefined}>{p.cat}</span>
+      </div>
+    </Link>
+  )
+}
+
 function PortfolioView() {
   // start deterministic (matches SSR), then shuffle which project fills which slot on each load
   const [order, setOrder] = useState<number[]>(() => PROJECTS.map((_, i) => i))
@@ -223,19 +243,7 @@ function PortfolioView() {
           const p = PROJECTS[pi]
           const span = SPAN_SLOTS[i] ?? ''
           const cls = span === 'wide' ? 'col-span-2 row-span-2' : span === 'square' ? 'row-span-2' : ''
-          return (
-            <Link key={p.slug} href={`/work/${p.slug}`}
-              className={`group/tile relative overflow-hidden bg-black/5 origin-center transition-all duration-300 ease-out will-change-transform group-hover/grid:opacity-70 hover:!opacity-100 hover:scale-[1.06] hover:z-20 hover:shadow-lg ${cls}`}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={p.img} alt={p.name} draggable={false} loading="lazy"
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover/tile:scale-105 [-webkit-user-drag:none]" />
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-2 opacity-0 group-hover/tile:opacity-100 transition-opacity duration-300"
-                style={{ background: 'rgba(0,0,0,0.55)' }}>
-                <span className="text-white font-bold leading-tight text-sm">{p.name}</span>
-                <span className="text-white/70 text-[10px] uppercase tracking-wider mt-0.5">{p.cat}</span>
-              </div>
-            </Link>
-          )
+          return <GridTile key={p.slug} p={p} cls={cls} />
         })}
       </div>
     </div>
