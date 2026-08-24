@@ -48,8 +48,8 @@ const RAW: Raw[] = [
   },
   {
     slug: 'luckys', name: "Lucky's", cat: 'Branding', sub: 'A local legend, back on the road.', city: 'Sydney', year: '2026',
-    img: '/projects/luckys/luckys-1.png',
-    images: ['/projects/luckys/luckys-1.png', '/projects/luckys/luckys-truck.jpg', '/projects/luckys/luckys-tabox.jpg', '/projects/luckys/luckys-tartaresauce.jpg', '/projects/luckys/luckys-shirt.jpg', '/projects/luckys/luckys-aframe.jpg', '/projects/luckys/luckys-tote.jpg', '/projects/luckys/luckys-2.png', '/projects/luckys/luckys-3.png'],
+    img: '/projects/luckys/luckys-shirt.jpg',
+    images: ['/projects/luckys/luckys-shirt.jpg', '/projects/luckys/luckys-1.png', '/projects/luckys/luckys-truck.jpg', '/projects/luckys/luckys-tabox.jpg', '/projects/luckys/luckys-tartaresauce.jpg', '/projects/luckys/luckys-aframe.jpg', '/projects/luckys/luckys-tote.jpg', '/projects/luckys/luckys-2.png', '/projects/luckys/luckys-3.png'],
     desc: "Some places don't need a reintroduction. They just need a second life.\n\nFor over 25 years, Padstow Seafoods was part of the neighbourhood routine. Families lining up on weekends, kids growing up on the same order, and Lucky behind the counter doing what he did best, simple, honest fish and chips done right.\n\nWhen the shop closed, the food stopped, but the memory didn't. Lucky's is our way of bringing that feeling back, not as a replica, but as a revival. A mobile fish and chip truck built on nostalgia, personality, and a stripped-back menu that focuses on what made it special in the first place.\n\nWe worked on the full brand direction from the ground up. Naming, identity, tone of voice, and visual system. From logo and colour palette to truck signage, packaging and uniforms, every touchpoint was designed to feel fun, confident and a little bit loud, just like the queues Lucky used to have.",
   },
   {
