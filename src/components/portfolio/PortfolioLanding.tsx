@@ -14,7 +14,7 @@ const RED = '#e5342b'
 const GREY = '#a3a09b'
 const INK = '#141414'
 const CREAM = '#f4f2ed'
-const EMAIL = 'hello@khalilkhouri.org'
+const EMAIL = 'khalilykhouri@gmail.com'
 
 type View = 'home' | 'about' | 'portfolio' | 'contact'
 
