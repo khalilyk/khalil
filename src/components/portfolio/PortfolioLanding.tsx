@@ -1,7 +1,6 @@
 'use client'
 
-import { useState } from 'react'
-import Link from 'next/link'
+import { useState, useRef, useEffect } from 'react'
 import ContactButton from './ContactButton'
 
 const RED = '#e5342b'
@@ -13,6 +12,20 @@ type View = 'home' | 'about' | 'portfolio'
 
 export default function PortfolioLanding() {
   const [view, setView] = useState<View>('home')
+  const faceRef = useRef<HTMLDivElement>(null)
+  const [tilt, setTilt] = useState({ x: 0, y: 0 })
+
+  // Illustration gently follows the cursor
+  useEffect(() => {
+    const onMove = (e: MouseEvent) => {
+      const MAX = 12
+      const x = ((e.clientX / window.innerWidth) - 0.5) * 2 * MAX
+      const y = ((e.clientY / window.innerHeight) - 0.5) * 2 * MAX
+      setTilt({ x, y })
+    }
+    window.addEventListener('mousemove', onMove)
+    return () => window.removeEventListener('mousemove', onMove)
+  }, [])
 
   const navItem = (n: string, label: string, v: View) => (
     <button onClick={() => setView(v)} className="hover:opacity-60 transition-opacity">
@@ -41,10 +54,19 @@ export default function PortfolioLanding() {
           {view === 'portfolio' && <PortfolioView key="portfolio" onContact />}
         </div>
 
-        {/* Portrait illustration */}
-        <div className="hidden lg:block h-full min-h-0 bg-no-repeat bg-contain bg-right-bottom"
-          style={{ backgroundImage: 'url(/kk-portrait.png)' }} aria-hidden />
+        {/* Portrait illustration — gently follows the cursor */}
+        <div ref={faceRef} className="hidden lg:flex h-full min-h-0 items-end justify-end">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/kk-portrait.png" alt="Illustration of Khalil Khouri"
+            className="h-full w-auto object-contain object-bottom will-change-transform"
+            style={{ transform: `translate(${tilt.x}px, ${tilt.y}px)`, transition: 'transform .2s ease-out' }} />
+        </div>
       </main>
+
+      {/* Footer */}
+      <footer className="shrink-0 max-w-[1500px] w-full mx-auto px-6 lg:px-16 py-4 text-xs" style={{ color: GREY }}>
+        © {new Date().getFullYear()} Khalil Khouri. All rights reserved.
+      </footer>
     </div>
   )
 }
@@ -61,12 +83,12 @@ function HomeView() {
         <p className="text-lg lg:text-xl font-semibold">designer, maker, and curious mind.</p>
         <p className="text-lg lg:text-xl" style={{ color: GREY }}>i turn ideas into thoughtful visuals and digital experiences.</p>
       </div>
-      <div className="mt-10 lg:mt-14 border-t pt-5 flex flex-wrap items-end justify-between gap-4" style={{ borderColor: 'rgba(0,0,0,0.12)' }}>
-        <div>
-          <p className="font-semibold">selected work</p>
+      <div className="mt-10 lg:mt-14 border-t pt-5" style={{ borderColor: 'rgba(0,0,0,0.12)' }}>
+        <p className="font-semibold">selected work</p>
+        <div className="mt-1 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
           <p className="text-sm" style={{ color: GREY }}>brand systems · digital experiences · illustration</p>
+          <ContactButton className="text-sm font-semibold hover:opacity-70 transition-opacity text-left text-[#e5342b]" label="have something in mind? let's talk →" />
         </div>
-        <ContactButton className="font-semibold hover:opacity-70 transition-opacity text-left text-[#e5342b]" label="have something in mind? let's talk →" />
       </div>
     </div>
   )
