@@ -18,8 +18,8 @@ type Raw = Omit<Project, 'img' | 'images'> & { img: string; images: string[] }
 const RAW: Raw[] = [
   {
     slug: 'tonton-bakes', name: 'Tonton Bakes', cat: 'Branding', sub: 'A little everyday magic.', city: 'Dubai', year: '2024',
-    img: '/projects/tonton/nn-tontonleft.jpg',
-    images: ['/projects/tonton/nn-tontonleft.jpg', '/projects/tonton/nn-tontoncoffee.jpg', '/projects/tonton/DSCF3251-Enhanced-NR.jpg', '/projects/tonton/DSCF3337-Enhanced-NR.jpg', '/projects/tonton/DSCF3125-Enhanced-NR.jpg', '/projects/tonton/DSCF3134-Enhanced-NR.jpg', '/projects/tonton/nn-tontonweb.jpg', '/projects/tonton/nn-tontonbc.jpg', '/projects/tonton/nn-tontonlogo.jpg'],
+    img: '/projects/tonton/DSCF3125-Enhanced-NR.jpg',
+    images: ['/projects/tonton/DSCF3125-Enhanced-NR.jpg', '/projects/tonton/nn-tontonleft.jpg', '/projects/tonton/nn-tontoncoffee.jpg', '/projects/tonton/DSCF3251-Enhanced-NR.jpg', '/projects/tonton/DSCF3337-Enhanced-NR.jpg', '/projects/tonton/DSCF3134-Enhanced-NR.jpg', '/projects/tonton/nn-tontonweb.jpg', '/projects/tonton/nn-tontonbc.jpg', '/projects/tonton/nn-tontonlogo.jpg'],
     desc: "We were tasked with building a brand that felt nostalgic yet fresh, charming without being cliché. Inspired by French and Italian bakery traditions and the warmth of the word 'Tonton' (French for uncle), we set out to create something that felt familiar, but never ordinary. We developed a hand-drawn identity system that feels artisanal but modern - pairing soft lines and playful details with a sophisticated palette of pastel purple and green. The logo, brand marks and tone of voice all reflect the essence of Tonton: approachable, slightly cheeky, and rooted in good taste.\n\nThe website was designed to feel like walking into the shop itself - inviting, warm, and filled with personality. Photography captured the hands-on baking process, crumb-close textures, and the kind of natural light that makes you want to slow down and order another pastry. We also created uniforms that feel like part of the story: clean, comfortable and unmistakably Tonton.",
   },
   {
