@@ -19,6 +19,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return { title: `${p.name} — Khalil Khouri`, description: p.desc, robots: { index: true, follow: true } }
 }
 
+function NavLink({ n, label, href }: { n: string; label: string; href: string }) {
+  return (
+    <Link href={href} className="whitespace-nowrap hover:opacity-60 transition-opacity">
+      <span className="hidden sm:inline" style={{ color: GREY }}>{n} </span>{label}.
+    </Link>
+  )
+}
+
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const p = getProject(slug)
@@ -28,8 +36,19 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   const next = PROJECTS[(idx + 1) % PROJECTS.length]
 
   return (
-    <div className="min-h-[100dvh]" style={{ backgroundColor: CREAM, color: INK }}>
-      <div className="max-w-[1150px] mx-auto px-6 lg:px-16 py-7 lg:py-10">
+    <div className="min-h-[100dvh] flex flex-col" style={{ backgroundColor: CREAM, color: INK }}>
+      {/* Header (same as the landing) */}
+      <header className="flex items-baseline justify-between gap-4 px-6 lg:px-16 py-6 lg:py-7 max-w-[1500px] w-full mx-auto shrink-0">
+        <Link href="/" className="text-2xl font-extrabold tracking-tight">kk<span style={{ color: RED }}>.</span></Link>
+        <nav className="flex gap-5 sm:gap-8 lg:gap-12 text-sm sm:text-base font-semibold">
+          <NavLink n="01" label="about" href="/?view=about" />
+          <NavLink n="02" label="portfolio" href="/?view=portfolio" />
+          <NavLink n="03" label="contact" href="/?view=contact" />
+        </nav>
+      </header>
+
+      {/* Content */}
+      <main className="flex-1 max-w-[1150px] w-full mx-auto px-6 lg:px-16 py-4 lg:py-8">
         {/* Breadcrumbs */}
         <nav className="flex items-center gap-2 text-sm font-semibold" style={{ color: GREY }}>
           <Link href="/" className="hover:opacity-70 transition-opacity">kk<span style={{ color: RED }}>.</span></Link>
@@ -39,8 +58,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           <span style={{ color: INK }}>{p.name}</span>
         </nav>
 
-        <div className="mt-8 lg:mt-12 grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-          <div className="overflow-hidden rounded-2xl bg-black/5">
+        <div className="mt-6 lg:mt-10 grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+          <div className="overflow-hidden bg-black/5">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={p.img} alt={p.name} className="w-full aspect-[4/3] object-cover" />
           </div>
@@ -63,7 +82,12 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             </div>
           </div>
         </div>
-      </div>
+      </main>
+
+      {/* Footer (same as the landing) */}
+      <footer className="shrink-0 max-w-[1500px] w-full mx-auto px-6 lg:px-16 py-4 flex flex-col items-center gap-1 text-center text-xs lg:flex-row lg:items-center lg:justify-between lg:gap-4 lg:text-left" style={{ color: GREY }}>
+        <span>© {new Date().getFullYear()} Khalil Khouri. All rights reserved.</span>
+      </footer>
     </div>
   )
 }
