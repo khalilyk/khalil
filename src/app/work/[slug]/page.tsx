@@ -48,7 +48,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       </header>
 
       {/* Content */}
-      <main className="flex-1 max-w-[1150px] w-full mx-auto px-6 lg:px-16 py-4 lg:py-8">
+      <main className="flex-1 max-w-[1500px] w-full mx-auto px-6 lg:px-16 py-4 lg:py-8">
         {/* Breadcrumbs */}
         <nav className="flex items-center gap-2 text-sm font-semibold" style={{ color: GREY }}>
           <Link href="/" className="hover:opacity-70 transition-opacity">kk<span style={{ color: RED }}>.</span></Link>
