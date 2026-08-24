@@ -176,7 +176,7 @@ function HomeView({ go }: { go: (v: View) => void }) {
 
 function AboutView({ go }: { go: (v: View) => void }) {
   return (
-    <div className="kk-view-in max-w-2xl space-y-3 text-base leading-relaxed">
+    <div className="kk-view-in max-w-2xl space-y-3 lg:space-y-2 text-base leading-relaxed lg:text-[15px] lg:leading-snug">
       <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: GREY }}>01 · about</p>
       <p className="font-semibold">The conviction is simple: the world doesn&apos;t need more of the same.</p>
       <p>
