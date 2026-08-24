@@ -23,10 +23,10 @@ function BrandLink({ href, label, tip }: { href: string; label: string; tip: str
       <a href={href} target="_blank" rel="noopener noreferrer"
         className="font-semibold underline decoration-1 underline-offset-2 hover:opacity-70" style={{ color: RED }}>{label}</a>
       <span role="tooltip"
-        className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-full mb-2 z-30 w-max max-w-[240px] rounded-lg px-3 py-2 text-xs font-normal leading-snug text-white text-center shadow-lg opacity-0 translate-y-1 transition-all duration-150 group-hover/tt:opacity-100 group-hover/tt:translate-y-0"
+        className="pointer-events-none absolute left-0 bottom-full mb-2 z-30 w-max max-w-[min(240px,70vw)] rounded-lg px-3 py-2 text-xs font-normal leading-snug text-white text-left shadow-lg opacity-0 translate-y-1 transition-all duration-150 group-hover/tt:opacity-100 group-hover/tt:translate-y-0"
         style={{ backgroundColor: INK }}>
         {tip}
-        <span className="absolute left-1/2 top-full -translate-x-1/2 -mt-1 h-2 w-2 rotate-45" style={{ backgroundColor: INK }} />
+        <span className="absolute left-5 top-full -translate-x-1/2 -mt-1 h-2 w-2 rotate-45" style={{ backgroundColor: INK }} />
       </span>
     </span>
   )
@@ -77,7 +77,17 @@ export default function PortfolioLanding() {
       <MarkerCanvas />
       {/* Nav */}
       <header className="flex items-baseline justify-between gap-4 px-6 lg:px-16 py-6 lg:py-7 max-w-[1500px] w-full mx-auto shrink-0">
-        <button onClick={() => setView('home')} className="text-2xl font-extrabold tracking-tight">kk<span style={{ color: RED }}>.</span></button>
+        <div className="relative group/home">
+          <button onClick={() => setView('home')} className="text-2xl font-extrabold tracking-tight">kk<span style={{ color: RED }}>.</span></button>
+          {view !== 'home' && (
+            <span role="tooltip"
+              className="pointer-events-none absolute left-0 top-full mt-2 z-30 rounded-lg px-3.5 py-2 text-xl font-extrabold tracking-tight text-white whitespace-nowrap shadow-lg opacity-0 -translate-y-1 transition-all duration-150 group-hover/home:opacity-100 group-hover/home:translate-y-0"
+              style={{ backgroundColor: INK }}>
+              go home
+              <span className="absolute left-5 bottom-full -translate-x-1/2 -mb-1 h-2 w-2 rotate-45" style={{ backgroundColor: INK }} />
+            </span>
+          )}
+        </div>
         <nav className="flex gap-5 sm:gap-8 lg:gap-12 text-sm sm:text-base font-semibold">
           {navItem('01', 'about', 'about')}
           {navItem('02', 'portfolio', 'portfolio')}
@@ -87,7 +97,7 @@ export default function PortfolioLanding() {
 
       {/* Stage */}
       <main className="flex-1 min-h-0 max-w-[1500px] w-full mx-auto grid lg:grid-cols-[1.15fr_1fr] gap-8 items-center px-6 lg:px-16 pb-8">
-        <div className="min-h-0 overflow-hidden">
+        <div className="min-h-0">
           {view === 'home' && <HomeView key="home" go={setView} />}
           {view === 'about' && <AboutView key="about" go={setView} />}
           {view === 'portfolio' && <PortfolioView key="portfolio" go={setView} />}
@@ -181,25 +191,44 @@ function AboutView({ go }: { go: (v: View) => void }) {
   )
 }
 
+const PROJECTS = [
+  { name: '3FILS', cat: 'Branding', sub: 'Reimagining a Waterfront Icon', city: 'Dubai', year: '2019', img: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80', desc: 'From a bold idea to a dining experience that redefined a category. We built more than a brand, we built obsession, with every plate and touchpoint designed to be remembered.' },
+  { name: 'Revolver', cat: 'Identity', sub: 'A Neighbourhood Bar, Reborn', city: 'Sydney', year: '2021', img: 'https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=1200&q=80', desc: 'A neighbourhood bar reimagined as a cultural anchor. Quiet rebellion designed into every detail, from the identity to the room people never want to leave.' },
+  { name: 'Maison Dali', cat: 'Branding', sub: 'Surrealism, Served', city: 'Beirut', year: '2022', img: 'https://images.unsplash.com/photo-1424847651672-bf20a4b0982b?auto=format&fit=crop&w=1200&q=80', desc: 'Surrealism on a plate. We built a world, not a logo. Each touchpoint a different act in the same play, designed to surprise and seduce in equal measure.' },
+  { name: 'Oakberry', cat: 'Content', sub: 'A Healthy Habit Made Iconic', city: 'Dubai', year: '2023', img: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=1200&q=80', desc: 'Visual direction that turned a healthy habit into a status symbol. Crave-worthy frame by frame, built to be screenshot, shared and remembered.' },
+  { name: "Benny's", cat: 'Identity', sub: 'A Room You Never Leave', city: 'Sydney', year: '2024', img: 'https://images.unsplash.com/photo-1551218808-94e220e084d2?auto=format&fit=crop&w=1200&q=80', desc: "Concept, identity and energy for a room people don't want to leave. A brand built around the feeling of a great night that never quite ends." },
+  { name: 'Kinoya', cat: 'Branding', sub: 'An Izakaya With a Soul', city: 'Dubai', year: '2022', img: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1200&q=80', desc: 'An izakaya with a soul. A warm, lived-in identity that carries the intimacy of a Tokyo back-alley into a Dubai dining room.' },
+  { name: "Tony's Woodfire", cat: 'Content', sub: 'Fire, Smoke & Story', city: 'Sydney', year: '2023', img: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1200&q=80', desc: 'Fire, smoke and story. A bold, tactile brand built around the primal pull of cooking over open flame.' },
+  { name: 'Shanghai Me', cat: 'Identity', sub: 'Old-World Glamour, Rebuilt', city: 'Dubai', year: '2021', img: 'https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=1200&q=80', desc: 'Old-world glamour, rebuilt for today. A cinematic identity steeped in 1930s Shanghai, dialled up for a modern fine-dining stage.' },
+  { name: 'Mimi Kakushi', cat: 'Branding', sub: '1920s Osaka, Reborn in Dubai', city: 'Dubai', year: '2024', img: 'https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?auto=format&fit=crop&w=1200&q=80', desc: '1920s Osaka reborn in Dubai. A richly detailed world of jazz-age Japan, translated into every plate, menu and surface.' },
+  { name: 'Print Paradise', cat: 'Print', sub: 'Editorial Meets Hospitality', city: 'Beirut', year: '2025', img: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1200&q=80', desc: 'Where editorial meets hospitality. A brand that reads like a magazine and tastes like a memory, printed across every surface worth touching.' },
+]
+
 function PortfolioView({ go }: { go: (v: View) => void }) {
-  const items = [
-    { t: 'Brand systems', d: 'Identity, type & visual language' },
-    { t: 'Digital experiences', d: 'Web & product design, end to end' },
-    { t: 'Illustration', d: 'Character & editorial work' },
-    { t: 'Hospitality concepts', d: 'Restaurants, cafés & lifestyle brands' },
-  ]
   return (
-    <div className="kk-view-in max-w-2xl">
+    <div className="kk-view-in max-w-3xl max-h-full overflow-y-auto pr-1">
       <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: GREY }}>02 — portfolio</p>
-      <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {items.map(p => (
-          <div key={p.t} className="rounded-2xl border p-5 bg-white/40" style={{ borderColor: 'rgba(0,0,0,0.1)' }}>
-            <p className="text-lg font-bold tracking-tight">{p.t}</p>
-            <p className="text-sm mt-1" style={{ color: GREY }}>{p.d}</p>
+      <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {PROJECTS.map(p => (
+          <div key={p.name} className="group/card rounded-2xl border overflow-hidden bg-white/50" style={{ borderColor: 'rgba(0,0,0,0.1)' }}>
+            <div className="aspect-[16/10] overflow-hidden">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={p.img} alt={p.name} draggable={false} loading="lazy"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105 [-webkit-user-drag:none]" />
+            </div>
+            <div className="p-4">
+              <div className="flex items-baseline justify-between gap-2">
+                <p className="text-lg font-bold tracking-tight">{p.name}</p>
+                <span className="text-[11px] font-semibold uppercase tracking-wider shrink-0" style={{ color: RED }}>{p.cat}</span>
+              </div>
+              <p className="text-sm mt-0.5 font-medium">{p.sub}</p>
+              <p className="text-xs mt-1.5 leading-relaxed" style={{ color: GREY }}>{p.desc}</p>
+              <p className="text-[11px] mt-2 uppercase tracking-wider" style={{ color: GREY }}>{p.city} · {p.year}</p>
+            </div>
           </div>
         ))}
       </div>
-      <Cta onClick={() => go('contact')} className="mt-6">start a project</Cta>
+      <Cta onClick={() => go('contact')} className="mt-5">start a project</Cta>
     </div>
   )
 }
@@ -242,8 +271,12 @@ function ContactView() {
 
       <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
         <Cta onClick={send}>{sent ? 'opening your email' : 'send message'}</Cta>
-        <p className="text-xs" style={{ color: GREY }}>
-          <a href={`mailto:${EMAIL}`} className="hover:opacity-70">{EMAIL}</a> · Dubai · Sydney · Beirut
+        <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider">
+          <span className="relative flex h-2.5 w-2.5">
+            <span className="absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75 animate-ping" />
+            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-green-500" style={{ boxShadow: '0 0 8px 1px rgba(34,197,94,0.8)' }} />
+          </span>
+          2 spots left this month
         </p>
       </div>
     </div>
