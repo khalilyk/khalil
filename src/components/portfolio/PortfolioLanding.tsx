@@ -199,14 +199,28 @@ function AboutView({ go }: { go: (v: View) => void }) {
   )
 }
 
+// fixed set of shape slots — 'wide' = 2x2 feature, 'square' = 1 col x 2 rows (≈square), '' = small landscape
+const SPAN_SLOTS = ['wide', 'square', '', 'square', '', 'wide', 'square', ''] as const
+
 function PortfolioView() {
+  // start deterministic (matches SSR), then shuffle which project fills which slot on each load
+  const [order, setOrder] = useState<number[]>(() => PROJECTS.map((_, i) => i))
+  useEffect(() => {
+    const a = PROJECTS.map((_, i) => i)
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[a[i], a[j]] = [a[j], a[i]]
+    }
+    setOrder(a)
+  }, [])
+
   return (
     <div className="kk-view-in max-w-2xl">
       <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: GREY }}>02 — select works</p>
       <div className="group/grid mt-4 grid grid-cols-3 grid-flow-dense auto-rows-[80px] sm:auto-rows-[104px] gap-1.5">
-        {/* span map: 'wide' = 2x2 feature, 'square' = 1 col x 2 rows (≈square), '' = small landscape */}
-        {PROJECTS.map((p, i) => {
-          const span = (['wide', 'square', '', 'square', '', 'wide', 'square', ''] as const)[i] ?? ''
+        {order.map((pi, i) => {
+          const p = PROJECTS[pi]
+          const span = SPAN_SLOTS[i] ?? ''
           const cls = span === 'wide' ? 'col-span-2 row-span-2' : span === 'square' ? 'row-span-2' : ''
           return (
             <Link key={p.slug} href={`/work/${p.slug}`}
