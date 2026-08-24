@@ -14,7 +14,6 @@ const RED = '#e5342b'
 const GREY = '#a3a09b'
 const INK = '#141414'
 const CREAM = '#f4f2ed'
-const EMAIL = 'khalilykhouri@gmail.com'
 
 type View = 'home' | 'about' | 'portfolio' | 'contact'
 
@@ -243,8 +242,9 @@ function PortfolioView() {
 
 function ContactView() {
   const [form, setForm] = useState({ topic: '', name: '', email: '', message: '' })
-  const [sent, setSent] = useState(false)
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent'>('idle')
   const [tried, setTried] = useState(false)
+  const [failed, setFailed] = useState('')
   const TOPICS = ['New project', 'Brand & identity', 'Restaurant / café concept', 'Collaboration', 'Something else']
 
   const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())
@@ -256,12 +256,37 @@ function ContactView() {
   }
   const valid = !errors.topic && !errors.name && !errors.email && !errors.message
 
-  function send() {
+  async function send() {
     if (!valid) { setTried(true); return }
-    const subject = encodeURIComponent(`${form.topic} · ${form.name}`)
-    const body = encodeURIComponent(`Topic: ${form.topic}\n\n${form.message}\n\n${form.name}\n${form.email}`)
-    window.location.href = `mailto:${EMAIL}?subject=${subject}&body=${body}`
-    setSent(true)
+    setStatus('sending'); setFailed('')
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+      if (!res.ok) {
+        const { error } = await res.json().catch(() => ({ error: '' }))
+        throw new Error(error || 'Something went wrong.')
+      }
+      setStatus('sent')
+    } catch (e) {
+      setStatus('idle')
+      setFailed(e instanceof Error ? e.message : 'Something went wrong.')
+    }
+  }
+
+  if (status === 'sent') {
+    return (
+      <div className="kk-view-in max-w-xl">
+        <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: GREY }}>03 · contact</p>
+        <h2 className="mt-2 text-4xl sm:text-5xl font-extrabold tracking-tight">message sent<span style={{ color: RED }}>.</span></h2>
+        <p className="mt-3 text-base leading-relaxed" style={{ color: GREY }}>
+          Thanks {form.name.split(' ')[0]} — your message has landed in my inbox. I&apos;ll usually reply within 24 hours.
+        </p>
+        <Cta onClick={() => { setForm({ topic: '', name: '', email: '', message: '' }); setTried(false); setStatus('idle') }} className="!mt-6">send another</Cta>
+      </div>
+    )
   }
 
   const field = 'select-text w-full h-11 rounded-xl border bg-white/60 px-3.5 text-sm outline-none focus:border-black/40'
@@ -289,16 +314,18 @@ function ContactView() {
       <textarea placeholder="What do you have in mind?" rows={4} value={form.message} onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
         className="select-text mt-3 w-full rounded-xl border bg-white/60 px-3.5 py-2.5 text-sm outline-none focus:border-black/40 resize-none" style={{ borderColor: bd(errors.message) }} />
 
-      {tried && !valid && (
+      {((tried && !valid) || failed) && (
         <p className="mt-2 text-xs font-semibold" style={{ color: RED }}>
-          {errors.email && !errors.name && !errors.topic && !errors.message
-            ? 'Please enter a valid email address.'
-            : 'Please fill in every field before sending.'}
+          {failed
+            ? failed
+            : errors.email && !errors.name && !errors.topic && !errors.message
+              ? 'Please enter a valid email address.'
+              : 'Please fill in every field before sending.'}
         </p>
       )}
 
       <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-        <Cta onClick={send}>{sent ? 'opening your email' : 'send message'}</Cta>
+        <Cta onClick={send}>{status === 'sending' ? 'sending…' : 'send message'}</Cta>
         <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider">
           <span className="relative flex h-2.5 w-2.5">
             <span className="absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75 animate-ping" />
