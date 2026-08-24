@@ -5,7 +5,8 @@ import ContactButton from './ContactButton'
 
 // Eye (sclera) centres as a % of the portrait image
 const EYES = [{ left: 45.4, top: 11.5 }, { left: 54.6, top: 9.2 }]
-const IRIS = 'radial-gradient(circle at 33% 28%, rgba(255,255,255,0.95) 0 9%, transparent 11%), radial-gradient(circle at 50% 52%, #4a3016 0 34%, #241407 62%, #150c05 100%)'
+// "hello," cycling through languages every 5s
+const GREETINGS = ['hello,', 'bonjour,', 'مرحبا،', 'γεια σου,', 'ciao,', '你好，', 'こんにちは、']
 
 const RED = '#e5342b'
 const GREY = '#a3a09b'
@@ -69,13 +70,17 @@ export default function PortfolioLanding() {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/kk-eyes.png" alt="Illustration of Khalil Khouri" className="h-full w-auto object-contain" />
             {EYES.map((eye, i) => (
-              <span key={i} aria-hidden className="absolute rounded-full"
+              <span key={i} aria-hidden
+                className="absolute flex items-center justify-center overflow-hidden"
                 style={{
                   left: `${eye.left}%`, top: `${eye.top}%`,
-                  width: '2.7%', aspectRatio: '1', background: IRIS,
-                  transform: `translate(calc(-50% + ${gaze.x}px), calc(-50% + ${gaze.y}px))`,
-                  transition: 'transform .09s ease-out',
-                }} />
+                  width: '4.4%', aspectRatio: '1.12', borderRadius: '50%',
+                  transform: 'translate(-50%, -50%)',
+                }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/eyeball.png" alt="" className="w-[82%] h-auto"
+                  style={{ transform: `translate(${gaze.x}px, ${gaze.y}px)`, transition: 'transform .09s ease-out' }} />
+              </span>
             ))}
           </div>
         </div>
@@ -90,10 +95,15 @@ export default function PortfolioLanding() {
 }
 
 function HomeView() {
+  const [gi, setGi] = useState(0)
+  useEffect(() => {
+    const t = setInterval(() => setGi(v => (v + 1) % GREETINGS.length), 5000)
+    return () => clearInterval(t)
+  }, [])
   return (
     <div className="kk-view-in">
       <h1 className="font-extrabold tracking-tight leading-[0.92] text-5xl sm:text-7xl lg:text-8xl">
-        <span className="block">hello,</span>
+        <span key={gi} dir="auto" className="block kk-fade">{GREETINGS[gi]}</span>
         <span className="block" style={{ color: GREY }}>my name is</span>
         <span className="block" style={{ color: RED }}>khalil khouri<span style={{ color: INK }}>.</span></span>
       </h1>
@@ -116,12 +126,13 @@ function AboutView() {
   return (
     <div className="kk-view-in max-w-2xl">
       <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: GREY }}>01 — about</p>
-      <p className="mt-4 text-base sm:text-lg lg:text-xl leading-relaxed">
-        The conviction is simple: the world doesn&apos;t need more of the same. Founder Khalil Khouri has spent two decades proving it, behind names recognised by <span className="font-semibold">Michelin</span>, celebrated by <span className="font-semibold">The World&apos;s 50 Best</span>, and awarded across Dubai&apos;s most competitive dining rooms. <span className="font-semibold" style={{ color: RED }}>3Fils. BRIX. Bordo Mavi.</span> From Dubai&apos;s waterfront to new concepts in Sydney and collaborations across Beirut, one thing held true everywhere.
+      <p className="mt-4 text-sm sm:text-base lg:text-lg leading-relaxed">
+        The conviction is simple: the world doesn&apos;t need more of the same. Founder Khalil Khouri has spent two decades proving it, behind names recognised by <span className="font-semibold">Michelin</span>, celebrated by <span className="font-semibold">The World&apos;s 50 Best</span>, and awarded across Dubai&apos;s most competitive dining rooms.{' '}<span className="font-semibold" style={{ color: RED }}>3Fils. BRIX. Bordo Mavi.</span>{' '}From Dubai&apos;s waterfront to new concepts in Sydney and collaborations across Beirut, one thing held true everywhere.
       </p>
-      <p className="mt-4 text-base sm:text-lg lg:text-xl leading-relaxed">
-        There&apos;s a difference between a venue people visit and one they can&apos;t stop talking about. <span className="font-semibold">We build the second kind.</span> Restaurants, cafés, lifestyle brands. Identity, strategy, menus, packaging, content, launch. Every decision runs through a hospitality lens, because that&apos;s the only one we&apos;ve ever worked through.
+      <p className="mt-4 text-sm sm:text-base lg:text-lg leading-relaxed">
+        There&apos;s a difference between a venue people visit and one they can&apos;t stop talking about.{' '}<span className="font-semibold">We build the second kind.</span>{' '}Restaurants, cafés, lifestyle brands. Identity, strategy, menus, packaging, content, launch. Every decision runs through a hospitality lens, because that&apos;s the only one we&apos;ve ever worked through.
       </p>
+      <ContactButton className="mt-6 inline-block font-semibold text-[#e5342b] hover:opacity-70 transition-opacity" label="let's build something →" />
     </div>
   )
 }
