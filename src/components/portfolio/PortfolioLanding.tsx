@@ -218,7 +218,7 @@ function PortfolioView() {
   return (
     <div className="kk-view-in max-w-2xl">
       <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: GREY }}>02 · select works</p>
-      <div className="group/grid mt-4 grid grid-cols-3 grid-flow-dense auto-rows-[80px] sm:auto-rows-[104px] gap-1.5">
+      <div className="group/grid mt-4 grid grid-cols-3 grid-flow-dense auto-rows-[80px] sm:auto-rows-[104px] lg:auto-rows-[11.5vh] gap-1.5">
         {order.map((pi, i) => {
           const p = PROJECTS[pi]
           const span = SPAN_SLOTS[i] ?? ''
