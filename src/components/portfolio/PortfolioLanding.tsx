@@ -46,7 +46,7 @@ export default function PortfolioLanding() {
   return (
     <div className="h-[100dvh] overflow-hidden flex flex-col" style={{ backgroundColor: CREAM, color: INK }}>
       {/* Nav */}
-      <header className="flex items-center gap-8 lg:gap-14 px-6 lg:px-16 py-6 lg:py-7 max-w-[1500px] w-full mx-auto shrink-0">
+      <header className="flex items-baseline gap-8 lg:gap-14 px-6 lg:px-16 py-6 lg:py-7 max-w-[1500px] w-full mx-auto shrink-0">
         <button onClick={() => setView('home')} className="text-2xl font-extrabold tracking-tight">kk<span style={{ color: RED }}>.</span></button>
         <nav className="flex gap-5 sm:gap-8 lg:gap-12 text-sm sm:text-base font-semibold">
           {navItem('01', 'about', 'about')}
