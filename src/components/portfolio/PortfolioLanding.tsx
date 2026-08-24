@@ -98,7 +98,7 @@ export default function PortfolioLanding() {
         </div>
         <nav className="flex gap-5 sm:gap-8 lg:gap-12 text-sm sm:text-base font-semibold">
           {navItem('01', 'about', 'about')}
-          {navItem('02', 'portfolio', 'portfolio')}
+          {navItem('02', 'select works', 'portfolio')}
           {navItem('03', 'contact', 'contact')}
         </nav>
       </header>
@@ -202,13 +202,15 @@ function AboutView({ go }: { go: (v: View) => void }) {
 function PortfolioView() {
   return (
     <div className="kk-view-in max-w-2xl">
-      <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: GREY }}>02 — portfolio · selected work</p>
-      <div className="group/grid mt-4 grid grid-cols-3 grid-flow-dense auto-rows-[92px] sm:auto-rows-[120px] gap-1.5">
+      <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: GREY }}>02 — select works</p>
+      <div className="group/grid mt-4 grid grid-cols-3 grid-flow-dense auto-rows-[80px] sm:auto-rows-[104px] gap-1.5">
+        {/* span map: 'wide' = 2x2 feature, 'square' = 1 col x 2 rows (≈square), '' = small landscape */}
         {PROJECTS.map((p, i) => {
-          const big = i === 0 || i === 5 // two feature tiles
+          const span = (['wide', 'square', '', 'square', '', 'wide', 'square', ''] as const)[i] ?? ''
+          const cls = span === 'wide' ? 'col-span-2 row-span-2' : span === 'square' ? 'row-span-2' : ''
           return (
             <Link key={p.slug} href={`/work/${p.slug}`}
-              className={`group/tile relative overflow-hidden bg-black/5 origin-center transition-all duration-300 ease-out will-change-transform group-hover/grid:opacity-70 hover:!opacity-100 hover:scale-[1.06] hover:z-20 hover:shadow-lg ${big ? 'col-span-2 row-span-2' : ''}`}>
+              className={`group/tile relative overflow-hidden bg-black/5 origin-center transition-all duration-300 ease-out will-change-transform group-hover/grid:opacity-70 hover:!opacity-100 hover:scale-[1.06] hover:z-20 hover:shadow-lg ${cls}`}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={p.img} alt={p.name} draggable={false} loading="lazy"
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover/tile:scale-105 [-webkit-user-drag:none]" />

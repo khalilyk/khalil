@@ -42,7 +42,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         <Link href="/" className="text-2xl font-extrabold tracking-tight">kk<span style={{ color: RED }}>.</span></Link>
         <nav className="flex gap-5 sm:gap-8 lg:gap-12 text-sm sm:text-base font-semibold">
           <NavLink n="01" label="about" href="/?view=about" />
-          <NavLink n="02" label="portfolio" href="/?view=portfolio" />
+          <NavLink n="02" label="select works" href="/?view=portfolio" />
           <NavLink n="03" label="contact" href="/?view=contact" />
         </nav>
       </header>
@@ -51,7 +51,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       <main className="flex-1 max-w-[1500px] w-full mx-auto px-6 lg:px-16 py-4 lg:py-8">
         {/* Breadcrumbs */}
         <nav className="flex items-center gap-2 text-sm font-semibold" style={{ color: GREY }}>
-          <Link href="/?view=portfolio" className="hover:opacity-70 transition-opacity">portfolio</Link>
+          <Link href="/?view=portfolio" className="hover:opacity-70 transition-opacity">select works</Link>
           <span>/</span>
           <span style={{ color: INK }}>{p.name}</span>
         </nav>
