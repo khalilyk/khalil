@@ -56,8 +56,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           <span style={{ color: INK }}>{p.name}</span>
         </nav>
 
-        <div className="mt-6 lg:mt-10 grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-          <div className="overflow-hidden bg-black/5">
+        <div className="mt-6 lg:mt-10 grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+          <div className="overflow-hidden bg-black/5 lg:sticky lg:top-6 self-start">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={p.img} alt={p.name} className="w-full aspect-[4/3] object-cover" />
           </div>
@@ -66,7 +66,9 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: RED }}>{p.cat}</span>
             <h1 className="mt-2 text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight">{p.name}</h1>
             <p className="mt-2 text-lg font-medium">{p.sub}</p>
-            <p className="mt-5 text-base leading-relaxed" style={{ color: '#3a3733' }}>{p.desc}</p>
+            <div className="mt-5 space-y-3 text-base leading-relaxed" style={{ color: '#3a3733' }}>
+              {p.desc.split('\n\n').map((para, i) => <p key={i}>{para}</p>)}
+            </div>
             <p className="mt-5 text-xs uppercase tracking-widest" style={{ color: GREY }}>{p.city} · {p.year}</p>
 
             <div className="mt-8 flex items-center gap-6 text-sm font-semibold">
@@ -80,6 +82,18 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             </div>
           </div>
         </div>
+
+        {/* Gallery */}
+        {p.images.length > 1 && (
+          <div className="mt-10 lg:mt-14 grid grid-cols-2 lg:grid-cols-3 gap-3">
+            {p.images.map((src, i) => (
+              <div key={i} className="overflow-hidden bg-black/5">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={src} alt={`${p.name} ${i + 1}`} loading="lazy" className="w-full aspect-square object-cover" />
+              </div>
+            ))}
+          </div>
+        )}
       </main>
 
       {/* Footer (same as the landing) */}

@@ -203,20 +203,23 @@ function PortfolioView() {
   return (
     <div className="kk-view-in max-w-2xl">
       <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: GREY }}>02 — portfolio · selected work</p>
-      <div className="mt-4 grid grid-cols-3 sm:grid-cols-4 gap-1.5">
-        {PROJECTS.map(p => (
-          <Link key={p.slug} href={`/work/${p.slug}`}
-            className="group/tile relative aspect-square overflow-hidden bg-black/5">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={p.img} alt={p.name} draggable={false} loading="lazy"
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover/tile:scale-110 [-webkit-user-drag:none]" />
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-2 opacity-0 group-hover/tile:opacity-100 transition-opacity duration-300"
-              style={{ background: 'rgba(0,0,0,0.55)' }}>
-              <span className="text-white font-bold leading-tight text-sm">{p.name}</span>
-              <span className="text-white/70 text-[10px] uppercase tracking-wider mt-0.5">{p.cat}</span>
-            </div>
-          </Link>
-        ))}
+      <div className="mt-4 columns-2 sm:columns-3 gap-1.5">
+        {PROJECTS.map((p, i) => {
+          const ratio = ['aspect-[4/5]', 'aspect-square', 'aspect-[3/4]', 'aspect-square', 'aspect-[5/6]'][i % 5]
+          return (
+            <Link key={p.slug} href={`/work/${p.slug}`}
+              className="group/tile relative block mb-1.5 overflow-hidden bg-black/5 break-inside-avoid">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={p.img} alt={p.name} draggable={false} loading="lazy"
+                className={`w-full ${ratio} object-cover transition-transform duration-500 group-hover/tile:scale-110 [-webkit-user-drag:none]`} />
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-2 opacity-0 group-hover/tile:opacity-100 transition-opacity duration-300"
+                style={{ background: 'rgba(0,0,0,0.55)' }}>
+                <span className="text-white font-bold leading-tight text-sm">{p.name}</span>
+                <span className="text-white/70 text-[10px] uppercase tracking-wider mt-0.5">{p.cat}</span>
+              </div>
+            </Link>
+          )
+        })}
       </div>
     </div>
   )
