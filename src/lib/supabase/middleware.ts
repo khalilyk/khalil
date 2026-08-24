@@ -26,6 +26,7 @@ export async function updateSession(request: NextRequest) {
   const { pathname } = request.nextUrl
   const isPublic =
     pathname === '/' ||                    // public portfolio landing
+    pathname.startsWith('/work') ||        // public project pages
     pathname.startsWith('/login') ||
     pathname.startsWith('/api/') ||
     pathname === '/robots.txt' ||
