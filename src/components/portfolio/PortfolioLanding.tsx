@@ -203,12 +203,12 @@ function PortfolioView() {
   return (
     <div className="kk-view-in max-w-2xl">
       <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: GREY }}>02 — portfolio · selected work</p>
-      <div className="mt-4 grid grid-cols-3 grid-flow-dense auto-rows-[92px] sm:auto-rows-[120px] gap-1.5">
+      <div className="group/grid mt-4 grid grid-cols-3 grid-flow-dense auto-rows-[92px] sm:auto-rows-[120px] gap-1.5">
         {PROJECTS.map((p, i) => {
           const big = i === 0 || i === 5 // two feature tiles
           return (
             <Link key={p.slug} href={`/work/${p.slug}`}
-              className={`group/tile relative overflow-hidden bg-black/5 ${big ? 'col-span-2 row-span-2' : ''}`}>
+              className={`group/tile relative overflow-hidden bg-black/5 origin-center transition-all duration-300 ease-out will-change-transform group-hover/grid:opacity-40 hover:!opacity-100 hover:scale-[1.45] hover:z-20 hover:shadow-2xl ${big ? 'col-span-2 row-span-2' : ''}`}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={p.img} alt={p.name} draggable={false} loading="lazy"
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover/tile:scale-110 [-webkit-user-drag:none]" />
