@@ -203,15 +203,15 @@ function PortfolioView() {
   return (
     <div className="kk-view-in max-w-2xl">
       <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: GREY }}>02 — portfolio · selected work</p>
-      <div className="mt-4 columns-2 sm:columns-3 gap-1.5">
+      <div className="mt-4 grid grid-cols-3 grid-flow-dense auto-rows-[92px] sm:auto-rows-[120px] gap-1.5">
         {PROJECTS.map((p, i) => {
-          const ratio = ['aspect-[4/5]', 'aspect-square', 'aspect-[3/4]', 'aspect-square', 'aspect-[5/6]'][i % 5]
+          const big = i === 0 || i === 5 // two feature tiles
           return (
             <Link key={p.slug} href={`/work/${p.slug}`}
-              className="group/tile relative block mb-1.5 overflow-hidden bg-black/5 break-inside-avoid">
+              className={`group/tile relative overflow-hidden bg-black/5 ${big ? 'col-span-2 row-span-2' : ''}`}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={p.img} alt={p.name} draggable={false} loading="lazy"
-                className={`w-full ${ratio} object-cover transition-transform duration-500 group-hover/tile:scale-110 [-webkit-user-drag:none]`} />
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover/tile:scale-110 [-webkit-user-drag:none]" />
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-2 opacity-0 group-hover/tile:opacity-100 transition-opacity duration-300"
                 style={{ background: 'rgba(0,0,0,0.55)' }}>
                 <span className="text-white font-bold leading-tight text-sm">{p.name}</span>
