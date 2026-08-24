@@ -16,6 +16,22 @@ const EMAIL = 'hello@khalilkhouri.org'
 
 type View = 'home' | 'about' | 'portfolio' | 'contact'
 
+// Brand link with a styled hover tooltip
+function BrandLink({ href, label, tip }: { href: string; label: string; tip: string }) {
+  return (
+    <span className="relative inline-block group/tt">
+      <a href={href} target="_blank" rel="noopener noreferrer"
+        className="font-semibold underline decoration-1 underline-offset-2 hover:opacity-70" style={{ color: RED }}>{label}</a>
+      <span role="tooltip"
+        className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-full mb-2 z-30 w-max max-w-[240px] rounded-lg px-3 py-2 text-xs font-normal leading-snug text-white text-center shadow-lg opacity-0 translate-y-1 transition-all duration-150 group-hover/tt:opacity-100 group-hover/tt:translate-y-0"
+        style={{ backgroundColor: INK }}>
+        {tip}
+        <span className="absolute left-1/2 top-full -translate-x-1/2 -mt-1 h-2 w-2 rotate-45" style={{ backgroundColor: INK }} />
+      </span>
+    </span>
+  )
+}
+
 // CTA with an arrow that slides on hover
 function Cta({ onClick, children, className = '' }: { onClick: () => void; children: React.ReactNode; className?: string }) {
   return (
@@ -60,7 +76,7 @@ export default function PortfolioLanding() {
     <div className="min-h-[100dvh] lg:h-[100dvh] overflow-x-hidden lg:overflow-hidden flex flex-col select-none lg:cursor-crosshair" style={{ backgroundColor: CREAM, color: INK }}>
       <MarkerCanvas />
       {/* Nav */}
-      <header className="flex items-baseline gap-8 lg:gap-14 px-6 lg:px-16 py-6 lg:py-7 max-w-[1500px] w-full mx-auto shrink-0">
+      <header className="flex items-baseline justify-between gap-4 px-6 lg:px-16 py-6 lg:py-7 max-w-[1500px] w-full mx-auto shrink-0">
         <button onClick={() => setView('home')} className="text-2xl font-extrabold tracking-tight">kk<span style={{ color: RED }}>.</span></button>
         <nav className="flex gap-5 sm:gap-8 lg:gap-12 text-sm sm:text-base font-semibold">
           {navItem('01', 'about', 'about')}
@@ -101,7 +117,7 @@ export default function PortfolioLanding() {
       </main>
 
       {/* Footer */}
-      <footer className="shrink-0 max-w-[1500px] w-full mx-auto px-6 lg:px-16 py-4 flex items-center justify-between text-xs" style={{ color: GREY }}>
+      <footer className="shrink-0 max-w-[1500px] w-full mx-auto px-6 lg:px-16 py-4 flex flex-col items-center gap-1 text-center text-xs lg:flex-row lg:items-center lg:justify-between lg:gap-4 lg:text-left" style={{ color: GREY }}>
         <span>© {new Date().getFullYear()} Khalil Khouri. All rights reserved.</span>
         <button onClick={() => window.dispatchEvent(new Event('kk:cleardraw'))} className="hidden lg:inline hover:text-foreground transition-colors">
           reset drawing
@@ -119,7 +135,7 @@ function HomeView({ go }: { go: (v: View) => void }) {
   }, [])
   return (
     <div className="kk-view-in">
-      <h1 className="font-extrabold tracking-tight leading-[0.92] text-5xl sm:text-7xl lg:text-8xl">
+      <h1 className="font-extrabold tracking-tight leading-[0.95] text-5xl sm:text-6xl lg:text-7xl whitespace-nowrap">
         <span key={gi} dir="auto" className="block kk-fade">{GREETINGS[gi]}</span>
         <span className="block" style={{ color: GREY }}>my name is</span>
         <span className="block" style={{ color: RED }}>khalil khouri<span style={{ color: INK }}>.</span></span>
@@ -141,20 +157,26 @@ function HomeView({ go }: { go: (v: View) => void }) {
 
 function AboutView({ go }: { go: (v: View) => void }) {
   return (
-    <div className="kk-view-in max-w-2xl space-y-3 text-sm sm:text-base leading-relaxed">
+    <div className="kk-view-in max-w-2xl space-y-2.5 text-sm leading-relaxed">
       <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: GREY }}>01 — about</p>
-      <p className="font-semibold text-base sm:text-lg">The conviction is simple: the world doesn&apos;t need more of the same.</p>
+      <p className="font-semibold text-base">The conviction is simple: the world doesn&apos;t need more of the same.</p>
       <p>
-        For two decades, I&apos;ve helped shape hospitality brands recognised by <span className="font-semibold">Michelin</span>, celebrated by <span className="font-semibold">The World&apos;s 50 Best</span>, and awarded across Dubai&apos;s most competitive dining scene — including <span className="font-semibold" style={{ color: RED }}>3Fils, BRIX and Bordo Mavi</span>.
+        For two decades, I&apos;ve helped shape hospitality brands recognised by <span className="font-semibold">Michelin</span>, celebrated by <span className="font-semibold">The World&apos;s 50 Best</span>, and awarded across Dubai&apos;s most competitive dining scene, including <span className="font-semibold" style={{ color: RED }}>3Fils, BRIX and Bordo Mavi</span>.
       </p>
       <p>
         From Dubai&apos;s waterfront to emerging concepts in Sydney and collaborations across Beirut, one belief has remained constant: there&apos;s a difference between a venue people visit and one they can&apos;t stop talking about.
       </p>
       <p className="font-semibold" style={{ color: RED }}>I create the second kind.</p>
       <p>
-        Restaurants, cafés and lifestyle brands. Identity, strategy, menus, packaging, content and launch — every decision is considered through a hospitality lens, because it&apos;s the world I know, understand and care deeply about.
+        Restaurants, cafés and lifestyle brands. Identity, strategy, menus, packaging, content and launch. Every decision is considered through a hospitality lens, because it&apos;s the world I know, understand and care deeply about.
       </p>
-      <Cta onClick={() => go('contact')} className="!mt-6">let&apos;s build something</Cta>
+      <p>
+        That thinking also extends through two sister brands:{' '}
+        <BrandLink href="https://bybric.com" label="BRIC" tip="Identity, positioning & communication for developers and the building sector. bybric.com" />, focused on identity, positioning and communication for developers and the building sector; and{' '}
+        <BrandLink href="https://printparadise.com.au" label="Print Paradise" tip="A fully fledged online print store. printparadise.com.au" />, a fully fledged online print store making high-quality, beautifully produced print simple and accessible.
+      </p>
+      <p className="font-semibold">Different sectors. The same ambition: to create brands people notice, understand and remember.</p>
+      <Cta onClick={() => go('contact')} className="!mt-5">let&apos;s build something</Cta>
     </div>
   )
 }
@@ -208,8 +230,8 @@ function ContactView() {
           backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a3a09b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")`,
           backgroundRepeat: 'no-repeat', backgroundPosition: 'right 14px center', backgroundSize: '14px',
         }}>
-        <option value="">What would you like to discuss?</option>
-        {TOPICS.map(t => <option key={t} value={t}>{t}</option>)}
+        <option value="" style={{ color: INK }}>What would you like to discuss?</option>
+        {TOPICS.map(t => <option key={t} value={t} style={{ color: INK, backgroundColor: '#fff' }}>{t}</option>)}
       </select>
       <div className="mt-3 grid gap-3 sm:grid-cols-2">
         <input placeholder="Your name" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} className={field} style={{ borderColor: 'rgba(0,0,0,0.12)' }} />
