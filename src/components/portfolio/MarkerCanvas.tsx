@@ -8,6 +8,9 @@ export default function MarkerCanvas() {
   const ref = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
+    // Drawing is a desktop (fine-pointer) feature only
+    if (!window.matchMedia('(min-width: 1024px) and (pointer: fine)').matches) return
+
     const cv = ref.current
     if (!cv) return
     const ctx = cv.getContext('2d')

@@ -50,14 +50,14 @@ export default function PortfolioLanding() {
   }, [])
 
   const navItem = (n: string, label: string, v: View) => (
-    <button onClick={() => setView(v)} className="hover:opacity-60 transition-opacity">
-      <span style={{ color: GREY }}>{n}</span>{' '}
+    <button onClick={() => setView(v)} className="whitespace-nowrap hover:opacity-60 transition-opacity">
+      <span className="hidden sm:inline" style={{ color: GREY }}>{n} </span>
       <span style={view === v ? { color: RED } : undefined}>{label}.</span>
     </button>
   )
 
   return (
-    <div className="h-[100dvh] overflow-hidden flex flex-col select-none cursor-crosshair" style={{ backgroundColor: CREAM, color: INK }}>
+    <div className="min-h-[100dvh] lg:h-[100dvh] overflow-x-hidden lg:overflow-hidden flex flex-col select-none lg:cursor-crosshair" style={{ backgroundColor: CREAM, color: INK }}>
       <MarkerCanvas />
       {/* Nav */}
       <header className="flex items-baseline gap-8 lg:gap-14 px-6 lg:px-16 py-6 lg:py-7 max-w-[1500px] w-full mx-auto shrink-0">
@@ -78,8 +78,8 @@ export default function PortfolioLanding() {
           {view === 'contact' && <ContactView key="contact" />}
         </div>
 
-        {/* Portrait illustration — pupils follow the cursor */}
-        <div className="hidden lg:flex h-full min-h-0 items-end justify-end">
+        {/* Portrait illustration — pupils follow the cursor (desktop) */}
+        <div className="flex h-[38vh] lg:h-full min-h-0 items-end justify-center lg:justify-end">
           <div ref={faceRef} className="relative h-full">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/kk-eyes.png" alt="Illustration of Khalil Khouri" draggable={false} className="h-full w-auto object-contain [-webkit-user-drag:none]" />
@@ -103,7 +103,7 @@ export default function PortfolioLanding() {
       {/* Footer */}
       <footer className="shrink-0 max-w-[1500px] w-full mx-auto px-6 lg:px-16 py-4 flex items-center justify-between text-xs" style={{ color: GREY }}>
         <span>© {new Date().getFullYear()} Khalil Khouri. All rights reserved.</span>
-        <button onClick={() => window.dispatchEvent(new Event('kk:cleardraw'))} className="hover:text-foreground transition-colors">
+        <button onClick={() => window.dispatchEvent(new Event('kk:cleardraw'))} className="hidden lg:inline hover:text-foreground transition-colors">
           reset drawing
         </button>
       </footer>
@@ -199,10 +199,15 @@ function ContactView() {
     <div className="kk-view-in max-w-xl">
       <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: GREY }}>03 — contact</p>
       <h2 className="mt-2 text-4xl sm:text-5xl font-extrabold tracking-tight">let&apos;s talk<span style={{ color: RED }}>.</span></h2>
-      <p className="mt-2 text-sm" style={{ color: GREY }}>Tell me about your project — I usually reply within 24 hours.</p>
+      <p className="mt-2 text-sm" style={{ color: GREY }}>Working globally, with roots in Dubai, Sydney and Beirut. Tell me about your project and I&apos;ll usually reply within 24 hours.</p>
 
       <select value={form.topic} onChange={e => setForm(f => ({ ...f, topic: e.target.value }))}
-        className={`${field} mt-5 ${form.topic ? '' : 'text-muted-foreground'}`} style={{ borderColor: 'rgba(0,0,0,0.12)' }}>
+        className={`${field} mt-5 appearance-none pr-10 ${form.topic ? '' : 'text-muted-foreground'}`}
+        style={{
+          borderColor: 'rgba(0,0,0,0.12)',
+          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a3a09b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")`,
+          backgroundRepeat: 'no-repeat', backgroundPosition: 'right 14px center', backgroundSize: '14px',
+        }}>
         <option value="">What would you like to discuss?</option>
         {TOPICS.map(t => <option key={t} value={t}>{t}</option>)}
       </select>
@@ -216,7 +221,7 @@ function ContactView() {
       <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
         <Cta onClick={send}>{sent ? 'opening your email' : 'send message'}</Cta>
         <p className="text-xs" style={{ color: GREY }}>
-          <a href={`mailto:${EMAIL}`} className="hover:opacity-70">{EMAIL}</a> · Sydney, Australia
+          <a href={`mailto:${EMAIL}`} className="hover:opacity-70">{EMAIL}</a> · Dubai · Sydney · Beirut
         </p>
       </div>
     </div>
