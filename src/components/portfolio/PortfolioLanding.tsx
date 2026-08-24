@@ -3,6 +3,10 @@
 import { useState, useRef, useEffect } from 'react'
 import ContactButton from './ContactButton'
 
+// Eye (sclera) centres as a % of the portrait image
+const EYES = [{ left: 45.4, top: 11.5 }, { left: 54.6, top: 9.2 }]
+const IRIS = 'radial-gradient(circle at 33% 28%, rgba(255,255,255,0.95) 0 9%, transparent 11%), radial-gradient(circle at 50% 52%, #4a3016 0 34%, #241407 62%, #150c05 100%)'
+
 const RED = '#e5342b'
 const GREY = '#a3a09b'
 const INK = '#141414'
@@ -13,15 +17,20 @@ type View = 'home' | 'about' | 'portfolio'
 export default function PortfolioLanding() {
   const [view, setView] = useState<View>('home')
   const faceRef = useRef<HTMLDivElement>(null)
-  const [tilt, setTilt] = useState({ x: 0, y: 0 })
+  const [gaze, setGaze] = useState({ x: 0, y: 0 })
 
-  // Illustration gently follows the cursor
+  // Pupils follow the cursor
   useEffect(() => {
     const onMove = (e: MouseEvent) => {
-      const MAX = 12
-      const x = ((e.clientX / window.innerWidth) - 0.5) * 2 * MAX
-      const y = ((e.clientY / window.innerHeight) - 0.5) * 2 * MAX
-      setTilt({ x, y })
+      const el = faceRef.current
+      if (!el) return
+      const r = el.getBoundingClientRect()
+      const cx = r.left + r.width * 0.5
+      const cy = r.top + r.height * 0.09 // eye height
+      const dx = e.clientX - cx, dy = e.clientY - cy
+      const len = Math.hypot(dx, dy) || 1
+      const MAX = 3 // px of iris travel
+      setGaze({ x: (dx / len) * MAX, y: (dy / len) * MAX })
     }
     window.addEventListener('mousemove', onMove)
     return () => window.removeEventListener('mousemove', onMove)
@@ -54,12 +63,21 @@ export default function PortfolioLanding() {
           {view === 'portfolio' && <PortfolioView key="portfolio" onContact />}
         </div>
 
-        {/* Portrait illustration — gently follows the cursor */}
-        <div ref={faceRef} className="hidden lg:flex h-full min-h-0 items-end justify-end">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/kk-portrait.png" alt="Illustration of Khalil Khouri"
-            className="h-full w-auto object-contain object-bottom will-change-transform"
-            style={{ transform: `translate(${tilt.x}px, ${tilt.y}px)`, transition: 'transform .2s ease-out' }} />
+        {/* Portrait illustration — pupils follow the cursor */}
+        <div className="hidden lg:flex h-full min-h-0 items-end justify-end">
+          <div ref={faceRef} className="relative h-full">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/kk-eyes.png" alt="Illustration of Khalil Khouri" className="h-full w-auto object-contain" />
+            {EYES.map((eye, i) => (
+              <span key={i} aria-hidden className="absolute rounded-full"
+                style={{
+                  left: `${eye.left}%`, top: `${eye.top}%`,
+                  width: '2.7%', aspectRatio: '1', background: IRIS,
+                  transform: `translate(calc(-50% + ${gaze.x}px), calc(-50% + ${gaze.y}px))`,
+                  transition: 'transform .09s ease-out',
+                }} />
+            ))}
+          </div>
         </div>
       </main>
 
