@@ -18,8 +18,8 @@ type Raw = Omit<Project, 'img' | 'images'> & { img: string; images: string[] }
 const RAW: Raw[] = [
   {
     slug: 'tonton-bakes', name: 'Tonton Bakes', cat: 'Branding', sub: 'A little everyday magic.', city: 'Dubai', year: '2024',
-    img: '/projects/tonton/DSCF3233-Enhanced-NR-scaled.jpg',
-    images: ['/projects/tonton/DSCF3233-Enhanced-NR-scaled.jpg', '/projects/tonton/tontonbakes-hoodie.jpg', '/projects/tonton/nn-tontonlogo.jpg', '/projects/tonton/tontonbakes-box.jpg', '/projects/tonton/DSCF3134-Enhanced-NR-scaled.jpg', '/projects/tonton/DSCF3125-Enhanced-NR-scaled.jpg', '/projects/tonton/tontonbakes-phone.jpg', '/projects/tonton/DSCF3288-Enhanced-NR-scaled.jpg', '/projects/tonton/nn-tontonweb-scaled.jpg'],
+    img: '/projects/tonton/nn-tontonleft.jpg',
+    images: ['/projects/tonton/nn-tontonleft.jpg', '/projects/tonton/nn-tontoncoffee.jpg', '/projects/tonton/nn-tontonweb.jpg', '/projects/tonton/nn-tontonbc.jpg', '/projects/tonton/nn-tontonlogo.jpg'],
     desc: "We were tasked with building a brand that felt nostalgic yet fresh, charming without being cliché. Inspired by French and Italian bakery traditions and the warmth of the word 'Tonton' (French for uncle), we set out to create something that felt familiar, but never ordinary. We developed a hand-drawn identity system that feels artisanal but modern - pairing soft lines and playful details with a sophisticated palette of pastel purple and green. The logo, brand marks and tone of voice all reflect the essence of Tonton: approachable, slightly cheeky, and rooted in good taste.\n\nThe website was designed to feel like walking into the shop itself - inviting, warm, and filled with personality. Photography captured the hands-on baking process, crumb-close textures, and the kind of natural light that makes you want to slow down and order another pastry. We also created uniforms that feel like part of the story: clean, comfortable and unmistakably Tonton.",
   },
   {
@@ -49,13 +49,13 @@ const RAW: Raw[] = [
   {
     slug: 'luckys', name: "Lucky's", cat: 'Branding', sub: 'A local legend, back on the road.', city: 'Sydney', year: '2026',
     img: '/projects/luckys/luckys-1.png',
-    images: ['/projects/luckys/luckys-1.png', '/projects/luckys/luckys-tabox-scaled.jpg', '/projects/luckys/luckys-truck-scaled.jpg', '/projects/luckys/luckys-tartaresauce.jpg', '/projects/luckys/luckys-shirt.jpg', '/projects/luckys/luckys-aframe.jpg', '/projects/luckys/luckys-2.png', '/projects/luckys/luckys-3.png', '/projects/luckys/luckys-tote.jpg'],
+    images: ['/projects/luckys/luckys-1.png', '/projects/luckys/luckys-truck.jpg', '/projects/luckys/luckys-tabox.jpg', '/projects/luckys/luckys-tartaresauce.jpg', '/projects/luckys/luckys-shirt.jpg', '/projects/luckys/luckys-aframe.jpg', '/projects/luckys/luckys-tote.jpg', '/projects/luckys/luckys-2.png', '/projects/luckys/luckys-3.png'],
     desc: "Some places don't need a reintroduction. They just need a second life.\n\nFor over 25 years, Padstow Seafoods was part of the neighbourhood routine. Families lining up on weekends, kids growing up on the same order, and Lucky behind the counter doing what he did best, simple, honest fish and chips done right.\n\nWhen the shop closed, the food stopped, but the memory didn't. Lucky's is our way of bringing that feeling back, not as a replica, but as a revival. A mobile fish and chip truck built on nostalgia, personality, and a stripped-back menu that focuses on what made it special in the first place.\n\nWe worked on the full brand direction from the ground up. Naming, identity, tone of voice, and visual system. From logo and colour palette to truck signage, packaging and uniforms, every touchpoint was designed to feel fun, confident and a little bit loud, just like the queues Lucky used to have.",
   },
   {
     slug: 'tonys-woodfire', name: "Tony's Woodfire", cat: 'Branding', sub: 'Not just a slice. A stance.', city: 'Sydney', year: '2026',
     img: '/projects/tonys/tonys-pizzabox.png',
-    images: ['/projects/tonys/tonys-pizzabox.png', '/projects/tonys/tonys-stools.png', '/projects/tonys/tonys-paper.jpg', '/projects/tonys/tonys-menu.png', '/projects/tonys/tonys-pizzachef.png', '/projects/tonys/tonys-lightbox.png'],
+    images: ['/projects/tonys/tonys-pizzabox.png', '/projects/tonys/tonys-pizzachef.png', '/projects/tonys/tonys-feastbyfire.png', '/projects/tonys/tonys-menu.png', '/projects/tonys/tonys-paper.jpg', '/projects/tonys/tonys-lightbox.png', '/projects/tonys/tonys-cap.png'],
     desc: "We created a full world of branded collateral for Tony's designed to match the heat of the oven and the buzz of a Friday night rush. From the logo to punchy menus and box designs, stickers and custom signage, every piece was built to feel bold, familiar and unmistakably Tony's.\n\nThis wasn't just design for the walls - it was design for the neighbourhood. Whether you're grabbing a quick slice, waiting by the curb or opening a box at home, the brand shows up strong. Loud without shouting. Classic without feeling dated. Confident, nostalgic and just the right amount of attitude - exactly how a proper pizza joint should feel.",
   },
   {
