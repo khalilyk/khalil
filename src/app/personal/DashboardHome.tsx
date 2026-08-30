@@ -111,18 +111,13 @@ export default async function DashboardHome() {
 
   return (
     <div className="relative px-4 py-6 lg:px-8 space-y-8 [&_section>*]:min-w-0">
-      {/* Big greeting headline + quick craving prompt on the same line */}
-      <div className="kk-rise flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div>
-          <p className="text-sm text-muted-foreground">{format(now, 'EEEE, d MMMM')}</p>
-          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-[0.95]">
-            {`Hey${prof.display_name ? `, ${prof.display_name.split(' ')[0]}` : ''}`}<span className="text-primary">.</span>
-          </h1>
-          <p className="mt-2 text-sm text-muted-foreground italic">“{quoteOfTheDay(now)}”</p>
-        </div>
-        <div className="lg:w-80 shrink-0">
-          <CravingTracker userId={user.id} cravings={(cravings ?? []) as { feeling: string | null; rode_out: boolean }[]} />
-        </div>
+      {/* Greeting — full on desktop; on mobile just a centered date + quote */}
+      <div className="kk-rise text-center lg:text-left">
+        <p className="text-sm text-muted-foreground">{format(now, 'EEEE, d MMMM')}</p>
+        <h1 className="hidden lg:block text-4xl sm:text-5xl font-extrabold tracking-tight leading-[0.95]">
+          {`Hey${prof.display_name ? `, ${prof.display_name.split(' ')[0]}` : ''}`}<span className="text-primary">.</span>
+        </h1>
+        <p className="mt-2 text-sm text-muted-foreground italic">“{quoteOfTheDay(now)}”</p>
       </div>
 
       {/* ── TODAY — one status card + the check-in action ── */}
@@ -144,6 +139,9 @@ export default async function DashboardHome() {
           <CoachCard text={reflection} />
         </section>
       ) : null}
+
+      {/* Craving prompt, just above goals */}
+      <CravingTracker userId={user.id} cravings={(cravings ?? []) as { feeling: string | null; rode_out: boolean }[]} />
 
       {/* ── PLANS — goals & the week, at the bottom ── */}
       <section className="space-y-4">
