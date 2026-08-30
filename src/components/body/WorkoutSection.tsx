@@ -175,12 +175,12 @@ export default function WorkoutSection({ userId, weekLogs }: { userId: string; w
                         checked ? 'bg-primary border-primary text-primary-foreground' : 'border-border group-hover:border-primary')}>
                       {checked && <Check size={14} strokeWidth={3} />}
                     </button>
-                    <button onClick={() => toggle(ex.name)} className="w-28 sm:w-40 shrink-0 text-left">
-                      <span className={cn('block text-sm font-medium truncate', checked && 'text-muted-foreground')}>{ex.name}</span>
+                    <button onClick={() => toggle(ex.name)} className="flex-1 min-w-0 text-left">
+                      <span className={cn('block text-sm font-medium leading-snug', checked && 'text-muted-foreground')}>{ex.name}</span>
                       <span className="block text-[11px] text-muted-foreground">{ex.detail}</span>
                     </button>
-                    {/* Weight per set - wraps into a 2-column grid (2 lines), no horizontal scroll */}
-                    <div className="flex-1 min-w-0 grid grid-cols-2 gap-1.5">
+                    {/* Weight per set - fixed 2-column grid (2 lines), no horizontal scroll */}
+                    <div className="shrink-0 w-40 grid grid-cols-2 gap-1.5">
                       {Array.from({ length: sets }).map((_, i) => (
                         <select key={i} value={arr[i] ?? ''} title={`Set ${i + 1}`}
                           onChange={e => setSetWeight(ex.name, sets, i, e.target.value)}
