@@ -120,7 +120,7 @@ export default function WorkoutSection({ userId, weekLogs }: { userId: string; w
           const isTodayTab = d.weekday === todayWd
           return (
             <button key={d.key} onClick={() => setSelected(d.weekday)}
-              className={cn('shrink-0 rounded-2xl px-3 py-2 border text-left transition-colors min-w-[88px]',
+              className={cn('shrink-0 rounded-2xl px-3 py-2 border text-center transition-colors min-w-[88px]',
                 selected === d.weekday ? 'bg-primary text-primary-foreground border-primary' : 'border-border hover:bg-muted')}>
               <span className="block text-xs font-semibold uppercase tracking-wide">
                 {['', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri'][d.weekday]}{isTodayTab ? ' •' : ''}
