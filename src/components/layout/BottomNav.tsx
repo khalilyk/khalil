@@ -21,7 +21,7 @@ export default function BottomNav() {
     const active = pathname.startsWith(href)
     return (
       <Link href={href} className={cn(
-        'flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-colors min-w-[52px]',
+        'flex flex-col items-center gap-1 px-1 py-2 rounded-xl transition-colors',
         active ? 'text-foreground' : 'text-muted-foreground'
       )}>
         <Icon size={20} strokeWidth={active ? 2.5 : 1.5} />
@@ -34,11 +34,11 @@ export default function BottomNav() {
 
   return (
     <nav className="lg:hidden fixed bottom-0 left-0 right-0 border-t border-border bg-background/95 backdrop-blur z-50 pb-[env(safe-area-inset-bottom)]">
-      <div className="flex justify-around items-end h-16 max-w-lg mx-auto px-2">
+      <div className="grid grid-cols-5 items-end h-16 max-w-lg mx-auto px-2">
         {left.map(i => <Item key={i.href} {...i} />)}
 
         {/* Centered Home circle */}
-        <Link href="/personal" className="flex flex-col items-center -mt-6 shrink-0">
+        <Link href="/personal" className="flex flex-col items-center -mt-6">
           <span className={cn(
             'flex items-center justify-center w-14 h-14 rounded-full shadow-lg border-4 border-background transition-colors',
             homeActive ? 'bg-primary text-primary-foreground' : 'bg-foreground text-background'
