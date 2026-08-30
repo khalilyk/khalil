@@ -65,7 +65,7 @@ export default function WorkDashboard({ userId, items, currency, live }: {
   const money = (n: number) => `${currency} ${n.toLocaleString(undefined, { maximumFractionDigits: 0 })}`
 
   return (
-    <div className="grid gap-4 lg:grid-cols-3 [&>*]:min-w-0">
+    <div className="grid gap-4 lg:grid-cols-2 [&>*]:min-w-0">
       {BUSINESSES.map(biz => {
         const mine = items.filter(i => i.business === biz.key)
         const liveStat = live?.[biz.key]
