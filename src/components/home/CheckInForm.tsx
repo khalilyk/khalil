@@ -112,7 +112,7 @@ export default function CheckInForm({ userId, today, bySlot }: {
   const saved = !!bySlot[slot]?.mood
 
   return (
-    <Card className="kk-rise relative overflow-hidden">
+    <Card className="kk-rise relative overflow-hidden [--card-spacing:--spacing(5)] sm:[--card-spacing:--spacing(6)]">
       <span className="kk-glow" style={{ left: '90%', top: '0%', width: 190, height: 190, background: 'radial-gradient(circle, rgba(112,137,46,0.16), transparent 70%)' }} />
       <CardHeader className="relative pb-3 flex flex-row items-center justify-between space-y-0">
         <CardTitle className="text-base">Check-in</CardTitle>

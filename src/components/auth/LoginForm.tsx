@@ -69,7 +69,7 @@ export default function LoginForm() {
             Building the future you want.
           </p>
           <p className="text-white/70 text-sm lg:text-base leading-relaxed max-w-xs">
-            Money, body, work, and calendar. Weekly, monthly, and annual reviews to keep you on track.
+            Body, work, and calendar. Weekly, monthly, and annual reviews to keep you on track.
           </p>
         </div>
 
