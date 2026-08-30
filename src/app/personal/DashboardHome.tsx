@@ -48,15 +48,6 @@ export default async function DashboardHome() {
     supabase.from('daily_steps').select('steps,day').order('day', { ascending: false }).limit(1).maybeSingle(),
   ])
 
-  // Time-of-day ambient glow palette (Sydney wall-clock)
-  const hour = Number(format(now, 'H'))
-  const timeGlow =
-    hour >= 5 && hour < 8 ? { a: 'rgba(255,190,120,0.34)', b: 'rgba(255,150,150,0.24)' }   // dawn
-      : hour >= 8 && hour < 12 ? { a: 'rgba(255,200,110,0.30)', b: 'rgba(210,225,140,0.24)' } // morning
-      : hour >= 12 && hour < 17 ? { a: 'rgba(200,224,132,0.30)', b: 'rgba(255,214,130,0.22)' } // day
-      : hour >= 17 && hour < 20 ? { a: 'rgba(255,140,80,0.34)', b: 'rgba(255,110,150,0.26)' }  // sunset
-      : { a: 'rgba(72,108,205,0.30)', b: 'rgba(38,54,120,0.26)' }                              // night
-
   const stepsInfo = stepsRow as { steps: number; day: string } | null
   const todaySteps = stepsInfo?.steps ?? 0
   const stepsAsOf = stepsInfo && stepsInfo.day !== today ? stepsInfo.day : null
@@ -120,12 +111,6 @@ export default async function DashboardHome() {
 
   return (
     <div className="relative px-4 py-6 lg:px-8 space-y-8 [&_section>*]:min-w-0">
-      {/* Live ambient glow — warm by day, deep blue by night */}
-      <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-        <span className="kk-bgglow a" style={{ left: '12%', top: '-6%', width: '58vw', height: '58vw', background: `radial-gradient(circle, ${timeGlow.a}, transparent 68%)` }} />
-        <span className="kk-bgglow b" style={{ left: '92%', top: '24%', width: '46vw', height: '46vw', background: `radial-gradient(circle, ${timeGlow.b}, transparent 70%)` }} />
-      </div>
-
       {/* Big greeting headline + quick craving prompt on the same line */}
       <div className="kk-rise flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
