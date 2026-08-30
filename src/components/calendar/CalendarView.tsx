@@ -3,16 +3,16 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { Plus, ChevronLeft, ChevronRight, X, Trash2, Clock } from 'lucide-react'
+import { Plus, ChevronLeft, ChevronRight, X, Trash2, Clock, Bell, BellOff } from 'lucide-react'
 import {
   format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, addMonths, subMonths, parseISO, isToday,
   differenceInCalendarDays,
 } from 'date-fns'
 import { cn } from '@/lib/utils'
 
-type Event = { id: string; title: string; starts_at: string; ends_at: string | null; all_day: boolean }
+type Event = { id: string; title: string; starts_at: string; ends_at: string | null; all_day: boolean; notify?: boolean | null }
 
-const emptyForm = { id: '', title: '', starts_at: '', ends_at: '', all_day: false }
+const emptyForm = { id: '', title: '', starts_at: '', ends_at: '', all_day: false, notify: false }
 
 export default function CalendarView({ userId, events }: { userId: string; events: Event[] }) {
   const router = useRouter()
@@ -40,7 +40,7 @@ export default function CalendarView({ userId, events }: { userId: string; event
       id: e.id, title: e.title,
       starts_at: format(parseISO(e.starts_at), "yyyy-MM-dd'T'HH:mm"),
       ends_at: e.ends_at ? format(parseISO(e.ends_at), "yyyy-MM-dd'T'HH:mm") : '',
-      all_day: e.all_day,
+      all_day: e.all_day, notify: !!e.notify,
     }); setOpen(true)
   }
   async function save() {
@@ -52,8 +52,14 @@ export default function CalendarView({ userId, events }: { userId: string; event
       ends_at: form.ends_at ? new Date(form.ends_at).toISOString() : null,
       all_day: form.all_day, source: 'native',
     }
+    let id = form.id
     if (form.id) await supabase.from('calendar_events').update(row).eq('id', form.id)
-    else await supabase.from('calendar_events').insert(row)
+    else {
+      const { data } = await supabase.from('calendar_events').insert(row).select('id').maybeSingle()
+      id = (data as { id: string } | null)?.id ?? ''
+    }
+    // Best-effort: needs migration 012 (calendar_events.notify). Silently ignored if absent.
+    if (id) await supabase.from('calendar_events').update({ notify: form.notify }).eq('id', id)
     setBusy(false); setOpen(false); setForm(emptyForm); router.refresh()
   }
   async function remove() {
@@ -130,6 +136,7 @@ export default function CalendarView({ userId, events }: { userId: string; event
                     <p className="mt-1 inline-flex items-center gap-1 text-xs text-muted-foreground"><Clock size={12} /> until {format(parseISO(e.ends_at), 'h:mm a')}</p>
                   )}
                 </div>
+                {e.notify && <Bell size={15} className="shrink-0 text-primary mt-0.5" />}
               </button>
             ))}
           </div>
@@ -165,6 +172,18 @@ export default function CalendarView({ userId, events }: { userId: string; event
                   className="mt-1 w-full h-11 rounded-xl border border-border bg-card px-3 text-sm outline-none focus:border-primary" />
               </label>
             )}
+
+            <button type="button" onClick={() => setForm(f => ({ ...f, notify: !f.notify }))}
+              className="w-full flex items-center justify-between rounded-xl border border-border px-4 py-3">
+              <span className="flex items-center gap-2 text-sm font-medium">
+                {form.notify ? <Bell size={16} className="text-primary" /> : <BellOff size={16} className="text-muted-foreground" />}
+                Remind me before it starts
+              </span>
+              <span className={cn('w-10 h-6 rounded-full p-0.5 transition-colors', form.notify ? 'bg-primary' : 'bg-muted')}>
+                <span className={cn('block w-5 h-5 rounded-full bg-white transition-transform', form.notify && 'translate-x-4')} />
+              </span>
+            </button>
+
             <div className="flex items-center gap-2 pt-1">
               {form.id && (
                 <button onClick={remove} disabled={busy} className="w-11 h-11 shrink-0 rounded-xl border border-border flex items-center justify-center text-destructive hover:bg-destructive/10"><Trash2 size={17} /></button>
