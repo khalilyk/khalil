@@ -54,7 +54,7 @@ function renderEmail(s: Awaited<ReturnType<typeof weeklySummary>>): string {
 
   return `<!doctype html><html><body style="margin:0;background:#ededea;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
     <div style="max-width:560px;margin:0 auto;padding:24px">
-      <div style="display:inline-block;width:34px;height:34px;background:#EA5A0C;border-radius:9px;color:#fff;font-weight:800;text-align:center;line-height:34px;font-size:18px">K</div>
+      <div style="display:inline-block;width:34px;height:34px;background:#70892e;border-radius:9px;color:#fff;font-weight:800;text-align:center;line-height:34px;font-size:18px">K</div>
       <h1 style="font-size:22px;color:#171717;margin:16px 0 2px">Your week in review</h1>
       <p style="color:#8a8a86;margin:0 0 20px">${s.rangeLabel}</p>
       <table style="width:100%;border-spacing:8px 0;margin:0 -8px"><tr>
@@ -64,7 +64,7 @@ function renderEmail(s: Awaited<ReturnType<typeof weeklySummary>>): string {
         ${stat('Spent', money)}
       </tr></table>
       <div style="margin-top:20px">${extras || '<p style="color:#555;margin:6px 0">On track — nothing flagged this week.</p>'}</div>
-      <a href="https://khalilkhouri.org" style="display:inline-block;margin-top:20px;background:#EA5A0C;color:#fff;text-decoration:none;padding:12px 20px;border-radius:999px;font-weight:600">Open Khalil</a>
+      <a href="https://khalilkhouri.org" style="display:inline-block;margin-top:20px;background:#70892e;color:#fff;text-decoration:none;padding:12px 20px;border-radius:999px;font-weight:600">Open Khalil</a>
       <p style="color:#b0b0ac;font-size:12px;margin-top:24px">Keep the streak going. Small steps, every day.</p>
     </div>
   </body></html>`
