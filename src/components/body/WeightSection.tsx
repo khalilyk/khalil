@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { LineChart, Line, XAxis, YAxis, Tooltip, ReferenceLine, ResponsiveContainer } from 'recharts'
 import { format, parseISO, subDays, addWeeks } from 'date-fns'
-import { TrendingDown, TrendingUp, Minus, Target, Pencil, Plus } from 'lucide-react'
+import { TrendingDown, TrendingUp, Minus, Target, Pencil, Plus, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 type Log = { id: string; weight: number; logged_on: string; note: string | null }
@@ -90,7 +90,7 @@ export default function WeightSection({ userId, logs, weightGoal, weightRate, un
     <section className="space-y-4">
       {/* Weight + plan, merged into one compact card */}
       <Card>
-        <CardContent className="py-4">
+        <CardContent className="py-3">
           <div className="grid grid-cols-2 gap-4">
             {/* Left — weight */}
             <div className="min-w-0">
@@ -172,18 +172,21 @@ export default function WeightSection({ userId, logs, weightGoal, weightRate, un
           </div>
 
           {/* Log today's weight — revealed on click */}
-          <div className="mt-3 pt-3 border-t border-border">
+          <div className="mt-2 pt-2 border-t border-border">
             {logging ? (
-              <div className="flex gap-2">
+              <div className="flex items-center gap-2">
                 <Input autoFocus placeholder={`Today's weight (${unit})`} type="number" inputMode="decimal" value={weight}
-                  onChange={e => setWeight(e.target.value)} className="flex-1 h-10"
+                  onChange={e => setWeight(e.target.value)} className="flex-1 h-9"
                   onKeyDown={e => { if (e.key === 'Enter') logWeight() }} />
-                <Button onClick={logWeight} disabled={loading || !weight} className="rounded-full px-6">Log</Button>
-                <Button variant="ghost" onClick={() => { setLogging(false); setWeight('') }} className="rounded-full px-3">Cancel</Button>
+                <Button onClick={logWeight} disabled={loading || !weight} className="rounded-full px-5 h-9">Log</Button>
+                <button onClick={() => { setLogging(false); setWeight('') }} aria-label="Cancel"
+                  className="w-9 h-9 shrink-0 rounded-full flex items-center justify-center text-muted-foreground hover:bg-muted transition-colors">
+                  <X size={17} />
+                </button>
               </div>
             ) : (
               <button onClick={() => setLogging(true)}
-                className="w-full flex items-center justify-center gap-1.5 text-sm font-semibold text-primary hover:opacity-80 transition-opacity py-1">
+                className="w-full flex items-center justify-center gap-1.5 text-sm font-semibold text-primary hover:opacity-80 transition-opacity">
                 <Plus size={15} /> Log today’s weight
               </button>
             )}
