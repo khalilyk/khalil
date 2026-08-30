@@ -222,3 +222,14 @@
 .kk-bgglow.a { animation: kk-float-a 30s ease-in-out infinite; }
 .kk-bgglow.b { animation: kk-float-b 38s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) { .kk-bgglow.a, .kk-bgglow.b { animation: none; } }
+
+/* Consistent dropdown chevron with proper padding on every native <select> */
+select:not([multiple]) {
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a3a09b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.7rem center;
+  background-size: 13px;
+  padding-right: 2.1rem !important;
+}

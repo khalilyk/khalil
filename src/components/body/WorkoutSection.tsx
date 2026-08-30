@@ -10,6 +10,9 @@ import { PROGRAM, totalExercises, type WorkoutDay } from '@/lib/workout'
 
 type Log = { logged_on: string; exercise: string; weight?: number | null }
 
+// Selectable weights: 10 - 70 kg in 2.5 kg steps
+const WEIGHTS = Array.from({ length: 25 }, (_, i) => 10 + i * 2.5)
+
 export default function WorkoutSection({ userId, weekLogs }: { userId: string; weekLogs: Log[] }) {
   const router = useRouter()
   const todayWd = new Date().getDay() // 0 Sun .. 6 Sat
@@ -81,9 +84,9 @@ export default function WorkoutSection({ userId, weekLogs }: { userId: string; w
   }
 
   // Save the weight for an exercise (logging it also marks the exercise done)
-  async function saveWeight(ex: string) {
+  async function saveWeight(ex: string, val?: string) {
     const key = `${date}|${ex}`
-    const raw = (weights.get(key) ?? '').trim()
+    const raw = (val ?? weights.get(key) ?? '').trim()
     const w = raw === '' ? null : Number(raw)
     if (raw !== '' && Number.isNaN(w as number)) return
     const next = new Set(doneSet)
@@ -160,13 +163,13 @@ export default function WorkoutSection({ userId, weekLogs }: { userId: string; w
                     </button>
                     {/* Weight lifted */}
                     <div className="shrink-0 flex items-center gap-1">
-                      <input type="number" inputMode="decimal" min="0" step="0.5"
+                      <select
                         value={weights.get(key) ?? ''}
-                        onChange={e => setWeights(m => new Map(m).set(key, e.target.value))}
-                        onBlur={() => saveWeight(ex.name)}
-                        onKeyDown={e => { if (e.key === 'Enter') (e.target as HTMLInputElement).blur() }}
-                        placeholder="—"
-                        className="w-14 h-9 rounded-lg border border-border bg-card text-sm text-center tabular-nums outline-none focus:border-primary" />
+                        onChange={e => { const v = e.target.value; setWeights(m => new Map(m).set(key, v)); saveWeight(ex.name, v) }}
+                        className="w-[88px] h-9 rounded-lg border border-border bg-card px-2.5 text-sm tabular-nums outline-none focus:border-primary">
+                        <option value="">—</option>
+                        {WEIGHTS.map(w => <option key={w} value={w}>{w}</option>)}
+                      </select>
                       <span className="text-xs text-muted-foreground">kg</span>
                     </div>
                   </div>

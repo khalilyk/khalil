@@ -33,7 +33,7 @@ export default function WeightTrendCard({ logs, unit, goal, className }: {
         </span>
         {weekPct !== null && dir !== 'flat' && (
           <span className="inline-flex items-center gap-0.5 text-[11px] font-bold rounded-full px-2 py-0.5 bg-white/55 backdrop-blur">
-            {dir === 'up' ? <ArrowUpRight size={11} /> : <ArrowDownRight size={11} />}{Math.abs(weekPct)}%
+            {dir === 'up' ? <ArrowUpRight size={11} /> : <ArrowDownRight size={11} />}{Math.abs(weekPct)}% w/w
           </span>
         )}
       </div>
