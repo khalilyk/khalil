@@ -179,12 +179,12 @@ export default function WorkoutSection({ userId, weekLogs }: { userId: string; w
                       <span className={cn('block text-sm font-medium truncate', checked && 'text-muted-foreground')}>{ex.name}</span>
                       <span className="block text-[11px] text-muted-foreground">{ex.detail}</span>
                     </button>
-                    {/* Weight per set - scrolls horizontally, one row */}
-                    <div className="flex-1 min-w-0 flex gap-1.5 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                    {/* Weight per set - wraps into a 2-column grid (2 lines), no horizontal scroll */}
+                    <div className="flex-1 min-w-0 grid grid-cols-2 gap-1.5">
                       {Array.from({ length: sets }).map((_, i) => (
                         <select key={i} value={arr[i] ?? ''} title={`Set ${i + 1}`}
                           onChange={e => setSetWeight(ex.name, sets, i, e.target.value)}
-                          className="shrink-0 w-[76px] h-8 rounded-lg border border-border bg-card pl-2 text-sm tabular-nums outline-none focus:border-primary">
+                          className="w-full h-8 rounded-lg border border-border bg-card pl-2 text-sm tabular-nums outline-none focus:border-primary">
                           <option value="">S{i + 1}</option>
                           {WEIGHTS.map(w => <option key={w} value={w}>{w}</option>)}
                         </select>
