@@ -62,6 +62,35 @@ async function invoiceStats(url?: string): Promise<LiveStat | null> {
   } catch { return null }
 }
 
+// Same invoice stats, but read over the Supabase REST API (URL + service key)
+async function invoiceStatsSupabase(url?: string, key?: string): Promise<LiveStat | null> {
+  const db = client(url, key)
+  if (!db) return null
+  try {
+    const { data, error } = await db
+      .from('invoices')
+      .select('number, subject, doc_type, status, items, tax_rate, discount')
+      .eq('doc_type', 'invoice')
+    if (error || !data) return null
+    const revenue = data
+      .filter(i => i.status === 'paid')
+      .reduce((s, i) => s + invoiceTotal(i.items, i.tax_rate, i.discount), 0)
+    const pending = data
+      .filter(i => i.status === 'sent' || i.status === 'overdue')
+      .slice(0, 6)
+      .map(i => ({ title: `${i.number}${i.subject ? ` · ${i.subject}` : ''}`, amount: invoiceTotal(i.items, i.tax_rate, i.discount), status: i.status }))
+    return { revenue, pending }
+  } catch { return null }
+}
+
+// BRIC: prefer its Supabase URL+key, then a direct Postgres URL, then the studio DB.
+async function bricStats(): Promise<LiveStat | null> {
+  if (process.env.BRIC_SUPABASE_URL && process.env.BRIC_SUPABASE_KEY) {
+    return invoiceStatsSupabase(process.env.BRIC_SUPABASE_URL, process.env.BRIC_SUPABASE_KEY)
+  }
+  return invoiceStats(process.env.BRIC_POSTGRES_URL || process.env.NN_POSTGRES_URL)
+}
+
 // Cache the external lookups briefly - NN's Postgres is in us-east-1, so
 // hitting it on every page load makes /work feel sluggish from Sydney.
 let cache: { at: number; data: Partial<Record<BusinessKey, LiveStat>> } | null = null
@@ -69,11 +98,8 @@ const TTL_MS = 5 * 60_000
 
 export async function getBusinessStats(): Promise<Partial<Record<BusinessKey, LiveStat>>> {
   if (cache && Date.now() - cache.at < TTL_MS) return cache.data
-  // BRIC pulls from its own invoicing DB; falls back to the studio DB if BRIC's isn't set yet.
-  const [pp, bric] = await Promise.all([
-    printParadise(),
-    invoiceStats(process.env.BRIC_POSTGRES_URL || process.env.NN_POSTGRES_URL),
-  ])
+  // BRIC pulls from its own invoicing DB (Supabase URL+key or Postgres URL); falls back to the studio DB.
+  const [pp, bric] = await Promise.all([printParadise(), bricStats()])
   const out: Partial<Record<BusinessKey, LiveStat>> = {}
   if (pp) out.print_paradise = pp
   if (bric) out.bric = bric
