@@ -144,17 +144,23 @@ export default function CheckInForm({ userId, today, bySlot }: {
           </select>
         </div>
 
-        {/* One field - type your own or pick a quick answer */}
+        {/* Type your own... */}
         <input
-          list={`quick-${slot}`}
           value={note}
           onChange={e => setNote(e.target.value)}
-          placeholder={slot === 'morning' ? 'How are you feeling? (type or pick)' : 'How did it go? (type or pick)'}
+          placeholder={slot === 'morning' ? 'How are you feeling?' : 'How did it go?'}
           className="w-full h-10 rounded-xl border border-input bg-transparent px-3 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:border-ring"
         />
-        <datalist id={`quick-${slot}`}>
-          {QUICK[slot].map(q => <option key={q} value={q} />)}
-        </datalist>
+        {/* ...or tap a quick answer */}
+        <div className="flex gap-1.5 overflow-x-auto -mx-1 px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {QUICK[slot].map(q => (
+            <button key={q} type="button" onClick={() => setNote(q)}
+              className={cn('shrink-0 rounded-full border px-3 py-1 text-xs transition-colors',
+                note === q ? 'bg-primary text-primary-foreground border-primary' : 'border-border text-muted-foreground hover:bg-muted')}>
+              {q}
+            </button>
+          ))}
+        </div>
 
         <Button onClick={save} disabled={loading || justSaved || (!mood && !energy)}
           className={cn('w-full rounded-full gap-1.5', justSaved && 'bg-green-600 hover:bg-green-600')}>
