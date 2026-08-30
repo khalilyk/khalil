@@ -49,7 +49,7 @@
 }
 
 :root {
-  /* Metrics.IQ palette — light neutral canvas, vivid orange accent, dark ink */
+  /* Metrics.IQ palette - light neutral canvas, vivid orange accent, dark ink */
   --background: oklch(0.982 0.002 60);
   --foreground: oklch(0.18 0.005 60);
   --card: oklch(1 0 0);
@@ -134,7 +134,7 @@
 }
 
 /* ── KK walking stick man ─────────────────────────────── */
-/* Limb swing + head bob — applied only while the figure is moving. */
+/* Limb swing + head bob - applied only while the figure is moving. */
 .kk-leg, .kk-arm { transform-box: view-box; }
 .kk-leg { transform-origin: 18px 22px; }
 .kk-arm { transform-origin: 18px 14px; }
@@ -187,7 +187,7 @@
 .kk-stagger > *:nth-child(3){ animation-delay:.16s } .kk-stagger > *:nth-child(4){ animation-delay:.23s }
 .kk-stagger > *:nth-child(5){ animation-delay:.30s } .kk-stagger > *:nth-child(6){ animation-delay:.37s }
 
-/* Soft breathing glow blob — drop inside a relative, overflow-hidden card */
+/* Soft breathing glow blob - drop inside a relative, overflow-hidden card */
 @keyframes kk-breathe {
   0%,100% { opacity:.45; transform: translate(-50%,-50%) scale(0.92); }
   50%     { opacity:1;   transform: translate(-48%,-53%) scale(1.18); }

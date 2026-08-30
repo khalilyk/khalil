@@ -1,4 +1,4 @@
-// A rotating set of motivational lines — one per day, deterministic.
+// A rotating set of motivational lines - one per day, deterministic.
 import { getDayOfYear } from 'date-fns'
 
 const QUOTES: string[] = [
@@ -20,7 +20,7 @@ const QUOTES: string[] = [
   'Fall in love with the process and the results will come.',
   'Comfort is the enemy of progress.',
   'Health is the crown that only the sick can see.',
-  'Take care of your body — it’s the only place you have to live.',
+  'Take care of your body - it’s the only place you have to live.',
   'The secret of getting ahead is getting started.',
   'Energy and persistence conquer all things.',
   'Every action you take is a vote for who you want to become.',

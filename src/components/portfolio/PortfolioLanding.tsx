@@ -105,7 +105,7 @@ export default function PortfolioLanding() {
 
       {/* Stage */}
       <main className="flex-1 min-h-0 max-w-[1500px] w-full mx-auto grid gap-8 items-center px-6 lg:px-16 pb-8 lg:grid-cols-[1.15fr_1fr]">
-        {/* Content — on desktop the page never scrolls, so an over-tall view scrolls within its own frame */}
+        {/* Content - on desktop the page never scrolls, so an over-tall view scrolls within its own frame */}
         <div className="min-h-0 lg:max-h-full lg:overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           {view === 'home' && <HomeView key="home" go={setView} />}
           {view === 'about' && <AboutView key="about" go={setView} />}
@@ -113,7 +113,7 @@ export default function PortfolioLanding() {
           {view === 'contact' && <ContactView key="contact" />}
         </div>
 
-        {/* Portrait illustration — pupils follow the cursor (desktop) */}
+        {/* Portrait illustration - pupils follow the cursor (desktop) */}
         <div className="flex h-[38vh] lg:h-full min-h-0 items-end justify-center lg:justify-end">
           <div ref={faceRef} className="relative h-full">
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -200,7 +200,7 @@ function AboutView({ go }: { go: (v: View) => void }) {
   )
 }
 
-// fixed set of shape slots — 'wide' = 2x2 feature, 'square' = 1 col x 2 rows (≈square), '' = small landscape
+// fixed set of shape slots - 'wide' = 2x2 feature, 'square' = 1 col x 2 rows (≈square), '' = small landscape
 const SPAN_SLOTS = ['wide', 'square', '', 'square', '', 'wide', 'square', ''] as const
 
 function GridTile({ p, cls }: { p: (typeof PROJECTS)[number]; cls: string }) {
@@ -300,7 +300,7 @@ function ContactView() {
         <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: GREY }}>03 · contact</p>
         <h2 className="mt-2 text-4xl sm:text-5xl font-extrabold tracking-tight">Message sent<span style={{ color: RED }}>.</span></h2>
         <p className="mt-3 text-base leading-relaxed" style={{ color: GREY }}>
-          Thanks {form.name.split(' ')[0]} — your message has landed in my inbox. I&apos;ll usually reply within 24 hours.
+          Thanks {form.name.split(' ')[0]} - your message has landed in my inbox. I&apos;ll usually reply within 24 hours.
         </p>
         <Cta onClick={() => { setForm({ topic: '', name: '', email: '', message: '' }); setTried(false); setStatus('idle') }} className="!mt-6">Send another</Cta>
       </div>

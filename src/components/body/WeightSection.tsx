@@ -55,10 +55,10 @@ export default function WeightSection({ userId, logs, weightGoal, weightRate, un
   if (projection && !projection.done && weekDiff !== null && rate) {
     const movingRight = (projection.losing && weekDiff < 0) || (!projection.losing && weekDiff > 0)
     const mag = Math.abs(weekDiff)
-    if (!movingRight && weekDiff !== 0) pace = { label: 'Off track — wrong direction', tone: 'off' }
+    if (!movingRight && weekDiff !== 0) pace = { label: 'Off track - wrong direction', tone: 'off' }
     else if (weekDiff === 0) pace = { label: 'Stalled this week', tone: 'slow' }
-    else if (mag > rate * 1.5) pace = { label: 'Too fast — ease off', tone: 'fast' }
-    else if (mag < rate * 0.5) pace = { label: 'Too slow — push a little', tone: 'slow' }
+    else if (mag > rate * 1.5) pace = { label: 'Too fast - ease off', tone: 'fast' }
+    else if (mag < rate * 0.5) pace = { label: 'Too slow - push a little', tone: 'slow' }
     else pace = { label: 'On track', tone: 'ok' }
   }
 

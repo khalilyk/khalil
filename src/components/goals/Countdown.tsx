@@ -11,7 +11,7 @@ export default function Countdown({ date }: { date: string }) {
     return () => clearInterval(id)
   }, [])
 
-  if (now === null) return <span className="tabular-nums">—</span>
+  if (now === null) return <span className="tabular-nums"> - </span>
 
   const target = new Date(`${date}T23:59:59`).getTime()
   let diff = target - now

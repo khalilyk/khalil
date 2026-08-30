@@ -25,7 +25,7 @@ export default function SummaryView({ s }: { s: PeriodSummary }) {
     { icon: Dumbbell, label: 'Trained', value: `${s.workoutDays}`, sub: `${s.workoutDays === 1 ? 'day' : 'days'} ${label}`, tone: MESH.orange },
     {
       icon: Scale, label: 'Weight',
-      value: wChange == null ? (s.weightLatest ? `${s.weightLatest} ${s.unit}` : '—') : `${wChange > 0 ? '+' : ''}${wChange} ${s.unit}`,
+      value: wChange == null ? (s.weightLatest ? `${s.weightLatest} ${s.unit}` : ' - ') : `${wChange > 0 ? '+' : ''}${wChange} ${s.unit}`,
       sub: wChange == null ? 'latest' : `change ${label}`, tone: MESH.blue,
     },
   ]
@@ -54,7 +54,7 @@ export default function SummaryView({ s }: { s: PeriodSummary }) {
           <Target size={13} /> Goals
         </p>
         {s.goalsDueSoon.length === 0 ? (
-          <p className="relative text-sm text-muted-foreground">{s.goalsActive} active — none due within 30 days.</p>
+          <p className="relative text-sm text-muted-foreground">{s.goalsActive} active - none due within 30 days.</p>
         ) : (
           <div className="relative space-y-2">
             {s.goalsDueSoon.map(g => (

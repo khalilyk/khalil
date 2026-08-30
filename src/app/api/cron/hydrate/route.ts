@@ -30,18 +30,18 @@ export async function GET(req: NextRequest) {
   for (const p of profiles ?? []) {
     const prof = p as { id: string; remind_water?: boolean; remind_snack?: boolean }
     if (prof.remind_water && waterSnackTime) {
-      await sendPush(prof.id, { title: '💧 Drink water', body: 'Time for a glass of water — stay hydrated.', tag: 'water', url: '/body' })
+      await sendPush(prof.id, { title: '💧 Drink water', body: 'Time for a glass of water - stay hydrated.', tag: 'water', url: '/body' })
       sent++
     }
     if (prof.remind_snack && waterSnackTime) {
-      await sendPush(prof.id, { title: '🚫 No snacking', body: 'Stay on plan — no snacking between meals.', tag: 'snack', url: '/body' })
+      await sendPush(prof.id, { title: '🚫 No snacking', body: 'Stay on plan - no snacking between meals.', tag: 'snack', url: '/body' })
       sent++
     }
-    // Afternoon craving check-in — the classic emotional-eating dip
+    // Afternoon craving check-in - the classic emotional-eating dip
     if (hour === 15) {
       await sendPush(prof.id, {
         title: '🔥 Craving check-in',
-        body: 'Afternoon dip — this is when urges hit. Feeling one? Tap to ride it out.',
+        body: 'Afternoon dip - this is when urges hit. Feeling one? Tap to ride it out.',
         tag: 'craving', url: '/',
       })
       sent++

@@ -22,7 +22,7 @@ export default function ContactButton({ label, className }: { label: React.React
 
   function send() {
     const subject = encodeURIComponent(`Portfolio enquiry${form.name ? ` from ${form.name}` : ''}`)
-    const body = encodeURIComponent(`${form.message}\n\n— ${form.name}${form.email ? `\n${form.email}` : ''}`)
+    const body = encodeURIComponent(`${form.message}\n\n - ${form.name}${form.email ? `\n${form.email}` : ''}`)
     window.location.href = `mailto:${EMAIL}?subject=${subject}&body=${body}`
     setSent(true)
   }
@@ -43,12 +43,12 @@ export default function ContactButton({ label, className }: { label: React.React
               <X size={18} />
             </button>
 
-            {/* Left — details (inverted: dark panel, red accents) */}
+            {/* Left - details (inverted: dark panel, red accents) */}
             <div className="p-7 sm:p-8 text-white flex flex-col gap-6" style={{ backgroundColor: INK }}>
               <div>
                 <h2 className="text-3xl font-extrabold tracking-tight">let&apos;s talk<span style={{ color: RED }}>.</span></h2>
                 <p className="text-sm mt-2 text-white/70 leading-relaxed">
-                  Whether it&apos;s a brand from scratch, a product to design, or an illustration you have in mind — I&apos;d love to hear about it.
+                  Whether it&apos;s a brand from scratch, a product to design, or an illustration you have in mind - I&apos;d love to hear about it.
                 </p>
               </div>
 
@@ -76,7 +76,7 @@ export default function ContactButton({ label, className }: { label: React.React
               </div>
             </div>
 
-            {/* Right — form */}
+            {/* Right - form */}
             <div className="p-7 sm:p-8">
               <p className="text-sm font-medium" style={{ color: GREY }}>Send a message</p>
               <div className="mt-4 space-y-3">

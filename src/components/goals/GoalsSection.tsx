@@ -157,7 +157,7 @@ export default function GoalsSection({ userId, goals, milestones, categories, cu
       </div>
       )}
 
-      {/* Featured goal for this tab — coloured box with live countdown */}
+      {/* Featured goal for this tab - coloured box with live countdown */}
       {(() => {
         const featured = active.find(g => g.target_date) ?? active[0]
         if (!featured) return null

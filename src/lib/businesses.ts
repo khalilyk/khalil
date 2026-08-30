@@ -61,7 +61,7 @@ async function notNormal(): Promise<LiveStat | null> {
   } catch { return null }
 }
 
-// Cache the external lookups briefly — NN's Postgres is in us-east-1, so
+// Cache the external lookups briefly - NN's Postgres is in us-east-1, so
 // hitting it on every page load makes /work feel sluggish from Sydney.
 let cache: { at: number; data: Partial<Record<BusinessKey, LiveStat>> } | null = null
 const TTL_MS = 5 * 60_000

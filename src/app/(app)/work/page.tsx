@@ -19,7 +19,7 @@ export default async function WorkPage() {
     <div className="w-full px-4 lg:px-8 py-6 space-y-8">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Work</h1>
-        <p className="text-sm text-muted-foreground">Your businesses — revenue, pipeline, and what needs doing.</p>
+        <p className="text-sm text-muted-foreground">Your businesses - revenue, pipeline, and what needs doing.</p>
       </div>
 
       <WorkDashboard userId={user!.id} items={(items ?? []) as WorkItem[]} currency={currency} live={live} />

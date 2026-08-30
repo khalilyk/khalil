@@ -78,7 +78,7 @@ export default function NotificationsPanel({ userId }: { userId: string }) {
         </div>
         <div className="max-h-96 overflow-y-auto">
           {notifications.length === 0 ? (
-            <p className="text-sm text-muted-foreground text-center py-10">All clear — no notifications.</p>
+            <p className="text-sm text-muted-foreground text-center py-10">All clear - no notifications.</p>
           ) : notifications.map(n => (
             <div key={n.id} className={cn('px-5 py-3 border-t border-border first:border-t-0', !n.read && 'bg-muted/40')}>
               <div className="flex items-start justify-between gap-3">

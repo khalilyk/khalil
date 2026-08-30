@@ -33,7 +33,7 @@ export default function StepsCard({ steps, asOf, className }: { steps: number; a
         <ChevronRight size={16} className="opacity-60 group-hover:translate-x-0.5 transition-transform" />
       </div>
 
-      {/* Ring centred, count + goal beneath — fills the card height */}
+      {/* Ring centred, count + goal beneath - fills the card height */}
       <div className="flex-1 flex flex-col items-center justify-center gap-3 py-3">
         <div className="relative w-32 h-32">
           <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">

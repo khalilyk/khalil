@@ -71,7 +71,7 @@ export default function CheckInForm({ userId, today, bySlot }: {
     )
     if (error) { setLoading(false); alert(`Could not save: ${error.message}`); return }
 
-    // 2) Mirror to the calendar — never let a calendar hiccup block the save
+    // 2) Mirror to the calendar - never let a calendar hiccup block the save
     try { await syncCalendar() } catch (e) { console.error('calendar sync failed', e) }
 
     // 3) Kick off the coach reflection in the background (don't block the UI)
@@ -144,7 +144,7 @@ export default function CheckInForm({ userId, today, bySlot }: {
           </select>
         </div>
 
-        {/* One field — type your own or pick a quick answer */}
+        {/* One field - type your own or pick a quick answer */}
         <input
           list={`quick-${slot}`}
           value={note}

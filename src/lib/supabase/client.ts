@@ -6,7 +6,7 @@ export function createClient() {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       auth: {
-        // @ts-ignore — experimental passkey/WebAuthn API
+        // @ts-ignore - experimental passkey/WebAuthn API
         experimental: { passkey: true },
       },
     }

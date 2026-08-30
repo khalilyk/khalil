@@ -37,7 +37,7 @@ export default function CravingTracker({ userId, cravings }: { userId: string; c
             <div className="min-w-0">
               <p className="font-semibold flex items-center gap-2"><Flame size={16} className="text-primary" /> Craving hitting?</p>
               <p className="text-xs text-muted-foreground mt-0.5">
-                {total ? `${resisted} beaten this month · ${pct}% resisted` : 'Tap when an urge strikes — ride it out.'}
+                {total ? `${resisted} beaten this month · ${pct}% resisted` : 'Tap when an urge strikes - ride it out.'}
               </p>
             </div>
             <Button onClick={() => setOpen(true)} className="rounded-full shrink-0">Ride it out</Button>

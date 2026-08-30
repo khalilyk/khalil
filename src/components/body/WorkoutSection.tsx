@@ -106,7 +106,7 @@ export default function WorkoutSection({ userId, weekLogs }: { userId: string; w
       <Card>
         <CardContent className="py-4 space-y-5">
           <div className="flex items-baseline justify-between">
-            <p className="font-semibold">{['', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'][selected]} — {day.title}</p>
+            <p className="font-semibold">{['', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'][selected]} - {day.title}</p>
             <p className="text-xs text-muted-foreground">{format(addDays(weekStart, selected - 1), 'd MMM')}</p>
           </div>
 

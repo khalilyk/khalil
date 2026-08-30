@@ -1,4 +1,4 @@
-// Khalil's weekly training split. Static program — completions are logged per date.
+// Khalil's weekly training split. Static program - completions are logged per date.
 
 export type Exercise = { name: string; detail: string }
 export type Block = { heading?: string; exercises: Exercise[] }

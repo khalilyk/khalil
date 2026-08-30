@@ -39,14 +39,14 @@ export default function WeightTrendCard({ logs, unit, goal, className }: {
       </div>
 
       <div className="mt-2 flex items-end gap-2">
-        <span className="text-6xl sm:text-7xl font-extrabold tracking-tight leading-none tabular-nums">{latest ? latest.weight : '—'}</span>
+        <span className="text-6xl sm:text-7xl font-extrabold tracking-tight leading-none tabular-nums">{latest ? latest.weight : ' - '}</span>
         <span className="pb-2 text-lg font-semibold opacity-70">{unit}</span>
       </div>
       <p className="mt-1 text-xs font-semibold opacity-70">
         {goal ? `Goal ${goal} ${unit}` : 'This week’s trend'}
       </p>
 
-      {/* Full-bleed sparkline — hover for the date + weight */}
+      {/* Full-bleed sparkline - hover for the date + weight */}
       <div className="mt-auto -mx-5 sm:-mx-6 pt-4">
         <WeightSparkline pts={pts} unit={unit} />
       </div>

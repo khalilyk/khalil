@@ -86,7 +86,7 @@ export default async function DashboardHome() {
   ]
   const score = scoreItems.reduce((s, i) => s + i.got, 0)
 
-  // The four things that make the day count — one place, no repetition
+  // The four things that make the day count - one place, no repetition
   const MOOD = ['', 'Rough', 'Low', 'Okay', 'Good', 'Great']
   const moodText = (c?: { mood: number | null; energy: number | null }) =>
     c?.mood ? `${MOOD[c.mood]}${c.energy ? ` · ⚡${c.energy}` : ''}` : 'Not yet'
@@ -96,7 +96,7 @@ export default async function DashboardHome() {
     { key: 'workout', label: todayWorkout?.title ?? 'Rest day',
       value: todayWorkout ? `${todayDone}/${totalExercises(todayWorkout)}` : 'Rest day',
       done: todayWorkout ? todayDone > 0 : true, href: '/body' },
-    { key: 'weight', label: 'Weight', value: latestWeight ? `${latestWeight} ${unit}` : '—', done: weightToday, href: '/body' },
+    { key: 'weight', label: 'Weight', value: latestWeight ? `${latestWeight} ${unit}` : ' - ', done: weightToday, href: '/body' },
   ]
 
   // Streak: consecutive days (up to today) with a check-in
@@ -105,13 +105,13 @@ export default async function DashboardHome() {
   for (let i = 0; i < 40; i++) {
     const ds = format(subDays(now, i), 'yyyy-MM-dd')
     if (ciDates.has(ds)) streak++
-    else if (i === 0) continue // today not logged yet — don't break the streak
+    else if (i === 0) continue // today not logged yet - don't break the streak
     else break
   }
 
   return (
     <div className="relative px-4 py-6 lg:px-8 space-y-8 [&_section>*]:min-w-0">
-      {/* Greeting — full on desktop; on mobile just a centered date + quote */}
+      {/* Greeting - full on desktop; on mobile just a centered date + quote */}
       <div className="kk-rise text-center lg:text-left">
         <p className="text-sm text-muted-foreground">{format(now, 'EEEE, d MMMM')}</p>
         <h1 className="hidden lg:block text-4xl sm:text-5xl font-extrabold tracking-tight leading-[0.95]">
@@ -120,7 +120,7 @@ export default async function DashboardHome() {
         <p className="mt-2 text-sm text-muted-foreground italic">“{quoteOfTheDay(now)}”</p>
       </div>
 
-      {/* ── TODAY — one status card + the check-in action ── */}
+      {/* ── TODAY - one status card + the check-in action ── */}
       {/* Score + check-in */}
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-stretch">
         <TodayHero score={score} streak={streak} rows={heroRows} weekDots={weekDots} />
@@ -133,7 +133,7 @@ export default async function DashboardHome() {
         <StepsCard steps={todaySteps} asOf={stepsAsOf} className="h-full" />
       </section>
 
-      {/* ── MORE — coach note, quieter ── */}
+      {/* ── MORE - coach note, quieter ── */}
       {reflection ? (
         <section className="grid grid-cols-1 gap-4">
           <CoachCard text={reflection} />
@@ -143,7 +143,7 @@ export default async function DashboardHome() {
       {/* Craving prompt, just above goals */}
       <CravingTracker userId={user.id} cravings={(cravings ?? []) as { feeling: string | null; rode_out: boolean }[]} />
 
-      {/* ── PLANS — goals & the week, at the bottom ── */}
+      {/* ── PLANS - goals & the week, at the bottom ── */}
       <section className="space-y-4">
         <SectionLabel>Goals & progress</SectionLabel>
         <div className="grid grid-cols-1 gap-4">

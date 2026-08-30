@@ -23,7 +23,7 @@ export async function createClient() {
 }
 
 // The proxy middleware (src/proxy.ts → updateSession) already calls getUser() on
-// every request — a real network round-trip that validates the token and redirects
+// every request - a real network round-trip that validates the token and redirects
 // if it's invalid. So by the time a page renders, the session cookie is trusted.
 // Reading it with getSession() is a local cookie decode (no network), which avoids
 // a second auth-server round-trip on every navigation. cache() further dedupes the

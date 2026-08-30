@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
     if (!to) continue
     const s = await weeklySummary(supabase, p.id)
     try {
-      await resend.emails.send({ from, to, subject: `Your week — ${s.rangeLabel}`, html: renderEmail(s) })
+      await resend.emails.send({ from, to, subject: `Your week - ${s.rangeLabel}`, html: renderEmail(s) })
       sent++
     } catch { /* skip failed sends */ }
   }
@@ -49,7 +49,7 @@ function renderEmail(s: Awaited<ReturnType<typeof weeklySummary>>): string {
     </td>`
   const extras = [
     ...(s.overBudget.length ? [`<p style="color:#d84315;margin:6px 0">Over budget: ${s.overBudget.join(', ')}</p>`] : []),
-    ...s.goalsDueSoon.map(g => `<p style="color:#555;margin:6px 0">🎯 ${g.title} — ${g.days < 0 ? 'overdue' : g.days === 0 ? 'due today' : `${g.days} days left`}</p>`),
+    ...s.goalsDueSoon.map(g => `<p style="color:#555;margin:6px 0">🎯 ${g.title} - ${g.days < 0 ? 'overdue' : g.days === 0 ? 'due today' : `${g.days} days left`}</p>`),
   ].join('')
 
   return `<!doctype html><html><body style="margin:0;background:#ededea;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
@@ -60,10 +60,10 @@ function renderEmail(s: Awaited<ReturnType<typeof weeklySummary>>): string {
       <table style="width:100%;border-spacing:8px 0;margin:0 -8px"><tr>
         ${stat('Check-ins', `${s.checkinsDone}/7`)}
         ${stat('Trained', `${s.workoutDays}d`)}
-        ${stat('Weight', s.weightChange === null ? '—' : `${s.weightChange > 0 ? '+' : ''}${s.weightChange}${s.unit}`)}
+        ${stat('Weight', s.weightChange === null ? ' - ' : `${s.weightChange > 0 ? '+' : ''}${s.weightChange}${s.unit}`)}
         ${stat('Spent', money)}
       </tr></table>
-      <div style="margin-top:20px">${extras || '<p style="color:#555;margin:6px 0">On track — nothing flagged this week.</p>'}</div>
+      <div style="margin-top:20px">${extras || '<p style="color:#555;margin:6px 0">On track - nothing flagged this week.</p>'}</div>
       <a href="https://khalilkhouri.org" style="display:inline-block;margin-top:20px;background:#70892e;color:#fff;text-decoration:none;padding:12px 20px;border-radius:999px;font-weight:600">Open Khalil</a>
       <p style="color:#b0b0ac;font-size:12px;margin-top:24px">Keep the streak going. Small steps, every day.</p>
     </div>

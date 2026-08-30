@@ -3,7 +3,7 @@
 import { useRef, useEffect } from 'react'
 
 // Draw on the page like a marker on paper. The canvas is pointer-events:none so
-// it never blocks the nav/CTAs — drawing is driven by window pointer events.
+// it never blocks the nav/CTAs - drawing is driven by window pointer events.
 export default function MarkerCanvas() {
   const ref = useRef<HTMLCanvasElement>(null)
 

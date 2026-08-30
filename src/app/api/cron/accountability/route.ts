@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
   const sydDayStart = new Date(new Date(`${today}T00:00:00`).getTime() - offsetMs).toISOString()
 
   // Hour in the owner's timezone (Sydney). Derive it from the *real* clock
-  // (new Date()), NOT sydneyNow() — that one already bakes in the Sydney offset,
+  // (new Date()), NOT sydneyNow() - that one already bakes in the Sydney offset,
   // and formatting it with a Sydney timeZone would double-count +10h.
   const sydHour = Number(new Intl.DateTimeFormat('en-AU', {
     hour: 'numeric', hour12: false, timeZone: 'Australia/Sydney',
@@ -69,7 +69,7 @@ export async function GET(req: NextRequest) {
 
     // Weekday-morning movement reminder: gym + 10k steps
     if (isWeekday && sydHour >= 6 && sydHour <= 8)
-      nudges.push({ type: 'nudge_move_am', title: '🏋️ Gym + 10k steps', body: 'Weekday morning — hit the gym and get your 10,000 steps in today.' })
+      nudges.push({ type: 'nudge_move_am', title: '🏋️ Gym + 10k steps', body: 'Weekday morning - hit the gym and get your 10,000 steps in today.' })
 
     // Check-ins
     if (sydHour >= 7 && !slots.has('morning'))
@@ -79,11 +79,11 @@ export async function GET(req: NextRequest) {
 
     // Workout
     if (workout && (workoutToday ?? []).length === 0 && sydHour >= 12)
-      nudges.push({ type: 'nudge_workout', title: `Today’s workout: ${workout.title}`, body: `${totalExercises(workout)} exercises waiting — get it done.` })
+      nudges.push({ type: 'nudge_workout', title: `Today’s workout: ${workout.title}`, body: `${totalExercises(workout)} exercises waiting - get it done.` })
 
-    // Weight — Monday morning only (weekly weigh-in)
+    // Weight - Monday morning only (weekly weigh-in)
     if (now.getDay() === 1 && sydHour >= 7 && sydHour <= 10 && (weightToday ?? []).length === 0)
-      nudges.push({ type: 'nudge_weight', title: 'Weekly weigh-in', body: 'It’s Monday — log your weight to track your weekly trend.' })
+      nudges.push({ type: 'nudge_weight', title: 'Weekly weigh-in', body: 'It’s Monday - log your weight to track your weekly trend.' })
 
     // Budgets over limit
     const spentByCat: Record<string, number> = {}

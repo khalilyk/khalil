@@ -4,8 +4,7 @@ import { createServiceClient } from '@/lib/supabase/server'
 export const runtime = 'nodejs'
 
 // Daily push-health check. If someone wants reminders (water/snack toggles on)
-// but has NO live push subscription, their device has silently dropped push —
-// flag it in-app so they see it next time they open the app. Deduped ~daily.
+// but has NO live push subscription, their device has silently dropped push - // flag it in-app so they see it next time they open the app. Deduped ~daily.
 export async function GET(req: NextRequest) {
   const expected = process.env.CRON_SECRET
   const auth = req.headers.get('authorization')
@@ -36,7 +35,7 @@ export async function GET(req: NextRequest) {
     await supabase.from('notifications').insert({
       user_id: prof.id, type: 'push_health',
       title: '🔔 Reminders dropped',
-      body: 'Your device stopped receiving notifications. Opening Khalil usually re-enables them automatically — or flip them back on in Settings.',
+      body: 'Your device stopped receiving notifications. Opening Khalil usually re-enables them automatically - or flip them back on in Settings.',
     })
     flagged++
   }

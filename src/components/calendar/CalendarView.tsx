@@ -76,7 +76,7 @@ export default function CalendarView({ userId, events }: { userId: string; event
 
   return (
     <div className="grid lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] gap-5 items-start">
-      {/* LEFT — dates */}
+      {/* LEFT - dates */}
       <div className="kk-rise rounded-3xl bg-card border border-border p-4 sm:p-5">
         <div className="flex items-center justify-between mb-3">
           <button onClick={() => setMonth(m => subMonths(m, 1))} className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-muted transition-colors"><ChevronLeft size={18} /></button>
@@ -104,7 +104,7 @@ export default function CalendarView({ userId, events }: { userId: string; event
           className="mt-3 w-full rounded-full border border-border py-2 text-sm font-medium hover:bg-muted transition-colors">Today</button>
       </div>
 
-      {/* RIGHT — activities */}
+      {/* RIGHT - activities */}
       <div className="kk-rise space-y-3">
         <div className="flex items-center justify-between">
           <div>

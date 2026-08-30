@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
   }
 
   if (!process.env.RESEND_API_KEY) {
-    // Not wired up yet — tell the client to fall back to a mailto handoff.
+    // Not wired up yet - tell the client to fall back to a mailto handoff.
     return NextResponse.json({ error: 'not_configured' }, { status: 503 })
   }
 

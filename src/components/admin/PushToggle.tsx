@@ -89,7 +89,7 @@ export default function PushToggle() {
   async function test() {
     setMsg('Sending…')
     const r = await fetch('/api/push/test', { method: 'POST' })
-    setMsg(r.ok ? 'Sent — check your device.' : 'Failed to send.')
+    setMsg(r.ok ? 'Sent - check your device.' : 'Failed to send.')
   }
 
   if (status === 'ios-install')

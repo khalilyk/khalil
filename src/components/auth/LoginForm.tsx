@@ -50,20 +50,20 @@ export default function LoginForm() {
 
   return (
     <div className="h-[100dvh] lg:h-auto lg:min-h-screen flex flex-col lg:flex-row overflow-hidden lg:overflow-visible">
-      {/* Brand panel — fills the space above the form on mobile, left half on desktop */}
+      {/* Brand panel - fills the space above the form on mobile, left half on desktop */}
       <div className="relative overflow-hidden bg-primary flex-1 lg:flex-none lg:w-1/2 lg:min-h-screen flex flex-col px-6 pb-8 lg:p-12"
         style={{ paddingTop: 'max(2rem, calc(env(safe-area-inset-top) + 1rem))' }}>
         {/* Grid texture */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.04)_1px,transparent_1px)] bg-[size:48px_48px]" />
 
-        {/* KHALIL wordmark — trimmed PNG, recoloured white, edge to edge */}
+        {/* KHALIL wordmark - trimmed PNG, recoloured white, edge to edge */}
         <div className="relative z-10 -mx-6 px-2 lg:mx-0 lg:px-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/khalil-wordmark.png" alt="Khalil" className="block w-full h-auto max-h-[22vh] object-contain object-center"
             style={{ filter: 'brightness(0) invert(1)' }} />
         </div>
 
-        {/* Content — centred in the remaining orange space */}
+        {/* Content - centred in the remaining orange space */}
         <div className="relative z-10 flex-1 flex flex-col justify-center items-center text-center space-y-3">
           <p className="text-3xl lg:text-4xl font-extrabold tracking-tight text-white leading-[1.05]">
             Building the future you want.

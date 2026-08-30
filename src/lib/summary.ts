@@ -35,7 +35,7 @@ export async function morningBriefing(supabase: DB, userId: string) {
     const done = (workoutToday ?? []).length
     lines.push(done > 0 ? `🏋️ ${w.title}: ${done}/${totalExercises(w)} done` : `🏋️ Today’s workout: ${w.title} (${totalExercises(w)} exercises)`)
   } else {
-    lines.push('🧘 Recovery day — steps, stretch, mobility.')
+    lines.push('🧘 Recovery day - steps, stretch, mobility.')
   }
 
   // Weight
@@ -43,7 +43,7 @@ export async function morningBriefing(supabase: DB, userId: string) {
   if (latest && profile?.weight_goal) {
     const diff = +(latest.weight - profile.weight_goal).toFixed(1)
     if (Math.abs(diff) < 0.1) lines.push(`⚖️ At goal weight (${latest.weight} ${unit}).`)
-    else lines.push(`⚖️ ${latest.weight} ${unit} — ${Math.abs(diff)} ${unit} to ${diff > 0 ? 'lose' : 'gain'}.`)
+    else lines.push(`⚖️ ${latest.weight} ${unit} - ${Math.abs(diff)} ${unit} to ${diff > 0 ? 'lose' : 'gain'}.`)
   } else if (latest) {
     lines.push(`⚖️ Last weigh-in: ${latest.weight} ${unit}.`)
   }
@@ -53,13 +53,13 @@ export async function morningBriefing(supabase: DB, userId: string) {
   const byCat: Record<string, number> = {}
   for (const t of monthTx ?? []) byCat[t.category ?? 'other'] = (byCat[t.category ?? 'other'] ?? 0) + Number(t.amount)
   const over = (budgets ?? []).filter((b: any) => (byCat[b.category] ?? 0) > b.monthly_limit)
-  lines.push(`💸 ${money(spent, ccy)} spent this month${over.length ? ` — over budget on ${over.map((b: any) => b.category).join(', ')}` : ''}.`)
+  lines.push(`💸 ${money(spent, ccy)} spent this month${over.length ? ` - over budget on ${over.map((b: any) => b.category).join(', ')}` : ''}.`)
 
   // Goal
   const g = (goals ?? [])[0]
   if (g) {
     const days = differenceInCalendarDays(parseISO(g.target_date), now)
-    lines.push(`🎯 ${g.title} — ${days < 0 ? 'overdue' : days === 0 ? 'due today' : `${days} days left`}.`)
+    lines.push(`🎯 ${g.title} - ${days < 0 ? 'overdue' : days === 0 ? 'due today' : `${days} days left`}.`)
   }
 
   // Check-in prompts
@@ -132,7 +132,7 @@ export async function weeklySummary(supabase: DB, userId: string): Promise<Weekl
     `✅ Checked in ${checkinsDone}/7 days`,
     `🏋️ Trained ${workoutDays} days`,
     weightChange !== null ? `⚖️ Weight ${weightChange > 0 ? '+' : ''}${weightChange} ${unit}` : '⚖️ No weigh-ins logged',
-    `💸 Spent ${money(spend, ccy)} this week${overBudget.length ? ` — over on ${overBudget.join(', ')}` : ''}`,
+    `💸 Spent ${money(spend, ccy)} this week${overBudget.length ? ` - over on ${overBudget.join(', ')}` : ''}`,
     goalsDueSoon.length ? `🎯 ${goalsDueSoon.length} goal(s) due within 2 weeks` : '🎯 No goals due soon',
   ]
 
@@ -203,7 +203,7 @@ export async function periodSummary(supabase: DB, userId: string, period: Period
     .map(([category, amount]) => ({ category, amount: amount as number }))
     .sort((a, b) => b.amount - a.amount)
     .slice(0, 4)
-  // Budgets are monthly targets — only compare on the month view
+  // Budgets are monthly targets - only compare on the month view
   const overBudget = period === 'month'
     ? (budgets ?? []).filter((b: any) => (byCat[b.category] ?? 0) > b.monthly_limit).map((b: any) => b.category)
     : []

@@ -8,7 +8,7 @@ export default function WeeklyReviewCard({ summary }: { summary: WeeklySummary }
     { label: 'Trained', value: `${summary.workoutDays} days`, good: summary.workoutDays >= 4 },
     {
       label: 'Weight',
-      value: summary.weightChange === null ? '—' : `${summary.weightChange > 0 ? '+' : ''}${summary.weightChange} ${summary.unit}`,
+      value: summary.weightChange === null ? ' - ' : `${summary.weightChange > 0 ? '+' : ''}${summary.weightChange} ${summary.unit}`,
       good: summary.weightChange !== null && summary.weightChange <= 0,
     },
     { label: 'Spent', value: `${summary.currency} ${Math.round(summary.spend).toLocaleString()}`, good: summary.overBudget.length === 0 },
@@ -37,7 +37,7 @@ export default function WeeklyReviewCard({ summary }: { summary: WeeklySummary }
           )}
           {summary.goalsDueSoon.map(g => (
             <p key={g.title} className="text-muted-foreground">
-              🎯 {g.title} — {g.days < 0 ? 'overdue' : g.days === 0 ? 'due today' : `${g.days}d left`}
+              🎯 {g.title} - {g.days < 0 ? 'overdue' : g.days === 0 ? 'due today' : `${g.days}d left`}
             </p>
           ))}
         </div>
