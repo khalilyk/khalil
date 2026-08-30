@@ -102,21 +102,14 @@ export default function WeightSection({ userId, logs, weightGoal, weightRate, un
                 <span className="text-3xl font-bold tracking-tight tabular-nums">{latest ? latest.weight : ' - '}</span>
                 <span className="text-sm text-muted-foreground">{unit}</span>
               </div>
-              <div className="flex flex-col items-start gap-1 text-xs mt-1.5">
-                {weekDiff !== null && (
-                  <span className={cn('inline-flex items-center gap-1 font-medium rounded-full',
-                    weekDiff < 0 ? 'text-primary-foreground bg-primary px-2 py-0.5'
-                      : weekDiff > 0 ? 'text-destructive bg-destructive/10 px-2 py-0.5' : 'text-muted-foreground')}>
-                    {weekDiff < 0 ? <TrendingDown size={12} /> : weekDiff > 0 ? <TrendingUp size={12} /> : <Minus size={12} />}
-                    {weekDiff > 0 ? '+' : ''}{weekDiff} {unit} vs last week
-                  </span>
-                )}
-                {distToGoal && (
-                  <span className="text-muted-foreground">
-                    {parseFloat(distToGoal) > 0 ? '+' : ''}{distToGoal} {unit} from goal
-                  </span>
-                )}
-              </div>
+              {weekDiff !== null && (
+                <span className={cn('inline-flex items-center gap-1 font-medium rounded-full text-xs mt-2',
+                  weekDiff < 0 ? 'text-primary-foreground bg-primary px-2 py-0.5'
+                    : weekDiff > 0 ? 'text-destructive bg-destructive/10 px-2 py-0.5' : 'text-muted-foreground')}>
+                  {weekDiff < 0 ? <TrendingDown size={12} /> : weekDiff > 0 ? <TrendingUp size={12} /> : <Minus size={12} />}
+                  {weekDiff > 0 ? '+' : ''}{weekDiff} {unit} vs last week
+                </span>
+              )}
             </div>
 
             {/* Right — plan */}
@@ -149,10 +142,8 @@ export default function WeightSection({ userId, logs, weightGoal, weightRate, un
               <p className="text-sm font-medium text-primary">🎯 You’ve reached your goal weight.</p>
             ) : (
               <div className="space-y-1.5">
-                <p className="text-sm">
-                  {projection.losing ? 'Lose' : 'Gain'} to <span className="font-semibold">{weightGoal} {unit}</span> by{' '}
-                  <span className="font-semibold">{format(projection.finish, 'd MMM yyyy')}</span>
-                  <span className="text-muted-foreground"> · at {rate} {unit}/wk (~{Math.ceil(projection.weeks)} wks)</span>
+                <p className="text-sm font-semibold">
+                  → {weightGoal} {unit} <span className="font-normal text-muted-foreground">by {format(projection.finish, 'MMM yyyy')}</span>
                 </p>
                 {pace && (
                   <span className={cn('inline-block text-xs font-semibold rounded-full px-2.5 py-0.5',
