@@ -8,10 +8,16 @@ import { startOfWeek, addDays, format } from 'date-fns'
 import { cn } from '@/lib/utils'
 import { PROGRAM, totalExercises, type WorkoutDay } from '@/lib/workout'
 
-type Log = { logged_on: string; exercise: string; weight?: number | null }
+type Log = { logged_on: string; exercise: string; weight?: number | null; set_weights?: (number | null)[] | null }
 
 // Selectable weights: 2.5 - 300 kg in 2.5 kg steps
 const WEIGHTS = Array.from({ length: 120 }, (_, i) => 2.5 + i * 2.5)
+
+// Number of sets from a detail string like "4 × 8-10" (falls back to 1)
+const setsFor = (detail: string) => {
+  const m = detail.match(/^(\d+)\s*×/)
+  return m ? Math.min(8, Math.max(1, Number(m[1]))) : 1
+}
 
 export default function WorkoutSection({ userId, weekLogs }: { userId: string; weekLogs: Log[] }) {
   const router = useRouter()
@@ -20,9 +26,13 @@ export default function WorkoutSection({ userId, weekLogs }: { userId: string; w
   const [doneSet, setDoneSet] = useState<Set<string>>(
     () => new Set(weekLogs.map(l => `${l.logged_on}|${l.exercise}`))
   )
-  // Weight lifted per exercise, keyed by `${date}|${exercise}`
-  const [weights, setWeights] = useState<Map<string, string>>(
-    () => new Map(weekLogs.filter(l => l.weight != null).map(l => [`${l.logged_on}|${l.exercise}`, String(l.weight)]))
+  // Weight lifted per set, keyed by `${date}|${exercise}` -> array of set weights (strings; '' = unset)
+  const [weights, setWeights] = useState<Map<string, string[]>>(
+    () => new Map(
+      weekLogs
+        .filter(l => Array.isArray(l.set_weights) && l.set_weights.length)
+        .map(l => [`${l.logged_on}|${l.exercise}`, (l.set_weights as (number | null)[]).map(w => w == null ? '' : String(w))])
+    )
   )
 
   const weekStart = startOfWeek(new Date(), { weekStartsOn: 1 })
@@ -72,9 +82,7 @@ export default function WorkoutSection({ userId, weekLogs }: { userId: string; w
         { user_id: userId, logged_on: date, exercise: ex },
         { onConflict: 'user_id,logged_on,exercise' }
       )
-      // Best-effort weight (needs migration 013). Silently ignored if the column is absent.
-      const w = weights.get(key)
-      if (w && w.trim() !== '') await supabase.from('workout_logs').update({ weight: Number(w) }).eq('logged_on', date).eq('exercise', ex)
+      await persistSets(supabase, ex, weights.get(key))
     } else {
       await supabase.from('workout_logs').delete().eq('logged_on', date).eq('exercise', ex)
     }
@@ -83,24 +91,32 @@ export default function WorkoutSection({ userId, weekLogs }: { userId: string; w
     router.refresh()
   }
 
-  // Save the weight for an exercise (logging it also marks the exercise done)
-  async function saveWeight(ex: string, val?: string) {
+  // Best-effort: write the per-set weights (needs migration 013's set_weights column)
+  async function persistSets(supabase: Awaited<ReturnType<typeof client>>, ex: string, arr?: string[]) {
+    if (!arr || !arr.some(v => v !== '')) return
+    await supabase.from('workout_logs')
+      .update({ set_weights: arr.map(v => v === '' ? null : Number(v)) })
+      .eq('logged_on', date).eq('exercise', ex)
+  }
+
+  // Set the weight for one set of an exercise (logging it also marks the exercise done)
+  async function setSetWeight(ex: string, sets: number, i: number, val: string) {
     const key = `${date}|${ex}`
-    const raw = (val ?? weights.get(key) ?? '').trim()
-    const w = raw === '' ? null : Number(raw)
-    if (raw !== '' && Number.isNaN(w as number)) return
+    const arr = [...(weights.get(key) ?? Array(sets).fill(''))]
+    while (arr.length < sets) arr.push('')
+    arr[i] = val
+    setWeights(m => new Map(m).set(key, arr))
+
     const next = new Set(doneSet)
-    if (raw !== '') next.add(key)
+    if (arr.some(v => v !== '')) next.add(key)
     setDoneSet(next)
 
     const supabase = await client()
-    // Ensure the row exists / is marked done (works without migration 013)…
     await supabase.from('workout_logs').upsert(
       { user_id: userId, logged_on: date, exercise: ex },
       { onConflict: 'user_id,logged_on,exercise' }
     )
-    // …then set the weight (best-effort; needs migration 013)
-    await supabase.from('workout_logs').update({ weight: w }).eq('logged_on', date).eq('exercise', ex)
+    await persistSets(supabase, ex, arr)
     await syncCalendar(day, date, [...next].filter(k => k.startsWith(`${date}|`)).length)
     router.refresh()
   }
@@ -150,27 +166,37 @@ export default function WorkoutSection({ userId, weekLogs }: { userId: string; w
               {block.exercises.map(ex => {
                 const checked = isDone(ex.name)
                 const key = `${date}|${ex.name}`
+                const sets = setsFor(ex.detail)
+                const arr = weights.get(key) ?? []
                 return (
-                  <div key={ex.name} className="w-full flex items-center gap-3 py-2 group">
-                    <button onClick={() => toggle(ex.name)} aria-label={checked ? 'Mark undone' : 'Mark done'}
-                      className={cn('w-6 h-6 shrink-0 rounded-md border-2 flex items-center justify-center transition-colors',
-                        checked ? 'bg-primary border-primary text-primary-foreground' : 'border-border group-hover:border-primary')}>
-                      {checked && <Check size={14} strokeWidth={3} />}
-                    </button>
-                    <button onClick={() => toggle(ex.name)} className="flex-1 min-w-0 text-left">
-                      <span className={cn('block text-sm font-medium', checked && 'text-muted-foreground')}>{ex.name}</span>
-                      <span className="block text-[11px] text-muted-foreground">{ex.detail}</span>
-                    </button>
-                    {/* Weight lifted */}
-                    <div className="shrink-0 flex items-center gap-1">
-                      <select
-                        value={weights.get(key) ?? ''}
-                        onChange={e => { const v = e.target.value; setWeights(m => new Map(m).set(key, v)); saveWeight(ex.name, v) }}
-                        className="w-[88px] h-9 rounded-lg border border-border bg-card px-2.5 text-sm tabular-nums outline-none focus:border-primary">
-                        <option value="">-</option>
-                        {WEIGHTS.map(w => <option key={w} value={w}>{w}</option>)}
-                      </select>
-                      <span className="text-xs text-muted-foreground">kg</span>
+                  <div key={ex.name} className="w-full py-2 group">
+                    <div className="flex items-center gap-3">
+                      <button onClick={() => toggle(ex.name)} aria-label={checked ? 'Mark undone' : 'Mark done'}
+                        className={cn('w-6 h-6 shrink-0 rounded-md border-2 flex items-center justify-center transition-colors',
+                          checked ? 'bg-primary border-primary text-primary-foreground' : 'border-border group-hover:border-primary')}>
+                        {checked && <Check size={14} strokeWidth={3} />}
+                      </button>
+                      <button onClick={() => toggle(ex.name)} className="flex-1 min-w-0 text-left">
+                        <span className={cn('block text-sm font-medium', checked && 'text-muted-foreground')}>{ex.name}</span>
+                        <span className="block text-[11px] text-muted-foreground">{ex.detail}</span>
+                      </button>
+                    </div>
+                    {/* Weight per set */}
+                    <div className="mt-2 pl-9 flex gap-2 overflow-x-auto -mr-1 pr-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                      {Array.from({ length: sets }).map((_, i) => (
+                        <label key={i} className="shrink-0 flex flex-col items-center gap-0.5">
+                          <span className="text-[9px] uppercase tracking-wide text-muted-foreground">Set {i + 1}</span>
+                          <div className="flex items-center gap-0.5">
+                            <select value={arr[i] ?? ''}
+                              onChange={e => setSetWeight(ex.name, sets, i, e.target.value)}
+                              className="w-[64px] h-8 rounded-lg border border-border bg-card pl-2 text-sm tabular-nums outline-none focus:border-primary">
+                              <option value="">-</option>
+                              {WEIGHTS.map(w => <option key={w} value={w}>{w}</option>)}
+                            </select>
+                            <span className="text-[10px] text-muted-foreground">kg</span>
+                          </div>
+                        </label>
+                      ))}
                     </div>
                   </div>
                 )
