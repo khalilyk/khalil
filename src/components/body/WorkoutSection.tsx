@@ -169,33 +169,25 @@ export default function WorkoutSection({ userId, weekLogs }: { userId: string; w
                 const sets = setsFor(ex.detail)
                 const arr = weights.get(key) ?? []
                 return (
-                  <div key={ex.name} className="w-full py-2 group">
-                    <div className="flex items-center gap-3">
-                      <button onClick={() => toggle(ex.name)} aria-label={checked ? 'Mark undone' : 'Mark done'}
-                        className={cn('w-6 h-6 shrink-0 rounded-md border-2 flex items-center justify-center transition-colors',
-                          checked ? 'bg-primary border-primary text-primary-foreground' : 'border-border group-hover:border-primary')}>
-                        {checked && <Check size={14} strokeWidth={3} />}
-                      </button>
-                      <button onClick={() => toggle(ex.name)} className="flex-1 min-w-0 text-left">
-                        <span className={cn('block text-sm font-medium', checked && 'text-muted-foreground')}>{ex.name}</span>
-                        <span className="block text-[11px] text-muted-foreground">{ex.detail}</span>
-                      </button>
-                    </div>
-                    {/* Weight per set */}
-                    <div className="mt-2 pl-9 flex gap-2 overflow-x-auto -mr-1 pr-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                  <div key={ex.name} className="w-full py-2 flex items-center gap-3 group">
+                    <button onClick={() => toggle(ex.name)} aria-label={checked ? 'Mark undone' : 'Mark done'}
+                      className={cn('w-6 h-6 shrink-0 rounded-md border-2 flex items-center justify-center transition-colors',
+                        checked ? 'bg-primary border-primary text-primary-foreground' : 'border-border group-hover:border-primary')}>
+                      {checked && <Check size={14} strokeWidth={3} />}
+                    </button>
+                    <button onClick={() => toggle(ex.name)} className="w-28 sm:w-40 shrink-0 text-left">
+                      <span className={cn('block text-sm font-medium truncate', checked && 'text-muted-foreground')}>{ex.name}</span>
+                      <span className="block text-[11px] text-muted-foreground">{ex.detail}</span>
+                    </button>
+                    {/* Weight per set - scrolls horizontally, one row */}
+                    <div className="flex-1 min-w-0 flex gap-1.5 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                       {Array.from({ length: sets }).map((_, i) => (
-                        <label key={i} className="shrink-0 flex flex-col items-center gap-0.5">
-                          <span className="text-[9px] uppercase tracking-wide text-muted-foreground">Set {i + 1}</span>
-                          <div className="flex items-center gap-0.5">
-                            <select value={arr[i] ?? ''}
-                              onChange={e => setSetWeight(ex.name, sets, i, e.target.value)}
-                              className="w-[64px] h-8 rounded-lg border border-border bg-card pl-2 text-sm tabular-nums outline-none focus:border-primary">
-                              <option value="">-</option>
-                              {WEIGHTS.map(w => <option key={w} value={w}>{w}</option>)}
-                            </select>
-                            <span className="text-[10px] text-muted-foreground">kg</span>
-                          </div>
-                        </label>
+                        <select key={i} value={arr[i] ?? ''} title={`Set ${i + 1}`}
+                          onChange={e => setSetWeight(ex.name, sets, i, e.target.value)}
+                          className="shrink-0 w-[76px] h-8 rounded-lg border border-border bg-card pl-2 text-sm tabular-nums outline-none focus:border-primary">
+                          <option value="">S{i + 1}</option>
+                          {WEIGHTS.map(w => <option key={w} value={w}>{w}</option>)}
+                        </select>
                       ))}
                     </div>
                   </div>
