@@ -68,10 +68,11 @@ const TTL_MS = 5 * 60_000
 
 export async function getBusinessStats(): Promise<Partial<Record<BusinessKey, LiveStat>>> {
   if (cache && Date.now() - cache.at < TTL_MS) return cache.data
-  const [pp, nn] = await Promise.all([printParadise(), notNormal()])
+  // The invoicing DB (formerly Not Normal) is now BRIC.
+  const [pp, bric] = await Promise.all([printParadise(), notNormal()])
   const out: Partial<Record<BusinessKey, LiveStat>> = {}
   if (pp) out.print_paradise = pp
-  if (nn) out.not_normal = nn
+  if (bric) out.bric = bric
   if (Object.keys(out).length) cache = { at: Date.now(), data: out }
   return out
 }

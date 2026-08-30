@@ -11,7 +11,7 @@ export default async function GoalsPage() {
         <p className="text-sm text-muted-foreground">What you&apos;re working toward</p>
         <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-[0.95]">Goals<span className="text-primary">.</span></h1>
       </div>
-      <GoalsBlock userId={user.id} categories={['Personal', 'Travel', 'Learning']} title="Life goals" />
+      <GoalsBlock userId={user.id} categories={['Money', 'Body', 'Career', 'Personal', 'Travel', 'Learning']} title="All goals" />
     </div>
   )
 }

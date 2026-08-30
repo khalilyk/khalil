@@ -1,7 +1,6 @@
 export type BusinessKey = 'not_normal' | 'bric' | 'print_paradise'
 
 export const BUSINESSES: { key: BusinessKey; name: string; tagline: string }[] = [
-  { key: 'not_normal', name: 'Not Normal', tagline: '' },
   { key: 'bric', name: 'BRIC', tagline: '' },
   { key: 'print_paradise', name: 'Print Paradise', tagline: '' },
 ]
