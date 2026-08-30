@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { Loader2, Plus, Check, Target, Trash2, Calendar as CalIcon, ChevronDown, ListChecks } from 'lucide-react'
+import { Loader2, Plus, Check, Target, Trash2, Pencil, Calendar as CalIcon, ChevronDown, ListChecks } from 'lucide-react'
 import { differenceInCalendarDays, format, parseISO } from 'date-fns'
 import { cn } from '@/lib/utils'
 import Countdown from './Countdown'
@@ -45,6 +45,7 @@ export default function GoalsSection({ userId, goals, milestones, categories, cu
   const [unit, setUnit] = useState('')
   const [date, setDate] = useState('')
   const [detail, setDetail] = useState('')
+  const [editingId, setEditingId] = useState<string | null>(null)
   const [busyId, setBusyId] = useState<string | null>(null)
   const [expanded, setExpanded] = useState<string | null>(null)
   const [msInput, setMsInput] = useState('')
@@ -77,8 +78,22 @@ export default function GoalsSection({ userId, goals, milestones, categories, cu
   const countFor = (t: string) =>
     goals.filter(g => g.status === 'active' && inScope(g) && (t === 'All' || g.category === t.toLowerCase())).length
 
+  function resetForm() {
+    setTitle(''); setValue(''); setUnit(''); setDate(''); setDetail(''); setEditingId(null)
+  }
   function openAdd() {
+    resetForm()
     setCategory(tab !== 'All' ? tab : cats[0])
+    setAdding(true)
+  }
+  function openEdit(g: Goal) {
+    setEditingId(g.id)
+    setTitle(g.title)
+    setCategory(g.category.charAt(0).toUpperCase() + g.category.slice(1))
+    setValue(g.target_value != null ? String(g.target_value) : '')
+    setUnit(g.target_unit ?? '')
+    setDate(g.target_date ?? '')
+    setDetail(g.detail ?? '')
     setAdding(true)
   }
 
@@ -100,17 +115,20 @@ export default function GoalsSection({ userId, goals, milestones, categories, cu
     if (!title.trim()) return
     setSaving(true)
     const supabase = await client()
-    await supabase.from('goals').insert({
-      user_id: userId,
+    const payload = {
       title: title.trim(),
       category: category.toLowerCase(),
       target_value: value ? Number(value) : null,
       target_unit: unit.trim() || null,
       target_date: date || null,
       detail: detail.trim() || null,
-      status: 'active',
-    })
-    setTitle(''); setValue(''); setUnit(''); setDate(''); setDetail(''); setCategory('Personal')
+    }
+    if (editingId) {
+      await supabase.from('goals').update(payload).eq('id', editingId)
+    } else {
+      await supabase.from('goals').insert({ user_id: userId, ...payload, status: 'active' })
+    }
+    resetForm(); setCategory('Personal')
     setSaving(false); setAdding(false)
     router.refresh()
   }
@@ -253,9 +271,9 @@ export default function GoalsSection({ userId, goals, milestones, categories, cu
 
             <div className="flex gap-2">
               <Button onClick={addGoal} disabled={saving || !title.trim()} className="flex-1 rounded-full gap-2">
-                {saving ? <Loader2 size={16} className="animate-spin" /> : 'Add goal'}
+                {saving ? <Loader2 size={16} className="animate-spin" /> : editingId ? 'Save changes' : 'Add goal'}
               </Button>
-              <Button variant="ghost" onClick={() => setAdding(false)} className="rounded-full">Cancel</Button>
+              <Button variant="ghost" onClick={() => { setAdding(false); resetForm() }} className="rounded-full">Cancel</Button>
             </div>
           </CardContent>
         </Card>
@@ -356,10 +374,16 @@ export default function GoalsSection({ userId, goals, milestones, categories, cu
                     )
                   })()}
                 </div>
-                <button onClick={() => remove(g)} disabled={busyId === g.id}
-                  className="text-muted-foreground hover:text-destructive transition-colors p-1">
-                  <Trash2 size={15} />
-                </button>
+                <div className="flex flex-col gap-1 shrink-0">
+                  <button onClick={() => openEdit(g)} aria-label="Edit goal"
+                    className="text-muted-foreground hover:text-foreground transition-colors p-1">
+                    <Pencil size={15} />
+                  </button>
+                  <button onClick={() => remove(g)} disabled={busyId === g.id} aria-label="Delete goal"
+                    className="text-muted-foreground hover:text-destructive transition-colors p-1">
+                    <Trash2 size={15} />
+                  </button>
+                </div>
               </CardContent>
             </Card>
           )
