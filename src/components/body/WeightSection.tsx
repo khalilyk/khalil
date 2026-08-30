@@ -88,15 +88,19 @@ export default function WeightSection({ userId, logs, weightGoal, weightRate, un
     <section className="space-y-4">
       {/* Weight + plan, merged into one compact card */}
       <Card>
-        <CardContent className="py-4 space-y-3">
-          <div className="flex items-start justify-between gap-3">
+        <CardContent className="py-4">
+          <div className="grid grid-cols-2 gap-4">
+            {/* Left — weight */}
             <div className="min-w-0">
-              <h2 className="text-[11px] uppercase tracking-wider text-muted-foreground">Weight</h2>
+              <div className="flex items-start justify-between gap-2">
+                <h2 className="text-[11px] uppercase tracking-wider text-muted-foreground">Weight</h2>
+                {latest && <p className="text-[11px] text-muted-foreground shrink-0">Logged {format(parseISO(latest.logged_on), 'd MMM')}</p>}
+              </div>
               <div className="flex items-baseline gap-1.5 mt-0.5">
                 <span className="text-3xl font-bold tracking-tight tabular-nums">{latest ? latest.weight : ' - '}</span>
                 <span className="text-sm text-muted-foreground">{unit}</span>
               </div>
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs mt-1.5">
+              <div className="flex flex-col items-start gap-1 text-xs mt-1.5">
                 {weekDiff !== null && (
                   <span className={cn('inline-flex items-center gap-1 font-medium rounded-full',
                     weekDiff < 0 ? 'text-primary-foreground bg-primary px-2 py-0.5'
@@ -112,17 +116,17 @@ export default function WeightSection({ userId, logs, weightGoal, weightRate, un
                 )}
               </div>
             </div>
-            {latest && <p className="text-xs text-muted-foreground shrink-0">Logged {format(parseISO(latest.logged_on), 'd MMM')}</p>}
-          </div>
 
-          {/* Plan */}
-          <div className="pt-3 border-t border-border flex items-center justify-between">
-            <span className="text-sm font-medium flex items-center gap-2"><Target size={15} /> Plan</span>
-            <button onClick={() => setEditPlan(v => !v)} className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1">
-              <Pencil size={12} /> {editPlan ? 'Cancel' : 'Edit'}
-            </button>
-          </div>
+            {/* Right — plan */}
+            <div className="min-w-0 pl-4 border-l border-border">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium flex items-center gap-2"><Target size={15} /> Plan</span>
+                <button onClick={() => setEditPlan(v => !v)} className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1">
+                  <Pencil size={12} /> {editPlan ? 'Cancel' : 'Edit'}
+                </button>
+              </div>
 
+              <div className="mt-2">
           {editPlan ? (
             <div className="space-y-2">
               <div className="grid grid-cols-2 gap-2">
@@ -161,6 +165,9 @@ export default function WeightSection({ userId, logs, weightGoal, weightRate, un
           ) : (
             <p className="text-sm text-muted-foreground">Set a goal weight and weekly rate to get a projected finish date and pace coaching.</p>
           )}
+              </div>
+            </div>
+          </div>
         </CardContent>
       </Card>
 
@@ -173,8 +180,8 @@ export default function WeightSection({ userId, logs, weightGoal, weightRate, un
                 <YAxis domain={['auto', 'auto']} tick={{ fontSize: 10 }} tickLine={false} axisLine={false} width={36} />
                 <Tooltip formatter={(v) => [`${v} ${unit}`, '']} labelFormatter={d => format(parseISO(d as string), 'd MMM yyyy')} />
                 <Line type="monotone" dataKey="weight" stroke="oklch(0.55 0.01 60)" strokeWidth={1.5} dot={false} />
-                <Line type="monotone" dataKey="avg" stroke="oklch(0.67 0.2 44)" strokeWidth={2.5} dot={false} />
-                {weightGoal && <ReferenceLine y={weightGoal} stroke="oklch(0.67 0.2 44)" strokeDasharray="4 4" />}
+                <Line type="monotone" dataKey="avg" stroke="oklch(0.592 0.121 123.2)" strokeWidth={2.5} dot={false} />
+                {weightGoal && <ReferenceLine y={weightGoal} stroke="oklch(0.592 0.121 123.2)" strokeDasharray="4 4" />}
               </LineChart>
             </ResponsiveContainer>
           </CardContent>
