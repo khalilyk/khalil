@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { format } from 'date-fns'
-import { Settings, Camera } from 'lucide-react'
+import { Settings } from 'lucide-react'
 
 const WORDMARK = {
   WebkitMaskImage: 'url(/khalil-wordmark.png)',
@@ -34,13 +34,6 @@ export default function Header({ userId, name }: { userId: string; name: string 
         <div className="flex items-center gap-1">
           <Link href="/admin" className="lg:hidden w-9 h-9 flex items-center justify-center rounded-full text-white/80 hover:text-white hover:bg-white/15 transition-colors">
             <Settings size={18} />
-          </Link>
-          <Link
-            href="/money?capture=1"
-            title="Snap a receipt"
-            className="w-9 h-9 flex items-center justify-center rounded-full text-white/80 hover:text-white hover:bg-white/15 transition-colors"
-          >
-            <Camera size={18} />
           </Link>
         </div>
       </div>

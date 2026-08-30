@@ -2,16 +2,16 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, DollarSign, Activity, Calendar, Briefcase } from 'lucide-react'
+import { Home, Activity, Calendar, Briefcase, LineChart } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const left = [
-  { href: '/money', label: 'Money', icon: DollarSign },
   { href: '/body', label: 'Body', icon: Activity },
+  { href: '/work', label: 'Work', icon: Briefcase },
 ]
 const right = [
-  { href: '/work', label: 'Work', icon: Briefcase },
   { href: '/calendar', label: 'Calendar', icon: Calendar },
+  { href: '/review', label: 'Review', icon: LineChart },
 ]
 
 export default function BottomNav() {

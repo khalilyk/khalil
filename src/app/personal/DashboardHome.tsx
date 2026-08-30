@@ -1,10 +1,9 @@
 import { createClient, getCachedUser } from '@/lib/supabase/server'
-import { format, startOfMonth, endOfMonth, subMonths, startOfWeek, addDays, subDays } from 'date-fns'
+import { format, startOfMonth, startOfWeek, addDays, subDays } from 'date-fns'
 import CheckInForm from '@/components/home/CheckInForm'
 import WeightTrendCard from '@/components/home/WeightTrendCard'
 import GoalFocusCard from '@/components/home/GoalFocusCard'
 import TodayHero, { type HeroRow } from '@/components/home/TodayHero'
-import MoneyCard from '@/components/home/MoneyCard'
 import StepsCard from '@/components/home/StepsCard'
 import CoachCard from '@/components/home/CoachCard'
 import WeeklyReviewCard from '@/components/home/WeeklyReviewCard'
@@ -24,8 +23,6 @@ export default async function DashboardHome() {
   const now = sydneyNow()
   const today = format(now, 'yyyy-MM-dd')
   const monthStart = format(startOfMonth(now), 'yyyy-MM-dd')
-  const lastMonthStart = format(startOfMonth(subMonths(now, 1)), 'yyyy-MM-dd')
-  const lastMonthEnd = format(endOfMonth(subMonths(now, 1)), 'yyyy-MM-dd')
   const weekStartDate = startOfWeek(now, { weekStartsOn: 1 })
   const weekStart = format(weekStartDate, 'yyyy-MM-dd')
   const since = format(subDays(now, 60), 'yyyy-MM-dd')
@@ -35,7 +32,7 @@ export default async function DashboardHome() {
 
   const [
     { data: checkIns }, { data: profile }, { data: goalsData },
-    { data: weightLogs }, { data: monthTx }, { data: lastMonthTx },
+    { data: weightLogs },
     { data: workoutLogs }, { data: recentCheckins }, { data: cravings },
     { data: stepsRow },
   ] = await Promise.all([
@@ -45,8 +42,6 @@ export default async function DashboardHome() {
       .select('id, title, detail, category, target_value, target_unit, target_date, status, created_at')
       .eq('status', 'active').order('target_date', { ascending: true, nullsFirst: false }).limit(5),
     supabase.from('weight_logs').select('weight,logged_on').gte('logged_on', since).order('logged_on'),
-    supabase.from('transactions').select('amount').eq('direction', 'expense').gte('occurred_on', monthStart).lte('occurred_on', today),
-    supabase.from('transactions').select('amount').eq('direction', 'expense').gte('occurred_on', lastMonthStart).lte('occurred_on', lastMonthEnd),
     supabase.from('workout_logs').select('logged_on,exercise').gte('logged_on', weekStart),
     supabase.from('check_ins').select('check_in_date').gte('check_in_date', format(subDays(now, 40), 'yyyy-MM-dd')),
     supabase.from('cravings').select('feeling,rode_out').gte('created_at', `${monthStart}T00:00:00`),
@@ -57,8 +52,7 @@ export default async function DashboardHome() {
 
   const goals = (goalsData ?? []) as Goal[]
   const weights = (weightLogs ?? []) as { weight: number; logged_on: string }[]
-  const prof = (profile ?? {}) as { currency?: string; weight_unit?: string; weight_goal?: number | null; display_name?: string | null }
-  const currency = prof.currency ?? 'AUD'
+  const prof = (profile ?? {}) as { weight_unit?: string; weight_goal?: number | null; display_name?: string | null }
   const unit = prof.weight_unit ?? 'kg'
 
   type CI = { id: string; slot: 'morning' | 'evening'; mood: number | null; energy: number | null; note: string | null; reflection_text: string | null }
@@ -66,10 +60,6 @@ export default async function DashboardHome() {
   const bySlot: Partial<Record<'morning' | 'evening', CI>> = {}
   for (const r of rows) bySlot[r.slot] = r
   const reflection = rows.filter(r => r.reflection_text).slice(-1)[0]?.reflection_text ?? null
-
-  const monthSpend = (monthTx ?? []).reduce((s, t) => s + t.amount, 0)
-  const lastSpend = (lastMonthTx ?? []).reduce((s, t) => s + t.amount, 0)
-  const spendTrend = lastSpend > 0 ? Math.round(((monthSpend - lastSpend) / lastSpend) * 100) : null
 
   const wLogs = (workoutLogs ?? []) as { logged_on: string; exercise: string }[]
   const todayWorkout = dayByWeekday(now.getDay())
@@ -129,10 +119,9 @@ export default async function DashboardHome() {
       </section>
 
       {/* ── SNAPSHOT — three glanceable numbers ── */}
-      <section className="grid grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-min">
+      <section className="grid grid-cols-2 gap-4 auto-rows-min">
         <WeightTrendCard logs={weights} unit={unit} goal={prof.weight_goal ?? null} />
         <StepsCard steps={todaySteps} />
-        <MoneyCard currency={currency} monthSpend={monthSpend} trend={spendTrend} className="col-span-2 lg:col-span-1" />
       </section>
 
       {/* ── MORE — coach note + urges, quieter ── */}
