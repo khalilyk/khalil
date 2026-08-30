@@ -91,9 +91,9 @@ export default function WeightSection({ userId, logs, weightGoal, weightRate, un
       {/* Weight + plan, merged into one compact card */}
       <Card>
         <CardContent className="py-0">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4 items-stretch">
             {/* Left - weight */}
-            <div className="min-w-0">
+            <div className="min-w-0 flex flex-col">
               <div className="flex items-start justify-between gap-2">
                 <h2 className="text-[11px] uppercase tracking-wider text-muted-foreground">Weight</h2>
                 {latest && <p className="text-[11px] text-muted-foreground shrink-0">Logged {format(parseISO(latest.logged_on), 'd MMM')}</p>}
@@ -103,7 +103,7 @@ export default function WeightSection({ userId, logs, weightGoal, weightRate, un
                 <span className="text-sm text-muted-foreground">{unit}</span>
               </div>
               {weekDiff !== null && (
-                <span className={cn('inline-flex items-center gap-1 font-medium rounded-full text-xs mt-2',
+                <span className={cn('inline-flex items-center gap-1 font-medium rounded-full text-xs mt-auto self-start',
                   weekDiff < 0 ? 'text-primary-foreground bg-primary px-2 py-0.5'
                     : weekDiff > 0 ? 'text-destructive bg-destructive/10 px-2 py-0.5' : 'text-muted-foreground')}>
                   {weekDiff < 0 ? <TrendingDown size={12} /> : weekDiff > 0 ? <TrendingUp size={12} /> : <Minus size={12} />}
@@ -113,7 +113,7 @@ export default function WeightSection({ userId, logs, weightGoal, weightRate, un
             </div>
 
             {/* Right - plan */}
-            <div className="min-w-0 pl-4 border-l border-border">
+            <div className="min-w-0 pl-4 border-l border-border flex flex-col">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium flex items-center gap-2"><Target size={15} /> Plan</span>
                 <button onClick={() => setEditPlan(v => !v)} className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1">
@@ -121,7 +121,7 @@ export default function WeightSection({ userId, logs, weightGoal, weightRate, un
                 </button>
               </div>
 
-              <div className="mt-2">
+              <div className="mt-2 flex-1 flex flex-col">
           {editPlan ? (
             <div className="space-y-2">
               <div className="grid grid-cols-2 gap-2">
@@ -141,12 +141,12 @@ export default function WeightSection({ userId, logs, weightGoal, weightRate, un
             projection.done ? (
               <p className="text-sm font-medium text-primary">🎯 You’ve reached your goal weight.</p>
             ) : (
-              <div className="space-y-1.5">
+              <div className="flex-1 flex flex-col">
                 <p className="text-sm font-semibold">
                   → {weightGoal} {unit} <span className="font-normal text-muted-foreground">by {format(projection.finish, 'MMM yyyy')}</span>
                 </p>
                 {pace && (
-                  <span className={cn('inline-block text-xs font-semibold rounded-full px-2.5 py-0.5',
+                  <span className={cn('self-start mt-auto text-xs font-semibold rounded-full px-2.5 py-0.5',
                     pace.tone === 'ok' ? 'bg-primary/15 text-primary'
                       : pace.tone === 'off' ? 'bg-destructive/10 text-destructive'
                         : 'bg-amber-500/15 text-amber-600')}>
