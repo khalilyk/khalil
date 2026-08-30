@@ -27,9 +27,9 @@ export default async function BodyPage() {
   const profile = profileRaw as Profile | null
 
   return (
-    <div className="w-full px-4 lg:px-8 py-6 space-y-6">
+    <div className="w-full px-4 lg:px-8 py-6 space-y-4">
       <h1 className="text-2xl font-bold tracking-tight">Body</h1>
-      <div className="space-y-6 [&>*]:min-w-0">
+      <div className="space-y-4 [&>*]:min-w-0">
         <WeightSection
           userId={user.id}
           logs={weightLogs ?? []}

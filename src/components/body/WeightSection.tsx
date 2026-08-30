@@ -87,7 +87,7 @@ export default function WeightSection({ userId, logs, weightGoal, weightRate, un
   }
 
   return (
-    <section className="space-y-4">
+    <section className="space-y-3">
       {/* Weight + plan, merged into one compact card */}
       <Card>
         <CardContent className="py-0">
@@ -196,8 +196,8 @@ export default function WeightSection({ userId, logs, weightGoal, weightRate, un
 
       {data.length > 1 && (
         <Card>
-          <CardContent className="pt-4 pb-2 px-2">
-            <ResponsiveContainer width="100%" height={160}>
+          <CardContent className="pt-3 pb-1 px-1">
+            <ResponsiveContainer width="100%" height={150}>
               <LineChart data={data}>
                 <XAxis dataKey="logged_on" tickFormatter={d => format(parseISO(d), 'd MMM')} tick={{ fontSize: 10 }} tickLine={false} axisLine={false} />
                 <YAxis domain={['auto', 'auto']} tick={{ fontSize: 10 }} tickLine={false} axisLine={false} width={36} />
