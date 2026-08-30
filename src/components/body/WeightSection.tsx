@@ -90,7 +90,7 @@ export default function WeightSection({ userId, logs, weightGoal, weightRate, un
     <section className="space-y-4">
       {/* Weight + plan, merged into one compact card */}
       <Card>
-        <CardContent className="py-3">
+        <CardContent className="py-0">
           <div className="grid grid-cols-2 gap-4">
             {/* Left — weight */}
             <div className="min-w-0">
