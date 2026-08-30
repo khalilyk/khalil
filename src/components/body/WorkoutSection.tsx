@@ -10,8 +10,8 @@ import { PROGRAM, totalExercises, type WorkoutDay } from '@/lib/workout'
 
 type Log = { logged_on: string; exercise: string; weight?: number | null }
 
-// Selectable weights: 10 - 70 kg in 2.5 kg steps
-const WEIGHTS = Array.from({ length: 25 }, (_, i) => 10 + i * 2.5)
+// Selectable weights: 2.5 - 300 kg in 2.5 kg steps
+const WEIGHTS = Array.from({ length: 120 }, (_, i) => 2.5 + i * 2.5)
 
 export default function WorkoutSection({ userId, weekLogs }: { userId: string; weekLogs: Log[] }) {
   const router = useRouter()

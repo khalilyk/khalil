@@ -33,7 +33,7 @@ export default function BottomNav() {
   const homeActive = pathname === '/personal'
 
   return (
-    <nav className="lg:hidden fixed bottom-0 left-0 right-0 border-t border-border bg-background/95 backdrop-blur z-50 pb-[env(safe-area-inset-bottom)]">
+    <nav className="lg:hidden shrink-0 border-t border-border bg-background/95 backdrop-blur pb-[env(safe-area-inset-bottom)]">
       <div className="grid grid-cols-5 items-end h-16 max-w-lg mx-auto px-2">
         {left.map(i => <Item key={i.href} {...i} />)}
 

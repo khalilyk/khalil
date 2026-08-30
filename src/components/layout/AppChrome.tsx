@@ -16,9 +16,10 @@ export default function AppChrome({ userId, name, children }: { userId: string; 
         <span className="kk-bgglow b" style={{ left: '92%', top: '24%', width: '46vw', height: '46vw', background: `radial-gradient(circle, ${glow.b}, transparent 70%)` }} />
       </div>
       <Sidebar />
-      <div className="flex-1 flex flex-col min-h-screen min-w-0">
+      {/* Mobile: fixed-height shell so the bottom nav is pinned by flex (no position:fixed to glitch on iOS scroll) */}
+      <div className="flex-1 flex flex-col min-w-0 h-[100dvh] lg:h-auto lg:min-h-screen">
         <Header userId={userId} name={name} />
-        <main className="flex-1 pb-[calc(5rem+env(safe-area-inset-bottom))] lg:pb-8 overflow-y-auto overflow-x-hidden">
+        <main className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden pb-6 lg:pb-8">
           {children}
         </main>
         <BottomNav />
