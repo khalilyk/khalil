@@ -35,15 +35,16 @@ function invoiceTotal(items: InvItem[], taxRate: number, discount: number) {
   const sub = (items ?? []).reduce((s, it) => s + (Number(it.qty || 0) * Number(it.rate || 0) - Number(it.discount || 0)), 0)
   return (sub - Number(discount || 0)) * (1 + Number(taxRate || 0) / 100)
 }
-let nnPool: Pool | null = null
-function nnDb() {
-  const url = process.env.NN_POSTGRES_URL
+// One pool per connection string (invoicing apps share the same schema).
+const invoicePools = new Map<string, Pool>()
+function invoiceDb(url?: string) {
   if (!url) return null
-  if (!nnPool) nnPool = new Pool({ connectionString: url, ssl: { rejectUnauthorized: true }, max: 2 })
-  return nnPool
+  let pool = invoicePools.get(url)
+  if (!pool) { pool = new Pool({ connectionString: url, ssl: { rejectUnauthorized: true }, max: 2 }); invoicePools.set(url, pool) }
+  return pool
 }
-async function notNormal(): Promise<LiveStat | null> {
-  const pool = nnDb()
+async function invoiceStats(url?: string): Promise<LiveStat | null> {
+  const pool = invoiceDb(url)
   if (!pool) return null
   try {
     const { rows } = await pool.query(
@@ -68,8 +69,11 @@ const TTL_MS = 5 * 60_000
 
 export async function getBusinessStats(): Promise<Partial<Record<BusinessKey, LiveStat>>> {
   if (cache && Date.now() - cache.at < TTL_MS) return cache.data
-  // The invoicing DB (formerly Not Normal) is now BRIC.
-  const [pp, bric] = await Promise.all([printParadise(), notNormal()])
+  // BRIC pulls from its own invoicing DB; falls back to the studio DB if BRIC's isn't set yet.
+  const [pp, bric] = await Promise.all([
+    printParadise(),
+    invoiceStats(process.env.BRIC_POSTGRES_URL || process.env.NN_POSTGRES_URL),
+  ])
   const out: Partial<Record<BusinessKey, LiveStat>> = {}
   if (pp) out.print_paradise = pp
   if (bric) out.bric = bric
