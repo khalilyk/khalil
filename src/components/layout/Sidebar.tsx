@@ -29,23 +29,23 @@ export default function Sidebar() {
   return (
     <aside className="hidden lg:block w-64 shrink-0">
       <div className="sticky top-0 h-screen p-3">
-        <div className="h-full rounded-3xl bg-sidebar text-sidebar-foreground border border-sidebar-border flex flex-col p-4">
-          <div className="px-2 py-3 leading-tight">
-            <p className="text-[10px] uppercase tracking-widest text-sidebar-foreground/50">
-              {format(new Date(), 'EEEE')}
-            </p>
-            <p className="text-xl font-bold tracking-tight">{format(new Date(), 'd MMMM')}</p>
+        <div className="h-full rounded-3xl bg-card border border-border flex flex-col p-4">
+          {/* Brand + date */}
+          <div className="px-2 pt-2 pb-4">
+            <p className="text-2xl font-extrabold tracking-tight leading-none">kk<span className="text-primary">.</span></p>
+            <p className="mt-3 text-[10px] uppercase tracking-widest text-muted-foreground">{format(new Date(), 'EEEE')}</p>
+            <p className="text-lg font-bold tracking-tight">{format(new Date(), 'd MMMM')}</p>
           </div>
 
-          <nav className="flex-1 space-y-1 mt-2">
+          <nav className="flex-1 space-y-1">
             {nav.map(({ href, label, icon: Icon }) => {
               const active = href === '/personal' ? pathname === '/personal' : pathname.startsWith(href)
               return (
                 <Link key={href} href={href} className={cn(
-                  'flex items-center gap-3 px-3 py-2.5 rounded-2xl text-sm font-medium transition-colors',
+                  'flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-sm font-medium transition-colors',
                   active
-                    ? 'bg-sidebar-primary text-sidebar-primary-foreground'
-                    : 'text-sidebar-foreground/55 hover:bg-sidebar-accent hover:text-sidebar-foreground'
+                    ? 'bg-primary text-primary-foreground shadow-[0_10px_24px_-10px_rgba(112,137,46,0.7)]'
+                    : 'text-muted-foreground hover:bg-muted hover:text-foreground',
                 )}>
                   <Icon size={18} strokeWidth={active ? 2.5 : 2} />
                   {label}
@@ -54,14 +54,12 @@ export default function Sidebar() {
             })}
           </nav>
 
-          <button onClick={signOut} className={cn(
-            'flex items-center gap-3 px-3 py-2.5 rounded-2xl text-sm font-medium transition-colors',
-            'text-sidebar-foreground/55 hover:bg-sidebar-accent hover:text-sidebar-foreground'
-          )}>
+          <button onClick={signOut}
+            className="flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
             <LogOut size={18} />
             Log out
           </button>
-          <p className="px-3 pt-2 text-xs text-sidebar-foreground/40">Private. Yours only.</p>
+          <p className="px-3.5 pt-2 text-xs text-muted-foreground/60">Private. Yours only.</p>
         </div>
       </div>
     </aside>

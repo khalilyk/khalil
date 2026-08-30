@@ -104,8 +104,9 @@ export default function CheckInForm({ userId, today, bySlot }: {
   const saved = !!bySlot[slot]?.mood
 
   return (
-    <Card>
-      <CardHeader className="pb-3 flex flex-row items-center justify-between space-y-0">
+    <Card className="kk-rise relative overflow-hidden">
+      <span className="kk-glow" style={{ left: '90%', top: '0%', width: 190, height: 190, background: 'radial-gradient(circle, rgba(112,137,46,0.16), transparent 70%)' }} />
+      <CardHeader className="relative pb-3 flex flex-row items-center justify-between space-y-0">
         <CardTitle className="text-base">Check-in</CardTitle>
         {/* AM/PM toggle next to the title */}
         <div className="flex gap-1 bg-muted rounded-full p-1 shrink-0">
@@ -120,7 +121,7 @@ export default function CheckInForm({ userId, today, bySlot }: {
           ))}
         </div>
       </CardHeader>
-      <CardContent className="space-y-3">
+      <CardContent className="relative space-y-3">
         {/* Mood + Energy on one line */}
         <div className="flex flex-wrap items-center gap-2">
           <select value={mood ?? ''} onChange={e => setMood(e.target.value ? Number(e.target.value) : null)}

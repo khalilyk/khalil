@@ -24,8 +24,9 @@ export default function WeightTrendCard({ logs, unit, goal, className }: {
   const color = dir === 'up' ? GAIN : dir === 'down' ? LOSS : FLAT
 
   return (
-    <div className={cn('kk-rise rounded-3xl bg-card border border-border text-foreground p-5 flex flex-col', className)}>
-      <div className="flex items-center gap-2 text-sm font-semibold">
+    <div className={cn('kk-rise relative overflow-hidden rounded-3xl bg-card border border-border text-foreground p-5 sm:p-6 flex flex-col', className)}>
+      <span className="kk-glow" style={{ left: '88%', top: '10%', width: 170, height: 170, background: `radial-gradient(circle, ${color}22, transparent 70%)`, animationDelay: '.6s' }} />
+      <div className="relative flex items-center gap-2 text-sm font-semibold">
         <span className="flex items-center justify-center w-6 h-6 rounded-md bg-primary text-primary-foreground"><Activity size={13} /></span>
         Weight
       </div>
