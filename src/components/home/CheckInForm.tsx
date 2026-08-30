@@ -29,8 +29,16 @@ const ENERGY = [
   { v: 5, label: '⚡ 5 · Peak' },
 ]
 const QUICK = {
-  morning: ['Locked in and focused', 'Steady and calm', 'Low energy, pushing through', 'Motivated', 'Distracted'],
-  evening: ['Great day', 'Good, productive', 'Average', 'Tough day', 'Rough — reset tomorrow'],
+  morning: [
+    'Locked in and focused', 'Slept well, feeling fresh', 'Steady and calm', 'Motivated to train',
+    'Slow start, easing in', 'Low energy, pushing through', 'A bit anxious', 'Distracted, scattered',
+    'Sore from yesterday', 'Grateful and clear',
+  ],
+  evening: [
+    'Great day, hit my goals', 'Productive and consistent', 'Trained hard, feeling it', 'Solid, showed up',
+    'Average, nothing special', 'Stressed but managed', 'Tired, ran on empty', 'Slipped on my habits',
+    'Tough day, resetting tomorrow', 'Proud of how I handled it',
+  ],
 }
 
 export default function CheckInForm({ userId, today, bySlot }: {

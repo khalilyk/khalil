@@ -12,7 +12,7 @@ const MESH =
   'radial-gradient(130% 130% at 44% 116%, #a9c6ff 0%, transparent 60%),' +
   'linear-gradient(160deg, #eaf1ff, #bcd2f7)'
 const INK = '#20365c'
-const RINGBG = 'rgba(32,54,92,0.14)'
+const RINGBG = 'rgba(255,255,255,0.3)'
 
 export default function StepsCard({ steps, asOf, className }: { steps: number; asOf?: string | null; className?: string }) {
   const pct = Math.min(100, Math.round((steps / GOAL) * 100))
@@ -20,7 +20,6 @@ export default function StepsCard({ steps, asOf, className }: { steps: number; a
   const r = 40
   const c = 2 * Math.PI * r
   const dash = (pct / 100) * c
-  const ring = hit ? '#22c55e' : INK
 
   return (
     <Link href="/body"
@@ -39,8 +38,8 @@ export default function StepsCard({ steps, asOf, className }: { steps: number; a
         <div className="relative w-32 h-32">
           <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
             <circle cx="50" cy="50" r={r} fill="none" stroke={RINGBG} strokeWidth="7" />
-            <circle cx="50" cy="50" r={r} fill="none" stroke={ring} strokeWidth="7" strokeLinecap="round"
-              strokeDasharray={`${dash} ${c}`} />
+            <circle cx="50" cy="50" r={r} fill="none" stroke="#ffffff" strokeWidth="7" strokeLinecap="round"
+              strokeDasharray={`${dash} ${c}`} style={{ filter: 'drop-shadow(0 0 4px rgba(255,255,255,0.95))' }} />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center leading-none">
             <span className="text-xl font-bold tracking-tight tabular-nums">{steps.toLocaleString()}</span>

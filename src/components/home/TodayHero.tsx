@@ -41,11 +41,11 @@ export default function TodayHero({ score, streak, rows, weekDots }: {
       </div>
 
       {/* Big score + status */}
-      <div className="mt-2 flex items-end gap-3">
+      <div className="mt-2 flex items-center gap-4">
         <span className="kk-pop text-6xl sm:text-7xl font-extrabold tracking-tight leading-none tabular-nums">{pct}</span>
-        <div className="pb-1.5">
-          <span className="inline-block rounded-full bg-white/55 backdrop-blur px-3 py-1 text-xs font-bold">{status}</span>
-          <p className="mt-1 inline-flex items-center gap-1 text-xs font-semibold" style={{ color: '#4a5c22' }}>
+        <div className="flex flex-col gap-2.5">
+          <span className="self-start rounded-full bg-white/55 backdrop-blur px-3 py-1 text-xs font-bold">{status}</span>
+          <p className="inline-flex items-center gap-1 text-xs font-semibold" style={{ color: '#4a5c22' }}>
             <Flame size={12} /> {streak}-day streak
           </p>
         </div>

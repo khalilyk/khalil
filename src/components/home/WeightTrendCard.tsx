@@ -1,6 +1,7 @@
 import { format, parseISO, subDays } from 'date-fns'
 import { Scale, ArrowUpRight, ArrowDownRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import WeightSparkline from './WeightSparkline'
 
 type Log = { weight: number; logged_on: string }
 
@@ -20,25 +21,10 @@ export default function WeightTrendCard({ logs, unit, goal, className }: {
   const prior = weekTarget ? [...logs].reverse().find(l => l.logged_on <= weekTarget) : null
   const weekPct = latest && prior && prior.weight ? +(((latest.weight - prior.weight) / prior.weight) * 100).toFixed(1) : null
   const dir = weekPct == null || weekPct === 0 ? 'flat' : weekPct > 0 ? 'up' : 'down'
-
-  // Minimal sparkline (no axes) from the recent logs
   const pts = logs.slice(-24)
-  const W = 260, H = 52
-  let path = '', area = ''
-  if (pts.length > 1) {
-    const ys = pts.map(p => p.weight)
-    const min = Math.min(...ys), max = Math.max(...ys), span = max - min || 1
-    const xy = pts.map((p, i) => {
-      const x = (i / (pts.length - 1)) * W
-      const y = H - 6 - ((p.weight - min) / span) * (H - 12)
-      return [x, y] as const
-    })
-    path = xy.map(([x, y], i) => `${i ? 'L' : 'M'}${x.toFixed(1)},${y.toFixed(1)}`).join(' ')
-    area = `${path} L${W},${H} L0,${H} Z`
-  }
 
   return (
-    <div className={cn('kk-rise relative overflow-hidden rounded-3xl p-5 sm:p-6 flex flex-col shadow-[0_20px_60px_-24px_rgba(214,120,60,0.5)]', className)}
+    <div className={cn('kk-rise relative overflow-hidden rounded-3xl pt-5 sm:pt-6 px-5 sm:px-6 flex flex-col shadow-[0_20px_60px_-24px_rgba(214,120,60,0.5)]', className)}
       style={{ background: MESH, color: INK }}>
       <div className="flex items-center justify-between">
         <span className="flex items-center gap-2 text-sm font-semibold">
@@ -60,22 +46,9 @@ export default function WeightTrendCard({ logs, unit, goal, className }: {
         {goal ? `Goal ${goal} ${unit}` : 'This week’s trend'}
       </p>
 
-      {/* Sparkline fills the rest of the card */}
-      <div className="relative mt-auto pt-4">
-        {pts.length > 1 ? (
-          <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" className="w-full h-14">
-            <defs>
-              <linearGradient id="wtfill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor={INK} stopOpacity="0.28" />
-                <stop offset="100%" stopColor={INK} stopOpacity="0" />
-              </linearGradient>
-            </defs>
-            <path d={area} fill="url(#wtfill)" />
-            <path d={path} fill="none" stroke={INK} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        ) : (
-          <p className="text-xs opacity-70">Log your weight on the Body page to see your trend.</p>
-        )}
+      {/* Full-bleed sparkline — hover for the date + weight */}
+      <div className="mt-auto -mx-5 sm:-mx-6 pt-4">
+        <WeightSparkline pts={pts} unit={unit} />
       </div>
     </div>
   )

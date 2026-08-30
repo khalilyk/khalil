@@ -122,37 +122,43 @@ export default async function DashboardHome() {
     <div className="relative px-4 py-6 lg:px-8 space-y-8 [&_section>*]:min-w-0">
       {/* Live ambient glow — warm by day, deep blue by night */}
       <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-        <span className="kk-glow" style={{ left: '12%', top: '-6%', width: '58vw', height: '58vw', background: `radial-gradient(circle, ${timeGlow.a}, transparent 68%)` }} />
-        <span className="kk-glow" style={{ left: '92%', top: '24%', width: '46vw', height: '46vw', background: `radial-gradient(circle, ${timeGlow.b}, transparent 70%)`, animationDelay: '2.4s' }} />
+        <span className="kk-bgglow a" style={{ left: '12%', top: '-6%', width: '58vw', height: '58vw', background: `radial-gradient(circle, ${timeGlow.a}, transparent 68%)` }} />
+        <span className="kk-bgglow b" style={{ left: '92%', top: '24%', width: '46vw', height: '46vw', background: `radial-gradient(circle, ${timeGlow.b}, transparent 70%)` }} />
       </div>
 
-      {/* Big greeting headline */}
-      <div className="kk-rise">
-        <p className="text-sm text-muted-foreground">{format(now, 'EEEE, d MMMM')}</p>
-        <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-[0.95]">
-          {`Hey${prof.display_name ? `, ${prof.display_name.split(' ')[0]}` : ''}`}<span className="text-primary">.</span>
-        </h1>
-        <p className="mt-2 text-sm text-muted-foreground italic">“{quoteOfTheDay(now)}”</p>
+      {/* Big greeting headline + quick craving prompt on the same line */}
+      <div className="kk-rise flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div>
+          <p className="text-sm text-muted-foreground">{format(now, 'EEEE, d MMMM')}</p>
+          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-[0.95]">
+            {`Hey${prof.display_name ? `, ${prof.display_name.split(' ')[0]}` : ''}`}<span className="text-primary">.</span>
+          </h1>
+          <p className="mt-2 text-sm text-muted-foreground italic">“{quoteOfTheDay(now)}”</p>
+        </div>
+        <div className="lg:w-80 shrink-0">
+          <CravingTracker userId={user.id} cravings={(cravings ?? []) as { feeling: string | null; rode_out: boolean }[]} />
+        </div>
       </div>
 
       {/* ── TODAY — one status card + the check-in action ── */}
-      {/* Two big gradient cards */}
+      {/* Score + check-in */}
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-stretch">
         <TodayHero score={score} streak={streak} rows={heroRows} weekDots={weekDots} />
-        <WeightTrendCard logs={weights} unit={unit} goal={prof.weight_goal ?? null} className="h-full" />
+        <CheckInForm userId={user.id} today={today} bySlot={bySlot} />
       </section>
 
-      {/* Check-in + steps */}
-      <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-stretch">
-        <CheckInForm userId={user.id} today={today} bySlot={bySlot} />
+      {/* Weight + steps on one line */}
+      <section className="grid grid-cols-2 gap-4 items-stretch">
+        <WeightTrendCard logs={weights} unit={unit} goal={prof.weight_goal ?? null} className="h-full" />
         <StepsCard steps={todaySteps} asOf={stepsAsOf} className="h-full" />
       </section>
 
-      {/* ── MORE — coach note + urges, quieter ── */}
-      <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
-        {reflection ? <CoachCard text={reflection} /> : null}
-        <CravingTracker userId={user.id} cravings={(cravings ?? []) as { feeling: string | null; rode_out: boolean }[]} />
-      </section>
+      {/* ── MORE — coach note, quieter ── */}
+      {reflection ? (
+        <section className="grid grid-cols-1 gap-4">
+          <CoachCard text={reflection} />
+        </section>
+      ) : null}
 
       {/* ── PLANS — goals & the week, at the bottom ── */}
       <section className="space-y-4">
