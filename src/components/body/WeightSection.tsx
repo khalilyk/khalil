@@ -186,8 +186,8 @@ export default function WeightSection({ userId, logs, weightGoal, weightRate, un
               </div>
             ) : (
               <button onClick={() => setLogging(true)}
-                className="w-full flex items-center justify-center gap-1.5 text-sm font-semibold text-primary hover:opacity-80 transition-opacity">
-                <Plus size={15} /> Log today’s weight
+                className="w-full flex items-center justify-between text-sm font-semibold text-primary hover:opacity-80 transition-opacity">
+                Log today’s weight <Plus size={16} />
               </button>
             )}
           </div>
