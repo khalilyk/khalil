@@ -136,14 +136,15 @@ export default async function DashboardHome() {
       </div>
 
       {/* ── TODAY — one status card + the check-in action ── */}
+      {/* Two big gradient cards */}
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-stretch">
         <TodayHero score={score} streak={streak} rows={heroRows} weekDots={weekDots} />
-        <CheckInForm userId={user.id} today={today} bySlot={bySlot} />
+        <WeightTrendCard logs={weights} unit={unit} goal={prof.weight_goal ?? null} className="h-full" />
       </section>
 
-      {/* ── SNAPSHOT — three glanceable numbers ── */}
-      <section className="grid grid-cols-2 gap-4 items-stretch">
-        <WeightTrendCard logs={weights} unit={unit} goal={prof.weight_goal ?? null} className="h-full" />
+      {/* Check-in + steps */}
+      <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-stretch">
+        <CheckInForm userId={user.id} today={today} bySlot={bySlot} />
         <StepsCard steps={todaySteps} asOf={stepsAsOf} className="h-full" />
       </section>
 
@@ -156,7 +157,7 @@ export default async function DashboardHome() {
       {/* ── PLANS — goals & the week, at the bottom ── */}
       <section className="space-y-4">
         <SectionLabel>Goals & progress</SectionLabel>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+        <div className="grid grid-cols-1 gap-4">
           <GoalFocusCard goals={goals} />
           <WeeklyReviewCard summary={week} />
         </div>

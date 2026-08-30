@@ -1,16 +1,16 @@
-'use client'
-
-import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts'
 import { format, parseISO, subDays } from 'date-fns'
-import { Activity, ArrowUpRight, ArrowDownRight } from 'lucide-react'
+import { Scale, ArrowUpRight, ArrowDownRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 type Log = { weight: number; logged_on: string }
 
-// Weight is the one metric where UP is bad: gaining → red, losing → green.
-const GAIN = '#ef4444'  // red-500
-const LOSS = '#22c55e'  // green-500
-const FLAT = 'oklch(0.592 0.121 123.2)'
+// Warm gradient-mesh sibling to the green score card
+const MESH =
+  'radial-gradient(120% 90% at 24% 14%, #ffdcb4 0%, transparent 46%),' +
+  'radial-gradient(120% 120% at 72% 58%, #ff9e78 0%, transparent 55%),' +
+  'radial-gradient(130% 130% at 44% 116%, #ffcb8c 0%, transparent 60%),' +
+  'linear-gradient(160deg, #fdefe0, #f6cba9)'
+const INK = '#5b3320'
 
 export default function WeightTrendCard({ logs, unit, goal, className }: {
   logs: Log[]; unit: string; goal: number | null; className?: string
@@ -19,60 +19,64 @@ export default function WeightTrendCard({ logs, unit, goal, className }: {
   const weekTarget = latest ? format(subDays(parseISO(latest.logged_on), 7), 'yyyy-MM-dd') : null
   const prior = weekTarget ? [...logs].reverse().find(l => l.logged_on <= weekTarget) : null
   const weekPct = latest && prior && prior.weight ? +(((latest.weight - prior.weight) / prior.weight) * 100).toFixed(1) : null
-
   const dir = weekPct == null || weekPct === 0 ? 'flat' : weekPct > 0 ? 'up' : 'down'
-  const color = dir === 'up' ? GAIN : dir === 'down' ? LOSS : FLAT
+
+  // Minimal sparkline (no axes) from the recent logs
+  const pts = logs.slice(-24)
+  const W = 260, H = 52
+  let path = '', area = ''
+  if (pts.length > 1) {
+    const ys = pts.map(p => p.weight)
+    const min = Math.min(...ys), max = Math.max(...ys), span = max - min || 1
+    const xy = pts.map((p, i) => {
+      const x = (i / (pts.length - 1)) * W
+      const y = H - 6 - ((p.weight - min) / span) * (H - 12)
+      return [x, y] as const
+    })
+    path = xy.map(([x, y], i) => `${i ? 'L' : 'M'}${x.toFixed(1)},${y.toFixed(1)}`).join(' ')
+    area = `${path} L${W},${H} L0,${H} Z`
+  }
 
   return (
-    <div className={cn('kk-rise relative overflow-hidden rounded-3xl bg-card border border-border text-foreground p-5 sm:p-6 flex flex-col', className)}>
-      <span className="kk-glow" style={{ left: '88%', top: '10%', width: 170, height: 170, background: `radial-gradient(circle, ${color}22, transparent 70%)`, animationDelay: '.6s' }} />
-      <div className="relative flex items-center gap-2 text-sm font-semibold">
-        <span className="flex items-center justify-center w-6 h-6 rounded-md bg-primary text-primary-foreground"><Activity size={13} /></span>
-        Weight
-      </div>
-
-      <div className="relative mt-3 flex items-end gap-2">
-        <span className="text-4xl font-bold tracking-tight tabular-nums" style={dir !== 'flat' ? { color } : undefined}>
-          {latest ? latest.weight : '—'}
+    <div className={cn('kk-rise relative overflow-hidden rounded-3xl p-5 sm:p-6 flex flex-col shadow-[0_20px_60px_-24px_rgba(214,120,60,0.5)]', className)}
+      style={{ background: MESH, color: INK }}>
+      <div className="flex items-center justify-between">
+        <span className="flex items-center gap-2 text-sm font-semibold">
+          <span className="flex items-center justify-center w-6 h-6 rounded-md text-white" style={{ background: INK }}><Scale size={13} /></span>
+          Weight
         </span>
-        <span className="text-muted-foreground mb-1">{unit}</span>
-      </div>
-
-      <div className="relative mt-2 flex-1 min-h-[110px]">
-        {logs.length > 1 ? (
-          <ResponsiveContainer width="100%" height={120}>
-            <AreaChart data={logs} margin={{ top: 8, right: 4, left: -18, bottom: 0 }}>
-              <defs>
-                <linearGradient id="wt" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={color} stopOpacity={0.5} />
-                  <stop offset="100%" stopColor={color} stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <XAxis dataKey="logged_on" tickFormatter={d => format(parseISO(d), 'd MMM')}
-                tick={{ fontSize: 10, fill: 'rgba(0,0,0,0.4)' }} tickLine={false} axisLine={false} minTickGap={24} />
-              <YAxis domain={['auto', 'auto']} tick={{ fontSize: 10, fill: 'rgba(0,0,0,0.4)' }} tickLine={false} axisLine={false} width={34} />
-              <Tooltip
-                contentStyle={{ background: '#111', border: 'none', borderRadius: 12, fontSize: 12, color: '#fff' }}
-                formatter={(v) => [`${v} ${unit}`, '']} labelFormatter={d => format(parseISO(d as string), 'd MMM yyyy')} />
-              {goal && <ReferenceLine y={goal} stroke="rgba(0,0,0,0.2)" strokeDasharray="4 4" />}
-              <Area type="monotone" dataKey="weight" stroke={color} strokeWidth={2.5} fill="url(#wt)" />
-            </AreaChart>
-          </ResponsiveContainer>
-        ) : (
-          <div className="h-[150px] flex items-center justify-center text-muted-foreground text-sm text-center px-6">
-            Log your weight on the Body page to see your trend here.
-          </div>
+        {weekPct !== null && dir !== 'flat' && (
+          <span className="inline-flex items-center gap-0.5 text-[11px] font-bold rounded-full px-2 py-0.5 bg-white/55 backdrop-blur">
+            {dir === 'up' ? <ArrowUpRight size={11} /> : <ArrowDownRight size={11} />}{Math.abs(weekPct)}%
+          </span>
         )}
       </div>
 
-      {weekPct !== null && dir !== 'flat' && (
-        <div className="relative mt-2 flex justify-center">
-          <span className="inline-flex items-center gap-0.5 text-[11px] font-semibold rounded-full px-2 py-0.5"
-            style={{ color, backgroundColor: `${color}26` }}>
-            {dir === 'up' ? <ArrowUpRight size={11} /> : <ArrowDownRight size={11} />}{Math.abs(weekPct)}% vs last week
-          </span>
-        </div>
-      )}
+      <div className="mt-2 flex items-end gap-2">
+        <span className="text-6xl sm:text-7xl font-extrabold tracking-tight leading-none tabular-nums">{latest ? latest.weight : '—'}</span>
+        <span className="pb-2 text-lg font-semibold opacity-70">{unit}</span>
+      </div>
+      <p className="mt-1 text-xs font-semibold opacity-70">
+        {goal ? `Goal ${goal} ${unit}` : 'This week’s trend'}
+      </p>
+
+      {/* Sparkline fills the rest of the card */}
+      <div className="relative mt-auto pt-4">
+        {pts.length > 1 ? (
+          <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" className="w-full h-14">
+            <defs>
+              <linearGradient id="wtfill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor={INK} stopOpacity="0.28" />
+                <stop offset="100%" stopColor={INK} stopOpacity="0" />
+              </linearGradient>
+            </defs>
+            <path d={area} fill="url(#wtfill)" />
+            <path d={path} fill="none" stroke={INK} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        ) : (
+          <p className="text-xs opacity-70">Log your weight on the Body page to see your trend.</p>
+        )}
+      </div>
     </div>
   )
 }
