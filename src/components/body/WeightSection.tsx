@@ -196,11 +196,11 @@ export default function WeightSection({ userId, logs, weightGoal, weightRate, un
 
       {data.length > 1 && (
         <Card>
-          <CardContent className="pt-3 pb-1 px-1">
+          <CardContent className="pt-2 pb-2 px-2">
             <ResponsiveContainer width="100%" height={150}>
-              <LineChart data={data}>
-                <XAxis dataKey="logged_on" tickFormatter={d => format(parseISO(d), 'd MMM')} tick={{ fontSize: 10 }} tickLine={false} axisLine={false} />
-                <YAxis domain={['auto', 'auto']} tick={{ fontSize: 10 }} tickLine={false} axisLine={false} width={36} />
+              <LineChart data={data} margin={{ top: 6, right: 6, left: 0, bottom: 0 }}>
+                <XAxis dataKey="logged_on" tickFormatter={d => format(parseISO(d), 'd MMM')} tick={{ fontSize: 10 }} tickLine={false} axisLine={false} height={18} tickMargin={4} minTickGap={24} />
+                <YAxis domain={['auto', 'auto']} tick={{ fontSize: 10 }} tickLine={false} axisLine={false} width={30} />
                 <Tooltip formatter={(v) => [`${v} ${unit}`, '']} labelFormatter={d => format(parseISO(d as string), 'd MMM yyyy')} />
                 <Line type="monotone" dataKey="weight" stroke="oklch(0.55 0.01 60)" strokeWidth={1.5} dot={false} />
                 <Line type="monotone" dataKey="avg" stroke="oklch(0.592 0.121 123.2)" strokeWidth={2.5} dot={false} />
