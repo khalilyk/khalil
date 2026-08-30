@@ -8,10 +8,9 @@ export default function WeeklyReviewCard({ summary }: { summary: WeeklySummary }
     { label: 'Trained', value: `${summary.workoutDays} days`, good: summary.workoutDays >= 4 },
     {
       label: 'Weight',
-      value: summary.weightChange === null ? ' - ' : `${summary.weightChange > 0 ? '+' : ''}${summary.weightChange} ${summary.unit}`,
+      value: summary.weightLatest != null ? `${summary.weightLatest} ${summary.unit}` : ' - ',
       good: summary.weightChange !== null && summary.weightChange <= 0,
     },
-    { label: 'Spent', value: `${summary.currency} ${Math.round(summary.spend).toLocaleString()}`, good: summary.overBudget.length === 0 },
   ]
 
   return (
@@ -21,7 +20,7 @@ export default function WeeklyReviewCard({ summary }: { summary: WeeklySummary }
         <span className="text-xs text-muted-foreground">{summary.rangeLabel}</span>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div className="grid grid-cols-3 gap-3">
         {stats.map(s => (
           <div key={s.label} className="rounded-2xl bg-muted/50 px-3 py-3">
             <p className="text-xs text-muted-foreground">{s.label}</p>
@@ -30,11 +29,8 @@ export default function WeeklyReviewCard({ summary }: { summary: WeeklySummary }
         ))}
       </div>
 
-      {(summary.overBudget.length > 0 || summary.goalsDueSoon.length > 0) && (
+      {summary.goalsDueSoon.length > 0 && (
         <div className="mt-4 space-y-1 text-sm">
-          {summary.overBudget.length > 0 && (
-            <p className="text-destructive">Over budget: {summary.overBudget.join(', ')}</p>
-          )}
           {summary.goalsDueSoon.map(g => (
             <p key={g.title} className="text-muted-foreground">
               🎯 {g.title} - {g.days < 0 ? 'overdue' : g.days === 0 ? 'due today' : `${g.days}d left`}

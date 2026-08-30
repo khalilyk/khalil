@@ -21,7 +21,7 @@ export default async function BodyPage() {
   const [{ data: weightLogs }, { data: profileRaw }, { data: workoutLogs }, { data: cravings }] = await Promise.all([
     supabase.from('weight_logs').select('*').gte('logged_on', since).order('logged_on'),
     supabase.from('profiles').select('*').eq('id', user.id).maybeSingle(),
-    supabase.from('workout_logs').select('logged_on,exercise').gte('logged_on', weekStart),
+    supabase.from('workout_logs').select('*').gte('logged_on', weekStart),
     supabase.from('cravings').select('feeling,rode_out').gte('created_at', `${monthStart}T00:00:00`),
   ])
   const profile = profileRaw as Profile | null

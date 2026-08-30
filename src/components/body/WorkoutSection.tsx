@@ -8,7 +8,7 @@ import { startOfWeek, addDays, format } from 'date-fns'
 import { cn } from '@/lib/utils'
 import { PROGRAM, totalExercises, type WorkoutDay } from '@/lib/workout'
 
-type Log = { logged_on: string; exercise: string }
+type Log = { logged_on: string; exercise: string; weight?: number | null }
 
 export default function WorkoutSection({ userId, weekLogs }: { userId: string; weekLogs: Log[] }) {
   const router = useRouter()
@@ -16,6 +16,10 @@ export default function WorkoutSection({ userId, weekLogs }: { userId: string; w
   const [selected, setSelected] = useState<number>(todayWd >= 1 && todayWd <= 5 ? todayWd : 1)
   const [doneSet, setDoneSet] = useState<Set<string>>(
     () => new Set(weekLogs.map(l => `${l.logged_on}|${l.exercise}`))
+  )
+  // Weight lifted per exercise, keyed by `${date}|${exercise}`
+  const [weights, setWeights] = useState<Map<string, string>>(
+    () => new Map(weekLogs.filter(l => l.weight != null).map(l => [`${l.logged_on}|${l.exercise}`, String(l.weight)]))
   )
 
   const weekStart = startOfWeek(new Date(), { weekStartsOn: 1 })
@@ -65,11 +69,36 @@ export default function WorkoutSection({ userId, weekLogs }: { userId: string; w
         { user_id: userId, logged_on: date, exercise: ex },
         { onConflict: 'user_id,logged_on,exercise' }
       )
+      // Best-effort weight (needs migration 013). Silently ignored if the column is absent.
+      const w = weights.get(key)
+      if (w && w.trim() !== '') await supabase.from('workout_logs').update({ weight: Number(w) }).eq('logged_on', date).eq('exercise', ex)
     } else {
       await supabase.from('workout_logs').delete().eq('logged_on', date).eq('exercise', ex)
     }
     const count = [...next].filter(k => k.startsWith(`${date}|`)).length
     await syncCalendar(day, date, count)
+    router.refresh()
+  }
+
+  // Save the weight for an exercise (logging it also marks the exercise done)
+  async function saveWeight(ex: string) {
+    const key = `${date}|${ex}`
+    const raw = (weights.get(key) ?? '').trim()
+    const w = raw === '' ? null : Number(raw)
+    if (raw !== '' && Number.isNaN(w as number)) return
+    const next = new Set(doneSet)
+    if (raw !== '') next.add(key)
+    setDoneSet(next)
+
+    const supabase = await client()
+    // Ensure the row exists / is marked done (works without migration 013)…
+    await supabase.from('workout_logs').upsert(
+      { user_id: userId, logged_on: date, exercise: ex },
+      { onConflict: 'user_id,logged_on,exercise' }
+    )
+    // …then set the weight (best-effort; needs migration 013)
+    await supabase.from('workout_logs').update({ weight: w }).eq('logged_on', date).eq('exercise', ex)
+    await syncCalendar(day, date, [...next].filter(k => k.startsWith(`${date}|`)).length)
     router.refresh()
   }
 
@@ -117,18 +146,30 @@ export default function WorkoutSection({ userId, weekLogs }: { userId: string; w
               )}
               {block.exercises.map(ex => {
                 const checked = isDone(ex.name)
+                const key = `${date}|${ex.name}`
                 return (
-                  <button key={ex.name} onClick={() => toggle(ex.name)}
-                    className="w-full flex items-center gap-3 py-2 text-left group">
-                    <span className={cn('w-6 h-6 shrink-0 rounded-md border-2 flex items-center justify-center transition-colors',
-                      checked ? 'bg-primary border-primary text-primary-foreground' : 'border-border group-hover:border-primary')}>
+                  <div key={ex.name} className="w-full flex items-center gap-3 py-2 group">
+                    <button onClick={() => toggle(ex.name)} aria-label={checked ? 'Mark undone' : 'Mark done'}
+                      className={cn('w-6 h-6 shrink-0 rounded-md border-2 flex items-center justify-center transition-colors',
+                        checked ? 'bg-primary border-primary text-primary-foreground' : 'border-border group-hover:border-primary')}>
                       {checked && <Check size={14} strokeWidth={3} />}
-                    </span>
-                    <span className="flex-1 min-w-0">
-                      <span className={cn('block text-sm font-medium', checked && 'line-through text-muted-foreground')}>{ex.name}</span>
-                    </span>
-                    <span className="text-xs text-muted-foreground shrink-0">{ex.detail}</span>
-                  </button>
+                    </button>
+                    <button onClick={() => toggle(ex.name)} className="flex-1 min-w-0 text-left">
+                      <span className={cn('block text-sm font-medium', checked && 'text-muted-foreground')}>{ex.name}</span>
+                      <span className="block text-[11px] text-muted-foreground">{ex.detail}</span>
+                    </button>
+                    {/* Weight lifted */}
+                    <div className="shrink-0 flex items-center gap-1">
+                      <input type="number" inputMode="decimal" min="0" step="0.5"
+                        value={weights.get(key) ?? ''}
+                        onChange={e => setWeights(m => new Map(m).set(key, e.target.value))}
+                        onBlur={() => saveWeight(ex.name)}
+                        onKeyDown={e => { if (e.key === 'Enter') (e.target as HTMLInputElement).blur() }}
+                        placeholder="—"
+                        className="w-14 h-9 rounded-lg border border-border bg-card text-sm text-center tabular-nums outline-none focus:border-primary" />
+                      <span className="text-xs text-muted-foreground">kg</span>
+                    </div>
+                  </div>
                 )
               })}
             </div>

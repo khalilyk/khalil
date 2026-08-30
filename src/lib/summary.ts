@@ -79,6 +79,7 @@ export type WeeklySummary = {
   checkinsDone: number
   workoutDays: number
   weightChange: number | null
+  weightLatest: number | null
   unit: string
   spend: number
   currency: string
@@ -115,6 +116,7 @@ export async function weeklySummary(supabase: DB, userId: string): Promise<Weekl
   let weightChange: number | null = null
   if (weekWeights.length >= 2) weightChange = +(weekWeights[weekWeights.length - 1].weight - weekWeights[0].weight).toFixed(1)
   else if (ws.length >= 2) weightChange = +(ws[ws.length - 1].weight - ws[0].weight).toFixed(1)
+  const weightLatest = ws.length ? ws[ws.length - 1].weight : null
 
   const weekTx = (monthTx ?? []).filter((t: any) => t.occurred_on >= weekStartStr)
   const spend = weekTx.reduce((s: number, t: any) => s + Number(t.amount), 0)
@@ -138,7 +140,7 @@ export async function weeklySummary(supabase: DB, userId: string): Promise<Weekl
 
   return {
     rangeLabel: `${format(weekStart, 'd MMM')} – ${format(addDays(weekStart, 6), 'd MMM')}`,
-    checkinsDone, workoutDays, weightChange, unit, spend, currency: ccy, overBudget, goalsDueSoon, lines,
+    checkinsDone, workoutDays, weightChange, weightLatest, unit, spend, currency: ccy, overBudget, goalsDueSoon, lines,
   }
 }
 
