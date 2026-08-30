@@ -24,9 +24,8 @@ export default function WeightTrendCard({ logs, unit, goal, className }: {
   const color = dir === 'up' ? GAIN : dir === 'down' ? LOSS : FLAT
 
   return (
-    <div className={cn('kk-rise relative overflow-hidden rounded-3xl bg-neutral-900 text-white p-5 flex flex-col', className)}>
-      <span className="kk-glow" style={{ left: '80%', top: '20%', width: 180, height: 180, background: `radial-gradient(circle, ${color}55, transparent 70%)`, animationDelay: '.8s' }} />
-      <div className="relative flex items-center gap-2 text-sm font-semibold">
+    <div className={cn('kk-rise rounded-3xl bg-card border border-border text-foreground p-5 flex flex-col', className)}>
+      <div className="flex items-center gap-2 text-sm font-semibold">
         <span className="flex items-center justify-center w-6 h-6 rounded-md bg-primary text-primary-foreground"><Activity size={13} /></span>
         Weight
       </div>
@@ -35,7 +34,7 @@ export default function WeightTrendCard({ logs, unit, goal, className }: {
         <span className="text-4xl font-bold tracking-tight tabular-nums" style={dir !== 'flat' ? { color } : undefined}>
           {latest ? latest.weight : '—'}
         </span>
-        <span className="text-white/50 mb-1">{unit}</span>
+        <span className="text-muted-foreground mb-1">{unit}</span>
       </div>
 
       <div className="relative mt-2 flex-1 min-h-[110px]">
@@ -49,17 +48,17 @@ export default function WeightTrendCard({ logs, unit, goal, className }: {
                 </linearGradient>
               </defs>
               <XAxis dataKey="logged_on" tickFormatter={d => format(parseISO(d), 'd MMM')}
-                tick={{ fontSize: 10, fill: 'rgba(255,255,255,0.4)' }} tickLine={false} axisLine={false} minTickGap={24} />
-              <YAxis domain={['auto', 'auto']} tick={{ fontSize: 10, fill: 'rgba(255,255,255,0.4)' }} tickLine={false} axisLine={false} width={34} />
+                tick={{ fontSize: 10, fill: 'rgba(0,0,0,0.4)' }} tickLine={false} axisLine={false} minTickGap={24} />
+              <YAxis domain={['auto', 'auto']} tick={{ fontSize: 10, fill: 'rgba(0,0,0,0.4)' }} tickLine={false} axisLine={false} width={34} />
               <Tooltip
                 contentStyle={{ background: '#111', border: 'none', borderRadius: 12, fontSize: 12, color: '#fff' }}
                 formatter={(v) => [`${v} ${unit}`, '']} labelFormatter={d => format(parseISO(d as string), 'd MMM yyyy')} />
-              {goal && <ReferenceLine y={goal} stroke="rgba(255,255,255,0.25)" strokeDasharray="4 4" />}
+              {goal && <ReferenceLine y={goal} stroke="rgba(0,0,0,0.2)" strokeDasharray="4 4" />}
               <Area type="monotone" dataKey="weight" stroke={color} strokeWidth={2.5} fill="url(#wt)" />
             </AreaChart>
           </ResponsiveContainer>
         ) : (
-          <div className="h-[150px] flex items-center justify-center text-white/40 text-sm text-center px-6">
+          <div className="h-[150px] flex items-center justify-center text-muted-foreground text-sm text-center px-6">
             Log your weight on the Body page to see your trend here.
           </div>
         )}

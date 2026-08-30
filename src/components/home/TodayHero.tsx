@@ -12,53 +12,65 @@ export type HeroRow = {
   href: string
 }
 
+// Soft gradient-mesh backdrop for the score card (green, on-brand)
+const MESH =
+  'radial-gradient(120% 90% at 22% 12%, #f4dcba 0%, transparent 46%),' +
+  'radial-gradient(120% 120% at 62% 52%, #9fbf5a 0%, transparent 55%),' +
+  'radial-gradient(130% 130% at 48% 115%, #c6df82 0%, transparent 60%),' +
+  'linear-gradient(160deg, #eef3e0, #d6e6ad)'
+
+const INK = '#33401b'
+
 export default function TodayHero({ score, streak, rows, weekDots }: {
   score: number; streak: number; rows: HeroRow[]; weekDots: boolean[]
 }) {
   const pct = Math.round(score)
-  const ring = `conic-gradient(var(--primary) ${pct * 3.6}deg, rgba(255,255,255,0.08) 0deg)`
   const status = pct >= 80 ? 'On track' : pct >= 50 ? 'Getting there' : pct > 0 ? 'Warming up' : 'Fresh start'
 
   return (
-    <div className="kk-rise relative overflow-hidden rounded-3xl bg-neutral-900 text-white p-5 sm:p-6 shadow-[0_20px_60px_-20px_rgba(112,137,46,0.5)]">
-      {/* Ambient glows */}
-      <span className="kk-glow" style={{ left: '18%', top: '30%', width: 260, height: 260, background: 'radial-gradient(circle, rgba(134,160,58,0.55), transparent 68%)' }} />
-      <span className="kk-glow" style={{ left: '85%', top: '85%', width: 200, height: 200, background: 'radial-gradient(circle, rgba(112,137,46,0.35), transparent 70%)', animationDelay: '1.4s' }} />
-
-      {/* Top: score ring + streak, week dots on the right */}
-      <div className="relative flex items-center gap-4">
-        <div className="relative w-20 h-20 rounded-full grid place-items-center shrink-0 transition-transform duration-500" style={{ background: ring }}>
-          <div className="rounded-full bg-neutral-900 grid place-items-center" style={{ width: 62, height: 62 }}>
-            <span className="kk-pop text-2xl font-bold tabular-nums leading-none">{pct}</span>
-          </div>
-        </div>
-        <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-white/70">Today’s score</p>
-          <p className="text-lg font-bold leading-tight">{status}</p>
-          <p className="mt-0.5 inline-flex items-center gap-1 text-sm font-semibold text-primary">
-            <Flame size={14} /> {streak}-day streak
-          </p>
-        </div>
-        <div className="flex gap-1 shrink-0 self-start">
+    <div className="kk-rise relative overflow-hidden rounded-3xl p-5 sm:p-6 flex flex-col shadow-[0_20px_60px_-24px_rgba(112,137,46,0.5)]"
+      style={{ background: MESH, color: INK }}>
+      {/* Header row */}
+      <div className="flex items-start justify-between">
+        <p className="text-sm font-semibold">Today’s score</p>
+        <div className="flex gap-1">
           {weekDots.map((d, i) => (
-            <span key={i} className={cn('w-1.5 h-1.5 rounded-full transition-colors', d ? 'bg-primary shadow-[0_0_8px_rgba(134,160,58,0.9)]' : 'bg-white/20')} />
+            <span key={i} className="w-1.5 h-1.5 rounded-full" style={{ background: d ? INK : 'rgba(51,64,27,0.2)' }} />
           ))}
         </div>
       </div>
 
+      {/* Big score + status */}
+      <div className="mt-2 flex items-end gap-3">
+        <span className="kk-pop text-6xl sm:text-7xl font-extrabold tracking-tight leading-none tabular-nums">{pct}</span>
+        <div className="pb-1.5">
+          <span className="inline-block rounded-full bg-white/55 backdrop-blur px-3 py-1 text-xs font-bold">{status}</span>
+          <p className="mt-1 inline-flex items-center gap-1 text-xs font-semibold" style={{ color: '#4a5c22' }}>
+            <Flame size={12} /> {streak}-day streak
+          </p>
+        </div>
+      </div>
+
+      {/* Dotted progress bar */}
+      <div className="mt-3 flex gap-1">
+        {Array.from({ length: 20 }).map((_, i) => (
+          <span key={i} className="h-1.5 flex-1 rounded-full" style={{ background: i < Math.round(pct / 5) ? INK : 'rgba(51,64,27,0.18)' }} />
+        ))}
+      </div>
+
       {/* The four things that make the day count */}
-      <div className="relative mt-4 grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+      <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-1">
         {rows.map(({ key, label, value, done, href }) => {
           const Icon = ICONS[key]
           return (
             <Link key={key} href={href}
-              className="flex items-center gap-3 py-2 px-2.5 rounded-xl hover:bg-white/5 transition-colors">
-              <span className={cn('flex items-center justify-center w-8 h-8 rounded-lg shrink-0',
-                done ? 'bg-primary text-primary-foreground' : 'bg-white/10 text-white/60')}>
-                {done ? <Check size={15} strokeWidth={3} /> : <Icon size={15} />}
+              className="flex items-center gap-2.5 py-1.5 px-2 rounded-xl transition-colors hover:bg-white/40">
+              <span className={cn('flex items-center justify-center w-7 h-7 rounded-lg shrink-0 text-white')}
+                style={{ background: done ? INK : 'rgba(51,64,27,0.22)' }}>
+                {done ? <Check size={14} strokeWidth={3} /> : <Icon size={13} />}
               </span>
-              <span className="flex-1 min-w-0 text-sm truncate">{label}</span>
-              <span className={cn('text-sm font-medium shrink-0', done ? 'text-white' : 'text-white/45')}>{value}</span>
+              <span className="flex-1 min-w-0 text-sm truncate font-medium">{label}</span>
+              <span className={cn('text-sm font-semibold shrink-0', !done && 'opacity-50')}>{value}</span>
             </Link>
           )
         })}
