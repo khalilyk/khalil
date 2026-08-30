@@ -177,3 +177,24 @@
 @keyframes kk-fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 .kk-fade { animation: kk-fade .5s ease both; }
 @media (prefers-reduced-motion: reduce) { .kk-fade { animation: none; } }
+
+/* ── Dashboard glow + motion (pretty pass) ───────────────── */
+/* Staggered entrance for dashboard sections */
+@keyframes kk-rise { from { opacity: 0; transform: translateY(16px) scale(.99); } to { opacity: 1; transform: none; } }
+.kk-rise { animation: kk-rise .6s cubic-bezier(.2,.7,.2,1) both; }
+.kk-stagger > * { animation: kk-rise .6s cubic-bezier(.2,.7,.2,1) both; }
+.kk-stagger > *:nth-child(1){ animation-delay:.02s } .kk-stagger > *:nth-child(2){ animation-delay:.09s }
+.kk-stagger > *:nth-child(3){ animation-delay:.16s } .kk-stagger > *:nth-child(4){ animation-delay:.23s }
+.kk-stagger > *:nth-child(5){ animation-delay:.30s } .kk-stagger > *:nth-child(6){ animation-delay:.37s }
+
+/* Soft breathing glow blob — drop inside a relative, overflow-hidden card */
+@keyframes kk-breathe { 0%,100% { opacity:.75; transform: translate(-50%,-50%) scale(1); } 50% { opacity:1; transform: translate(-50%,-50%) scale(1.12); } }
+.kk-glow { position:absolute; border-radius:9999px; filter: blur(28px); pointer-events:none; animation: kk-breathe 6s ease-in-out infinite; will-change: transform, opacity; }
+
+/* Number count-up shimmer on the score */
+@keyframes kk-pop { 0% { transform: scale(.9); opacity:0 } 60% { transform: scale(1.04) } 100% { transform: scale(1); opacity:1 } }
+.kk-pop { animation: kk-pop .7s cubic-bezier(.2,.8,.2,1) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .kk-rise, .kk-stagger > *, .kk-glow, .kk-pop { animation: none; }
+}

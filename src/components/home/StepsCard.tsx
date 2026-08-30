@@ -14,8 +14,9 @@ export default function StepsCard({ steps, asOf, className }: { steps: number; a
   const dash = (pct / 100) * c
 
   return (
-    <Link href="/body" className={cn('rounded-3xl bg-card border border-border p-5 flex flex-col group', className)}>
-      <div className="flex items-center justify-between">
+    <Link href="/body" className={cn('kk-rise relative overflow-hidden rounded-3xl bg-card border border-border p-5 flex flex-col group', className)}>
+      <span className="kk-glow" style={{ left: '50%', top: '58%', width: 200, height: 200, background: `radial-gradient(circle, ${hit ? 'rgba(34,197,94,0.28)' : 'rgba(112,137,46,0.22)'}, transparent 70%)`, animationDelay: '1.1s' }} />
+      <div className="relative flex items-center justify-between">
         <span className="flex items-center gap-2 text-sm font-semibold">
           <span className="flex items-center justify-center w-6 h-6 rounded-md bg-primary text-primary-foreground"><Footprints size={13} /></span>
           Steps
@@ -24,7 +25,7 @@ export default function StepsCard({ steps, asOf, className }: { steps: number; a
       </div>
 
       {/* Ring centred, count + goal beneath — fills the card height */}
-      <div className="flex-1 flex flex-col items-center justify-center gap-3 py-3">
+      <div className="relative flex-1 flex flex-col items-center justify-center gap-3 py-3">
         <div className="relative w-32 h-32">
           <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
             <circle cx="50" cy="50" r={r} fill="none" stroke="currentColor" strokeWidth="7" className="text-muted" />

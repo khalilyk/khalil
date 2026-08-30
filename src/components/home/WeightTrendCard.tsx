@@ -10,7 +10,7 @@ type Log = { weight: number; logged_on: string }
 // Weight is the one metric where UP is bad: gaining → red, losing → green.
 const GAIN = '#ef4444'  // red-500
 const LOSS = '#22c55e'  // green-500
-const FLAT = 'oklch(0.67 0.2 44)'
+const FLAT = 'oklch(0.592 0.121 123.2)'
 
 export default function WeightTrendCard({ logs, unit, goal, className }: {
   logs: Log[]; unit: string; goal: number | null; className?: string
@@ -24,20 +24,21 @@ export default function WeightTrendCard({ logs, unit, goal, className }: {
   const color = dir === 'up' ? GAIN : dir === 'down' ? LOSS : FLAT
 
   return (
-    <div className={cn('rounded-3xl bg-neutral-900 text-white p-5 flex flex-col', className)}>
-      <div className="flex items-center gap-2 text-sm font-semibold">
+    <div className={cn('kk-rise relative overflow-hidden rounded-3xl bg-neutral-900 text-white p-5 flex flex-col', className)}>
+      <span className="kk-glow" style={{ left: '80%', top: '20%', width: 180, height: 180, background: `radial-gradient(circle, ${color}55, transparent 70%)`, animationDelay: '.8s' }} />
+      <div className="relative flex items-center gap-2 text-sm font-semibold">
         <span className="flex items-center justify-center w-6 h-6 rounded-md bg-primary text-primary-foreground"><Activity size={13} /></span>
         Weight
       </div>
 
-      <div className="mt-3 flex items-end gap-2">
+      <div className="relative mt-3 flex items-end gap-2">
         <span className="text-4xl font-bold tracking-tight tabular-nums" style={dir !== 'flat' ? { color } : undefined}>
           {latest ? latest.weight : '—'}
         </span>
         <span className="text-white/50 mb-1">{unit}</span>
       </div>
 
-      <div className="mt-2 flex-1 min-h-[110px]">
+      <div className="relative mt-2 flex-1 min-h-[110px]">
         {logs.length > 1 ? (
           <ResponsiveContainer width="100%" height={120}>
             <AreaChart data={logs} margin={{ top: 8, right: 4, left: -18, bottom: 0 }}>
@@ -65,7 +66,7 @@ export default function WeightTrendCard({ logs, unit, goal, className }: {
       </div>
 
       {weekPct !== null && dir !== 'flat' && (
-        <div className="mt-2 flex justify-center">
+        <div className="relative mt-2 flex justify-center">
           <span className="inline-flex items-center gap-0.5 text-[11px] font-semibold rounded-full px-2 py-0.5"
             style={{ color, backgroundColor: `${color}26` }}>
             {dir === 'up' ? <ArrowUpRight size={11} /> : <ArrowDownRight size={11} />}{Math.abs(weekPct)}% vs last week
