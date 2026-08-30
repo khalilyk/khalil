@@ -42,12 +42,13 @@ export default function Sidebar() {
               const active = href === '/personal' ? pathname === '/personal' : pathname.startsWith(href)
               return (
                 <Link key={href} href={href} className={cn(
-                  'flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-sm font-medium transition-colors',
+                  'group/nav flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-sm font-medium transition-all duration-200 ease-out hover:translate-x-1',
                   active
-                    ? 'bg-primary text-primary-foreground shadow-[0_10px_24px_-10px_rgba(112,137,46,0.7)]'
+                    ? 'bg-primary text-primary-foreground shadow-[0_12px_28px_-10px_rgba(112,137,46,0.75)] scale-[1.02]'
                     : 'text-muted-foreground hover:bg-muted hover:text-foreground',
                 )}>
-                  <Icon size={18} strokeWidth={active ? 2.5 : 2} />
+                  <Icon size={18} strokeWidth={active ? 2.5 : 2}
+                    className="transition-transform duration-200 group-hover/nav:scale-110 group-hover/nav:-rotate-6" />
                   {label}
                 </Link>
               )

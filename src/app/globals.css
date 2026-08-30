@@ -188,7 +188,11 @@
 .kk-stagger > *:nth-child(5){ animation-delay:.30s } .kk-stagger > *:nth-child(6){ animation-delay:.37s }
 
 /* Soft breathing glow blob — drop inside a relative, overflow-hidden card */
-@keyframes kk-breathe { 0%,100% { opacity:.75; transform: translate(-50%,-50%) scale(1); } 50% { opacity:1; transform: translate(-50%,-50%) scale(1.12); } }
+@keyframes kk-breathe {
+  0%,100% { opacity:.7;  transform: translate(-50%,-50%) scale(1); }
+  33%     { opacity:1;   transform: translate(-44%,-56%) scale(1.14); }
+  66%     { opacity:.85; transform: translate(-56%,-46%) scale(1.06); }
+}
 .kk-glow { position:absolute; border-radius:9999px; filter: blur(28px); pointer-events:none; animation: kk-breathe 6s ease-in-out infinite; will-change: transform, opacity; }
 
 /* Number count-up shimmer on the score */

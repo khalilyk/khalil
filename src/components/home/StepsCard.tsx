@@ -14,7 +14,7 @@ export default function StepsCard({ steps, asOf, className }: { steps: number; a
   const dash = (pct / 100) * c
 
   return (
-    <Link href="/body" className={cn('kk-rise relative overflow-hidden rounded-3xl bg-card border border-border p-5 sm:p-6 flex flex-col group', className)}>
+    <Link href="/body" className={cn('kk-rise relative overflow-hidden rounded-3xl bg-card border border-border p-5 sm:p-6 flex flex-col group transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_-18px_rgba(0,0,0,0.25)]', className)}>
       <span className="kk-glow" style={{ left: '50%', top: '58%', width: 200, height: 200, background: `radial-gradient(circle, ${hit ? 'rgba(34,197,94,0.28)' : 'rgba(112,137,46,0.22)'}, transparent 70%)`, animationDelay: '1.1s' }} />
       <div className="relative flex items-center justify-between">
         <span className="flex items-center gap-2 text-sm font-semibold">

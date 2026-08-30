@@ -121,15 +121,15 @@ export default async function DashboardHome() {
       </div>
 
       {/* ── TODAY — one status card + the check-in action ── */}
-      <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+      <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-stretch">
         <TodayHero score={score} streak={streak} rows={heroRows} weekDots={weekDots} />
         <CheckInForm userId={user.id} today={today} bySlot={bySlot} />
       </section>
 
       {/* ── SNAPSHOT — three glanceable numbers ── */}
-      <section className="grid grid-cols-2 gap-4 auto-rows-min">
-        <WeightTrendCard logs={weights} unit={unit} goal={prof.weight_goal ?? null} />
-        <StepsCard steps={todaySteps} asOf={stepsAsOf} />
+      <section className="grid grid-cols-2 gap-4 items-stretch">
+        <WeightTrendCard logs={weights} unit={unit} goal={prof.weight_goal ?? null} className="h-full" />
+        <StepsCard steps={todaySteps} asOf={stepsAsOf} className="h-full" />
       </section>
 
       {/* ── MORE — coach note + urges, quieter ── */}
