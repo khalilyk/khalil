@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { LineChart, Line, XAxis, YAxis, Tooltip, ReferenceLine, ResponsiveContainer } from 'recharts'
 import { format, parseISO, subDays, addWeeks } from 'date-fns'
-import { TrendingDown, TrendingUp, Minus, Target, Pencil } from 'lucide-react'
+import { TrendingDown, TrendingUp, Minus, Target, Pencil, Plus } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 type Log = { id: string; weight: number; logged_on: string; note: string | null }
@@ -29,6 +29,7 @@ export default function WeightSection({ userId, logs, weightGoal, weightRate, un
   const [weight, setWeight] = useState('')
   const [loading, setLoading] = useState(false)
   const [editPlan, setEditPlan] = useState(false)
+  const [logging, setLogging] = useState(false)
   const [goalInput, setGoalInput] = useState(weightGoal?.toString() ?? '')
   const [rateInput, setRateInput] = useState(weightRate?.toString() ?? '')
 
@@ -81,6 +82,7 @@ export default function WeightSection({ userId, logs, weightGoal, weightRate, un
     })
     setWeight('')
     setLoading(false)
+    setLogging(false)
     router.refresh()
   }
 
@@ -168,6 +170,24 @@ export default function WeightSection({ userId, logs, weightGoal, weightRate, un
               </div>
             </div>
           </div>
+
+          {/* Log today's weight — revealed on click */}
+          <div className="mt-3 pt-3 border-t border-border">
+            {logging ? (
+              <div className="flex gap-2">
+                <Input autoFocus placeholder={`Today's weight (${unit})`} type="number" inputMode="decimal" value={weight}
+                  onChange={e => setWeight(e.target.value)} className="flex-1 h-10"
+                  onKeyDown={e => { if (e.key === 'Enter') logWeight() }} />
+                <Button onClick={logWeight} disabled={loading || !weight} className="rounded-full px-6">Log</Button>
+                <Button variant="ghost" onClick={() => { setLogging(false); setWeight('') }} className="rounded-full px-3">Cancel</Button>
+              </div>
+            ) : (
+              <button onClick={() => setLogging(true)}
+                className="w-full flex items-center justify-center gap-1.5 text-sm font-semibold text-primary hover:opacity-80 transition-opacity py-1">
+                <Plus size={15} /> Log today’s weight
+              </button>
+            )}
+          </div>
         </CardContent>
       </Card>
 
@@ -188,12 +208,6 @@ export default function WeightSection({ userId, logs, weightGoal, weightRate, un
         </Card>
       )}
 
-      <div className="flex gap-2">
-        <Input placeholder={`Today's weight (${unit})`} type="number" inputMode="decimal" value={weight}
-          onChange={e => setWeight(e.target.value)} className="flex-1"
-          onKeyDown={e => { if (e.key === 'Enter') logWeight() }} />
-        <Button onClick={logWeight} disabled={loading || !weight} className="rounded-full px-6">Log</Button>
-      </div>
     </section>
   )
 }
