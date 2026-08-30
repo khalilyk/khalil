@@ -167,7 +167,7 @@ export default function WorkoutSection({ userId, weekLogs }: { userId: string; w
                         value={weights.get(key) ?? ''}
                         onChange={e => { const v = e.target.value; setWeights(m => new Map(m).set(key, v)); saveWeight(ex.name, v) }}
                         className="w-[88px] h-9 rounded-lg border border-border bg-card px-2.5 text-sm tabular-nums outline-none focus:border-primary">
-                        <option value="">—</option>
+                        <option value="">-</option>
                         {WEIGHTS.map(w => <option key={w} value={w}>{w}</option>)}
                       </select>
                       <span className="text-xs text-muted-foreground">kg</span>

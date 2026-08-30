@@ -92,7 +92,7 @@ export default function WeightSection({ userId, logs, weightGoal, weightRate, un
       <Card>
         <CardContent className="py-0">
           <div className="grid grid-cols-2 gap-4">
-            {/* Left — weight */}
+            {/* Left - weight */}
             <div className="min-w-0">
               <div className="flex items-start justify-between gap-2">
                 <h2 className="text-[11px] uppercase tracking-wider text-muted-foreground">Weight</h2>
@@ -112,7 +112,7 @@ export default function WeightSection({ userId, logs, weightGoal, weightRate, un
               )}
             </div>
 
-            {/* Right — plan */}
+            {/* Right - plan */}
             <div className="min-w-0 pl-4 border-l border-border">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium flex items-center gap-2"><Target size={15} /> Plan</span>
@@ -162,7 +162,7 @@ export default function WeightSection({ userId, logs, weightGoal, weightRate, un
             </div>
           </div>
 
-          {/* Log today's weight — revealed on click */}
+          {/* Log today's weight - revealed on click */}
           <div className="mt-2 pt-2 border-t border-border">
             {logging ? (
               <div className="flex items-center gap-2">
