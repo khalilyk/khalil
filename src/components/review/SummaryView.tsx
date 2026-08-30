@@ -3,8 +3,8 @@ import { CheckCircle2, Dumbbell, Scale, Target } from 'lucide-react'
 
 const MESH = {
   green: {
-    bg: 'radial-gradient(120% 90% at 22% 12%, #f4dcba 0%, transparent 46%), radial-gradient(120% 120% at 62% 52%, #9fbf5a 0%, transparent 55%), radial-gradient(130% 130% at 48% 115%, #c6df82 0%, transparent 60%), linear-gradient(160deg, #eef3e0, #d6e6ad)',
-    ink: '#33401b',
+    bg: 'radial-gradient(120% 90% at 22% 12%, #f9ead2 0%, transparent 46%), radial-gradient(120% 120% at 62% 52%, #c3dd88 0%, transparent 55%), radial-gradient(130% 130% at 48% 115%, #ddecab 0%, transparent 60%), linear-gradient(160deg, #f5f9ec, #e4efc9)',
+    ink: '#3a4a1f',
   },
   orange: {
     bg: 'radial-gradient(120% 90% at 24% 14%, #ffdcb4 0%, transparent 46%), radial-gradient(120% 120% at 72% 58%, #ff9e78 0%, transparent 55%), radial-gradient(130% 130% at 44% 116%, #ffcb8c 0%, transparent 60%), linear-gradient(160deg, #fdefe0, #f6cba9)',

@@ -22,10 +22,10 @@ export default async function ReviewPage() {
       </div>
 
       <Tabs defaultValue="week">
-        <TabsList className="w-full max-w-md">
-          <TabsTrigger value="week" className="flex-1">Weekly</TabsTrigger>
-          <TabsTrigger value="month" className="flex-1">Monthly</TabsTrigger>
-          <TabsTrigger value="year" className="flex-1">Annual</TabsTrigger>
+        <TabsList className="w-full max-w-md h-11 bg-card border border-border shadow-sm rounded-full p-1">
+          <TabsTrigger value="week" className="flex-1 rounded-full data-active:bg-primary data-active:text-primary-foreground data-active:shadow-sm">Weekly</TabsTrigger>
+          <TabsTrigger value="month" className="flex-1 rounded-full data-active:bg-primary data-active:text-primary-foreground data-active:shadow-sm">Monthly</TabsTrigger>
+          <TabsTrigger value="year" className="flex-1 rounded-full data-active:bg-primary data-active:text-primary-foreground data-active:shadow-sm">Annual</TabsTrigger>
         </TabsList>
         <TabsContent value="week" className="mt-6"><SummaryView s={week} /></TabsContent>
         <TabsContent value="month" className="mt-6"><SummaryView s={month} /></TabsContent>

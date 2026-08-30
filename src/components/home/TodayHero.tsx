@@ -14,12 +14,12 @@ export type HeroRow = {
 
 // Soft gradient-mesh backdrop for the score card (green, on-brand)
 const MESH =
-  'radial-gradient(120% 90% at 22% 12%, #f4dcba 0%, transparent 46%),' +
-  'radial-gradient(120% 120% at 62% 52%, #9fbf5a 0%, transparent 55%),' +
-  'radial-gradient(130% 130% at 48% 115%, #c6df82 0%, transparent 60%),' +
-  'linear-gradient(160deg, #eef3e0, #d6e6ad)'
+  'radial-gradient(120% 90% at 22% 12%, #f9ead2 0%, transparent 46%),' +
+  'radial-gradient(120% 120% at 62% 52%, #c3dd88 0%, transparent 55%),' +
+  'radial-gradient(130% 130% at 48% 115%, #ddecab 0%, transparent 60%),' +
+  'linear-gradient(160deg, #f5f9ec, #e4efc9)'
 
-const INK = '#33401b'
+const INK = '#3a4a1f'
 
 export default function TodayHero({ score, streak, rows, weekDots }: {
   score: number; streak: number; rows: HeroRow[]; weekDots: boolean[]
