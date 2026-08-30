@@ -144,23 +144,15 @@ export default function CheckInForm({ userId, today, bySlot }: {
           </select>
         </div>
 
-        {/* Type your own... */}
-        <input
-          value={note}
+        {/* Pick how it went */}
+        <select
+          value={QUICK[slot].includes(note) ? note : ''}
           onChange={e => setNote(e.target.value)}
-          placeholder={slot === 'morning' ? 'How are you feeling?' : 'How did it go?'}
-          className="w-full h-10 rounded-xl border border-input bg-transparent px-3 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:border-ring"
-        />
-        {/* ...or tap a quick answer */}
-        <div className="flex gap-1.5 overflow-x-auto -mx-1 px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {QUICK[slot].map(q => (
-            <button key={q} type="button" onClick={() => setNote(q)}
-              className={cn('shrink-0 rounded-full border px-3 py-1 text-xs transition-colors',
-                note === q ? 'bg-primary text-primary-foreground border-primary' : 'border-border text-muted-foreground hover:bg-muted')}>
-              {q}
-            </button>
-          ))}
-        </div>
+          className={cn('w-full h-10 rounded-xl border border-input bg-transparent px-3 text-sm outline-none focus-visible:border-ring',
+            note ? '' : 'text-muted-foreground')}>
+          <option value="">{slot === 'morning' ? 'How are you feeling?' : 'How did it go?'}</option>
+          {QUICK[slot].map(q => <option key={q} value={q}>{q}</option>)}
+        </select>
 
         <Button onClick={save} disabled={loading || justSaved || (!mood && !energy)}
           className={cn('w-full rounded-full gap-1.5', justSaved && 'bg-green-600 hover:bg-green-600')}>
