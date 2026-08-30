@@ -45,10 +45,12 @@ export default async function DashboardHome() {
     supabase.from('workout_logs').select('logged_on,exercise').gte('logged_on', weekStart),
     supabase.from('check_ins').select('check_in_date').gte('check_in_date', format(subDays(now, 40), 'yyyy-MM-dd')),
     supabase.from('cravings').select('feeling,rode_out').gte('created_at', `${monthStart}T00:00:00`),
-    supabase.from('daily_steps').select('steps').eq('day', today).maybeSingle(),
+    supabase.from('daily_steps').select('steps,day').order('day', { ascending: false }).limit(1).maybeSingle(),
   ])
 
-  const todaySteps = (stepsRow as { steps: number } | null)?.steps ?? 0
+  const stepsInfo = stepsRow as { steps: number; day: string } | null
+  const todaySteps = stepsInfo?.steps ?? 0
+  const stepsAsOf = stepsInfo && stepsInfo.day !== today ? stepsInfo.day : null
 
   const goals = (goalsData ?? []) as Goal[]
   const weights = (weightLogs ?? []) as { weight: number; logged_on: string }[]
@@ -121,7 +123,7 @@ export default async function DashboardHome() {
       {/* ── SNAPSHOT — three glanceable numbers ── */}
       <section className="grid grid-cols-2 gap-4 auto-rows-min">
         <WeightTrendCard logs={weights} unit={unit} goal={prof.weight_goal ?? null} />
-        <StepsCard steps={todaySteps} />
+        <StepsCard steps={todaySteps} asOf={stepsAsOf} />
       </section>
 
       {/* ── MORE — coach note + urges, quieter ── */}

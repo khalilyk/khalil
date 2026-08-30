@@ -1,10 +1,11 @@
 import Link from 'next/link'
 import { Footprints, ChevronRight } from 'lucide-react'
+import { format, parseISO } from 'date-fns'
 import { cn } from '@/lib/utils'
 
 const GOAL = 10000
 
-export default function StepsCard({ steps, className }: { steps: number; className?: string }) {
+export default function StepsCard({ steps, asOf, className }: { steps: number; asOf?: string | null; className?: string }) {
   const pct = Math.min(100, Math.round((steps / GOAL) * 100))
   const hit = steps >= GOAL
   // Ring geometry
@@ -36,7 +37,9 @@ export default function StepsCard({ steps, className }: { steps: number; classNa
           </div>
         </div>
         <p className="text-xs text-muted-foreground text-center">
-          {hit ? '🎉 10k goal hit' : `${(GOAL - steps).toLocaleString()} steps to 10k`}
+          {asOf
+            ? `as of ${format(parseISO(asOf), 'EEE d MMM')}`
+            : hit ? '🎉 10k goal hit' : `${(GOAL - steps).toLocaleString()} steps to 10k`}
         </p>
       </div>
     </Link>
