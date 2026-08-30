@@ -26,25 +26,23 @@ export default function WeightTrendCard({ logs, unit, goal, className }: {
   return (
     <div className={cn('kk-rise relative overflow-hidden rounded-3xl pt-5 sm:pt-6 px-5 sm:px-6 flex flex-col shadow-[0_20px_60px_-24px_rgba(214,120,60,0.5)]', className)}
       style={{ background: MESH, color: INK }}>
-      <div className="flex items-center justify-between">
-        <span className="flex items-center gap-2 text-sm font-semibold">
-          <span className="flex items-center justify-center w-6 h-6 rounded-md text-white" style={{ background: INK }}><Scale size={13} /></span>
-          Weight
-        </span>
-        {weekPct !== null && dir !== 'flat' && (
-          <span className="shrink-0 inline-flex items-center gap-0.5 whitespace-nowrap text-[11px] font-bold rounded-full px-2 py-0.5 bg-white/55 backdrop-blur">
-            {dir === 'up' ? <ArrowUpRight size={11} /> : <ArrowDownRight size={11} />}{Math.abs(weekPct)}%
-          </span>
-        )}
-      </div>
+      <span className="flex items-center gap-2 text-sm font-semibold">
+        <span className="flex items-center justify-center w-6 h-6 rounded-md text-white" style={{ background: INK }}><Scale size={13} /></span>
+        Weight
+      </span>
 
       <div className="mt-2 flex items-end gap-2">
         <span className="text-6xl sm:text-7xl font-extrabold tracking-tight leading-none tabular-nums">{latest ? latest.weight : ' - '}</span>
         <span className="pb-2 text-lg font-semibold opacity-70">{unit}</span>
       </div>
-      <p className="mt-1 text-xs font-semibold opacity-70">
-        {goal ? `Goal ${goal} ${unit}` : 'This week’s trend'}
-      </p>
+      <div className="mt-1.5 flex items-center gap-2">
+        {weekPct !== null && dir !== 'flat' && (
+          <span className="shrink-0 inline-flex items-center gap-0.5 whitespace-nowrap text-[11px] font-bold rounded-full px-2 py-0.5 bg-white/55 backdrop-blur">
+            {dir === 'up' ? <ArrowUpRight size={11} /> : <ArrowDownRight size={11} />}{Math.abs(weekPct)}%
+          </span>
+        )}
+        <span className="text-xs font-semibold opacity-70">{goal ? `Goal ${goal} ${unit}` : 'This week’s trend'}</span>
+      </div>
 
       {/* Full-bleed sparkline - hover for the date + weight */}
       <div className="mt-auto -mx-5 sm:-mx-6 pt-4">
