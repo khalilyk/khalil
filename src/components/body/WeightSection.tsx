@@ -86,38 +86,37 @@ export default function WeightSection({ userId, logs, weightGoal, weightRate, un
 
   return (
     <section className="space-y-4">
-      <div className="flex items-end justify-between">
-        <h2 className="font-medium">Weight</h2>
-        {latest && (
-          <div className="text-right">
-            <span className="text-2xl font-semibold">{latest.weight} {unit}</span>
-            <p className="text-xs text-muted-foreground">Logged {format(parseISO(latest.logged_on), 'd MMM')}</p>
-          </div>
-        )}
-      </div>
-
-      <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
-        {weekDiff !== null && (
-          <span className={cn('flex items-center gap-1 font-medium',
-            weekDiff < 0 ? 'text-primary-foreground' : weekDiff > 0 ? 'text-destructive' : 'text-muted-foreground')}>
-            {weekDiff < 0 ? <TrendingDown size={14} /> : weekDiff > 0 ? <TrendingUp size={14} /> : <Minus size={14} />}
-            <span className={cn(weekDiff !== 0 && 'rounded-full px-2 py-0.5',
-              weekDiff < 0 ? 'bg-primary' : weekDiff > 0 ? 'bg-destructive/10' : '')}>
-              {weekDiff > 0 ? '+' : ''}{weekDiff} {unit} vs last week
-            </span>
-          </span>
-        )}
-        {distToGoal && (
-          <span className="text-muted-foreground">
-            {parseFloat(distToGoal) > 0 ? '+' : ''}{distToGoal} {unit} from goal
-          </span>
-        )}
-      </div>
-
-      {/* Plan card */}
+      {/* Weight + plan, merged into one compact card */}
       <Card>
         <CardContent className="py-4 space-y-3">
-          <div className="flex items-center justify-between">
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0">
+              <h2 className="text-[11px] uppercase tracking-wider text-muted-foreground">Weight</h2>
+              <div className="flex items-baseline gap-1.5 mt-0.5">
+                <span className="text-3xl font-bold tracking-tight tabular-nums">{latest ? latest.weight : ' - '}</span>
+                <span className="text-sm text-muted-foreground">{unit}</span>
+              </div>
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs mt-1.5">
+                {weekDiff !== null && (
+                  <span className={cn('inline-flex items-center gap-1 font-medium rounded-full',
+                    weekDiff < 0 ? 'text-primary-foreground bg-primary px-2 py-0.5'
+                      : weekDiff > 0 ? 'text-destructive bg-destructive/10 px-2 py-0.5' : 'text-muted-foreground')}>
+                    {weekDiff < 0 ? <TrendingDown size={12} /> : weekDiff > 0 ? <TrendingUp size={12} /> : <Minus size={12} />}
+                    {weekDiff > 0 ? '+' : ''}{weekDiff} {unit} vs last week
+                  </span>
+                )}
+                {distToGoal && (
+                  <span className="text-muted-foreground">
+                    {parseFloat(distToGoal) > 0 ? '+' : ''}{distToGoal} {unit} from goal
+                  </span>
+                )}
+              </div>
+            </div>
+            {latest && <p className="text-xs text-muted-foreground shrink-0">Logged {format(parseISO(latest.logged_on), 'd MMM')}</p>}
+          </div>
+
+          {/* Plan */}
+          <div className="pt-3 border-t border-border flex items-center justify-between">
             <span className="text-sm font-medium flex items-center gap-2"><Target size={15} /> Plan</span>
             <button onClick={() => setEditPlan(v => !v)} className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1">
               <Pencil size={12} /> {editPlan ? 'Cancel' : 'Edit'}
