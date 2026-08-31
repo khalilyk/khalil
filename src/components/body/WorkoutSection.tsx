@@ -13,10 +13,10 @@ type Log = { logged_on: string; exercise: string; weight?: number | null; set_we
 // Selectable weights: 2.5 - 300 kg in 2.5 kg steps
 const WEIGHTS = Array.from({ length: 120 }, (_, i) => 2.5 + i * 2.5)
 
-// Number of sets from a detail string like "4 × 8-10" (falls back to 1)
+// Number of sets from a detail string like "4 × 8-10"; 0 = no weighted sets (e.g. cardio)
 const setsFor = (detail: string) => {
   const m = detail.match(/^(\d+)\s*×/)
-  return m ? Math.min(8, Math.max(1, Number(m[1]))) : 1
+  return m ? Math.min(8, Math.max(1, Number(m[1]))) : 0
 }
 
 export default function WorkoutSection({ userId, weekLogs }: { userId: string; weekLogs: Log[] }) {
@@ -179,17 +179,19 @@ export default function WorkoutSection({ userId, weekLogs }: { userId: string; w
                       <span className={cn('block text-sm font-medium leading-snug', checked && 'text-muted-foreground')}>{ex.name}</span>
                       <span className="block text-[11px] text-muted-foreground">{ex.detail}</span>
                     </button>
-                    {/* Weight per set - fixed 2-column grid (2 lines), no horizontal scroll */}
-                    <div className="shrink-0 w-40 grid grid-cols-2 gap-1.5">
-                      {Array.from({ length: sets }).map((_, i) => (
-                        <select key={i} value={arr[i] ?? ''} title={`Set ${i + 1}`}
-                          onChange={e => setSetWeight(ex.name, sets, i, e.target.value)}
-                          className="w-full h-8 rounded-lg border border-border bg-card pl-2 text-sm tabular-nums outline-none focus:border-primary">
-                          <option value="">S{i + 1}</option>
-                          {WEIGHTS.map(w => <option key={w} value={w}>{w}</option>)}
-                        </select>
-                      ))}
-                    </div>
+                    {/* Weight per set (skipped for cardio / non-weighted moves) */}
+                    {sets > 0 && (
+                      <div className="shrink-0 w-40 grid grid-cols-2 gap-1.5">
+                        {Array.from({ length: sets }).map((_, i) => (
+                          <select key={i} value={arr[i] ?? ''} title={`Set ${i + 1}`}
+                            onChange={e => setSetWeight(ex.name, sets, i, e.target.value)}
+                            className="w-full h-8 rounded-lg border border-border bg-card pl-2 text-sm tabular-nums outline-none focus:border-primary">
+                            <option value="">S{i + 1}</option>
+                            {WEIGHTS.map(w => <option key={w} value={w}>{w}</option>)}
+                          </select>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 )
               })}
