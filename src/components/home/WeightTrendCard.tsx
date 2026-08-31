@@ -32,7 +32,7 @@ export default function WeightTrendCard({ logs, unit, goal, className }: {
       </span>
 
       <div className="mt-2 flex items-end gap-2">
-        <span className="text-5xl sm:text-6xl font-extrabold tracking-tight leading-none tabular-nums">{latest ? latest.weight : ' - '}</span>
+        <span className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-none tabular-nums">{latest ? latest.weight : ' - '}</span>
         <span className="pb-1.5 text-base font-semibold opacity-70 shrink-0">{unit}</span>
       </div>
       <div className="mt-1.5 flex items-center gap-2">
@@ -41,7 +41,6 @@ export default function WeightTrendCard({ logs, unit, goal, className }: {
             {dir === 'up' ? <ArrowUpRight size={11} /> : <ArrowDownRight size={11} />}{Math.abs(weekPct)}%
           </span>
         )}
-        <span className="text-xs font-semibold opacity-70">{goal ? `Goal ${goal} ${unit}` : 'This week’s trend'}</span>
       </div>
 
       {/* Full-bleed sparkline - hover for the date + weight */}
