@@ -1,6 +1,6 @@
 // Khalil's weekly training split. Static program - completions are logged per date.
 
-export type Exercise = { name: string; detail: string }
+export type Exercise = { name: string; detail: string; bw?: boolean } // bw = bodyweight/band, no tracked weight
 export type Block = { heading?: string; exercises: Exercise[] }
 export type WorkoutDay = { key: string; weekday: number; title: string; blocks: Block[] }
 
@@ -18,7 +18,7 @@ export const PROGRAM: WorkoutDay[] = [
         { name: 'Dumbbell Row', detail: '4 × 10–12' },
         { name: 'Seated Cable Row', detail: '3 × 12' },
         { name: 'Face Pulls', detail: '3 × 15' },
-        { name: 'Band Pull Outs', detail: '3 × 20' },
+        { name: 'Band Pull Outs', detail: '3 × 20', bw: true },
       ] },
       { heading: 'Cardio', exercises: [CARDIO] },
     ],
@@ -37,7 +37,7 @@ export const PROGRAM: WorkoutDay[] = [
       { heading: 'Core', exercises: [
         { name: 'Weighted Decline Sit-Ups', detail: '3 × 15' },
         { name: 'Cable Woodchoppers', detail: '3 × 15 each side' },
-        { name: 'Plank', detail: '3 × 60 sec' },
+        { name: 'Plank', detail: '3 × 60 sec', bw: true },
       ] },
       { heading: 'Cardio', exercises: [CARDIO] },
     ],
@@ -49,7 +49,8 @@ export const PROGRAM: WorkoutDay[] = [
         { name: '10,000–14,000 Steps', detail: 'Across the day' },
         { name: 'Stretching', detail: '15 mins' },
         { name: 'Shoulder Mobility', detail: '10 mins' },
-        { name: 'Band External Rotations', detail: '3 × 20' },
+        { name: 'Band External Rotations', detail: '3 × 20', bw: true },
+        { name: 'Dips', detail: '3 × 15' },
         { name: 'Face Pulls', detail: '3 × 15' },
       ] },
     ],
@@ -87,7 +88,7 @@ export const PROGRAM: WorkoutDay[] = [
       { heading: 'Core', exercises: [
         { name: 'Cable Crunches', detail: '4 × 20' },
         { name: 'Hanging Knee Raises', detail: '4 × 12–15' },
-        { name: 'Plank', detail: '3 × 60 sec' },
+        { name: 'Plank', detail: '3 × 60 sec', bw: true },
       ] },
       { heading: 'Cardio', exercises: [CARDIO] },
     ],

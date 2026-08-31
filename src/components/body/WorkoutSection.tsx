@@ -179,8 +179,8 @@ export default function WorkoutSection({ userId, weekLogs }: { userId: string; w
                       <span className={cn('block text-sm font-medium leading-snug', checked && 'text-muted-foreground')}>{ex.name}</span>
                       <span className="block text-[11px] text-muted-foreground">{ex.detail}</span>
                     </button>
-                    {/* Weight per set (skipped for cardio / non-weighted moves) */}
-                    {sets > 0 && (
+                    {/* Weight per set (skipped for cardio / bodyweight / band moves) */}
+                    {sets > 0 && !ex.bw && (
                       <div className="shrink-0 w-40 grid grid-cols-2 gap-1.5">
                         {Array.from({ length: sets }).map((_, i) => (
                           <select key={i} value={arr[i] ?? ''} title={`Set ${i + 1}`}
