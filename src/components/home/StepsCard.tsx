@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { Footprints, ChevronRight } from 'lucide-react'
-import { format, parseISO } from 'date-fns'
 import { cn } from '@/lib/utils'
 
 const GOAL = 10000
@@ -14,7 +13,7 @@ const MESH =
 const INK = '#20365c'
 const RINGBG = 'rgba(255,255,255,0.3)'
 
-export default function StepsCard({ steps, asOf, className }: { steps: number; asOf?: string | null; className?: string }) {
+export default function StepsCard({ steps, className }: { steps: number; className?: string }) {
   const pct = Math.min(100, Math.round((steps / GOAL) * 100))
   const hit = steps >= GOAL
   const r = 40
@@ -47,9 +46,7 @@ export default function StepsCard({ steps, asOf, className }: { steps: number; a
           </div>
         </div>
         <p className="text-xs opacity-70 text-center">
-          {asOf
-            ? `as of ${format(parseISO(asOf), 'EEE d MMM')}`
-            : hit ? '🎉 10k goal hit' : `${(GOAL - steps).toLocaleString()} steps to 10k`}
+          {hit ? '🎉 10k goal hit' : steps > 0 ? `${(GOAL - steps).toLocaleString()} steps to 10k` : 'Today · syncs later'}
         </p>
       </div>
     </Link>
