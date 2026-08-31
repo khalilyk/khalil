@@ -31,9 +31,9 @@ export default function WeightTrendCard({ logs, unit, goal, className }: {
         Weight
       </span>
 
-      <div className="mt-2 flex items-end gap-2">
+      <div className="mt-2 flex items-baseline gap-1.5">
         <span className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-none tabular-nums">{latest ? latest.weight : ' - '}</span>
-        <span className="pb-1.5 text-base font-semibold opacity-70 shrink-0">{unit}</span>
+        <span className="text-base font-semibold opacity-70 shrink-0">{unit}</span>
       </div>
       <div className="mt-1.5 flex items-center gap-2">
         {weekPct !== null && dir !== 'flat' && (
