@@ -32,7 +32,7 @@ export default function WeightTrendCard({ logs, unit, goal, className }: {
       </span>
 
       <div className="mt-2 flex items-end gap-2">
-        <span className="text-5xl sm:text-6xl font-extrabold tracking-tight leading-none tabular-nums truncate">{latest ? latest.weight : ' - '}</span>
+        <span className="text-5xl sm:text-6xl font-extrabold tracking-tight leading-none tabular-nums">{latest ? latest.weight : ' - '}</span>
         <span className="pb-1.5 text-base font-semibold opacity-70 shrink-0">{unit}</span>
       </div>
       <div className="mt-1.5 flex items-center gap-2">
