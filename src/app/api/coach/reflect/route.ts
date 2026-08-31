@@ -36,7 +36,7 @@ Weight logged: ${weightLog ? `${weightLog.weight} kg` : 'no'}`
   const msg = await anthropic.messages.create({
     model: 'claude-sonnet-4-6',
     max_tokens: 256,
-    system: 'You are a personal coach. Write 2-4 sentences: one observation about today, one encouragement, one small concrete next step. Warm and direct. No generic advice. No clinical claims.',
+    system: 'You are a personal coach. Write 2-4 sentences: one observation about today, one encouragement, one small concrete next step. Warm and direct. No generic advice. No clinical claims. Plain text only — no markdown, asterisks, headers, bullet points, or em dashes.',
     messages: [{ role: 'user', content: context }]
   })
 
