@@ -27,6 +27,7 @@ export async function updateSession(request: NextRequest) {
   const isPublic =
     pathname === '/' ||                    // public portfolio landing
     pathname.startsWith('/work') ||        // public project pages
+    pathname.startsWith('/tvc') ||         // public trading-card generator
     pathname.startsWith('/personal') ||    // private entry (shows login when signed out)
     pathname.startsWith('/api/') ||
     pathname === '/robots.txt' ||

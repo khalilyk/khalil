@@ -233,3 +233,8 @@ select:not([multiple]) {
   background-size: 13px;
   padding-right: 2.1rem !important;
 }
+
+/* Trading-card gentle float */
+@keyframes kk-tvc-float { 0%,100% { transform: translateY(-6px); } 50% { transform: translateY(10px); } }
+.kk-tvc-float { animation: kk-tvc-float 5s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .kk-tvc-float { animation: none; } }
